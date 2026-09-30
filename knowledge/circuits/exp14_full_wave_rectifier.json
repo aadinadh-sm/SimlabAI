@@ -1,0 +1,478 @@
+{
+  "template_id": "exp14_full_wave_rectifier",
+  "experiment_number": 14,
+  "topology_category": "EXACT MANUAL TOPOLOGY",
+  "circuit_type": "FULL_WAVE_RECTIFIER",
+  "name": "Full-Wave Bridge Rectifier (Experiment 14)",
+  "components": [
+    "V1",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "R1"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 12.0,
+      "unit": "V"
+    },
+    "D1": {
+      "value": 0.7,
+      "unit": "V"
+    },
+    "D2": {
+      "value": 0.7,
+      "unit": "V"
+    },
+    "D3": {
+      "value": 0.7,
+      "unit": "V"
+    },
+    "D4": {
+      "value": 0.7,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 1000.0,
+      "unit": "ohm"
+    }
+  },
+  "component_types": {
+    "V1": "ac_voltage_source",
+    "D1": "diode",
+    "D2": "diode",
+    "D3": "diode",
+    "D4": "diode",
+    "R1": "resistor"
+  },
+  "nodes": [
+    "1",
+    "2",
+    "out",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,N2",
+    "D1 -> N1,out",
+    "D2 -> GND,N2",
+    "D3 -> N2,out",
+    "D4 -> GND,N1",
+    "R1 -> out,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [
+    "V1: (+) N1 to (-) N2"
+  ],
+  "analysis_type": "transient",
+  "simulation_parameters": {
+    "type": "transient",
+    "step_stop_consistency": {
+      "step_positive": true,
+      "stop_positive": true,
+      "step_le_stop": true,
+      "raw_pair_consistent": true,
+      "was_adjusted": false,
+      "adjustment_reason": "",
+      "window_sufficient": true,
+      "raw_step_s": 0.001,
+      "raw_stop_s": 0.05,
+      "raw_step_expr": "1@u_ms",
+      "raw_stop_expr": "50@u_ms",
+      "raw_step_text": "1 milliseconds",
+      "raw_stop_text": "50 milliseconds",
+      "compat_step_for_raw_stop_s": 0.001,
+      "compat_raw_step_expr": "1@u_ms",
+      "compat_raw_step_text": "1 milliseconds",
+      "required_cycles": 5,
+      "required_duration_s": 1.0,
+      "compat_step_for_req_s": 0.001,
+      "req_step_expr": "1@u_ms",
+      "req_step_text": "1 milliseconds",
+      "req_stop_expr": "1@u_time_s",
+      "req_stop_text": "1 seconds",
+      "req_needs_u_second": true,
+      "changes_reported": []
+    }
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1 (Input Peak)": 12.0,
+      "2/out (Output Peak)": 10.6
+    },
+    "branch_currents": {
+      "I_peak (Forward/Load Current)": 0.0106
+    },
+    "transient_metrics": {
+      "Diode Forward Knee Voltage Vf": "1.4 V",
+      "Peak Load Voltage": "10.6000 V"
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Full-Wave Bridge Rectifier (Experiment 14)",
+      "circuit_type": "FULL_WAVE_RECTIFIER",
+      "experiment": 14,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "waveform",
+        "node_voltage",
+        "branch_current"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "out",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "ac_voltage_source",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → N2",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "D1",
+            "type": "diode",
+            "raw_from": "1",
+            "raw_to": "out",
+            "from_node": "N1",
+            "to_node": "out",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D1: N1 → out",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "D2",
+            "type": "diode",
+            "raw_from": "GND",
+            "raw_to": "2",
+            "from_node": "GND",
+            "to_node": "N2",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D2: GND → N2",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "D3",
+            "type": "diode",
+            "raw_from": "2",
+            "raw_to": "out",
+            "from_node": "N2",
+            "to_node": "out",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D3: N2 → out",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "D4",
+            "type": "diode",
+            "raw_from": "GND",
+            "raw_to": "1",
+            "from_node": "GND",
+            "to_node": "N1",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D4: GND → N1",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "out",
+            "raw_to": "GND",
+            "from_node": "out",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R1: out → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → N2",
+        "D1: N1 → out",
+        "D2: GND → N2",
+        "D3: N2 → out",
+        "D4: GND → N1",
+        "R1: out → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "out",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "ac_voltage_source",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → N2",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "D1",
+              "type": "diode",
+              "raw_from": "1",
+              "raw_to": "out",
+              "from_node": "N1",
+              "to_node": "out",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D1: N1 → out",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "D2",
+              "type": "diode",
+              "raw_from": "GND",
+              "raw_to": "2",
+              "from_node": "GND",
+              "to_node": "N2",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D2: GND → N2",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "D3",
+              "type": "diode",
+              "raw_from": "2",
+              "raw_to": "out",
+              "from_node": "N2",
+              "to_node": "out",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D3: N2 → out",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "D4",
+              "type": "diode",
+              "raw_from": "GND",
+              "raw_to": "1",
+              "from_node": "GND",
+              "to_node": "N1",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D4: GND → N1",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "out",
+              "raw_to": "GND",
+              "from_node": "out",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R1: out → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → N2",
+            "D1: N1 → out",
+            "D2: GND → N2",
+            "D3: N2 → out",
+            "D4: GND → N1",
+            "R1: out → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → N2",
+            "D1: N1 → out",
+            "D2: GND → N2",
+            "D3: N2 → out",
+            "D4: GND → N1",
+            "R1: out → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → N2)\n ├── D1 (0.7 V): N1 → out\n ├── D2 (0.7 V): GND → N2\n ├── D3 (0.7 V): N2 → out\n ├── D4 (0.7 V): GND → N1\n └── R1 (1 kΩ): out → GND",
+        "edge_list_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → N2)\n ├── D1 (0.7 V): N1 → out\n ├── D2 (0.7 V): GND → N2\n ├── D3 (0.7 V): N2 → out\n ├── D4 (0.7 V): GND → N1\n └── R1 (1 kΩ): out → GND\n\nV1: N1 → N2\nD1: N1 → out\nD2: GND → N2\nD3: N2 → out\nD4: GND → N1\nR1: out → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "ac_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "D1",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "out"
+        ]
+      },
+      {
+        "id": "D2",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "GND",
+          "2"
+        ]
+      },
+      {
+        "id": "D3",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "2",
+          "out"
+        ]
+      },
+      {
+        "id": "D4",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "GND",
+          "1"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "out",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "out",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 0.001,
+        "raw_stop_s": 0.05,
+        "raw_step_expr": "1@u_ms",
+        "raw_stop_expr": "50@u_ms",
+        "raw_step_text": "1 milliseconds",
+        "raw_stop_text": "50 milliseconds",
+        "compat_step_for_raw_stop_s": 0.001,
+        "compat_raw_step_expr": "1@u_ms",
+        "compat_raw_step_text": "1 milliseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  }
+}

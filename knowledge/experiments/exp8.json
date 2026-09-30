@@ -1,0 +1,303 @@
+{
+  "exp_number": 8,
+  "title": "Simulation of Half Adder and Full Adder Circuit in Multisim",
+  "category": "Digital Combinational",
+  "family": "DIGITAL_LOGIC",
+  "pages": [
+    25,
+    26,
+    27,
+    28
+  ],
+  "aim": "To construct and verify the truth tables of Half Adder and Full Adder combinational arithmetic circuits.",
+  "apparatus_components": [
+    "XOR Gate IC 7486 (for SUM generation)",
+    "AND Gate IC 7408 (for CARRY generation)",
+    "OR Gate IC 7432 (for Full Adder Carry-Out combination)",
+    "Interactive Digital Inputs (A, B, Cin) and Output Probes (Sum, Cout)"
+  ],
+  "theory": "A Half Adder adds two 1-bit binary numbers A and B, producing Sum = A ⊕ B and Carry = A · B. Because it cannot accept a carry-in from a lower significant stage, a Full Adder adds three 1-bit binary numbers (A, B, Cin) and produces Sum = A ⊕ B ⊕ Cin and Cout = AB + (A ⊕ B)Cin = AB + BCin + ACin.",
+  "equations": [
+    "Half Adder SUM = A ⊕ B",
+    "Half Adder CARRY = A · B",
+    "Full Adder SUM = A ⊕ B ⊕ Cin",
+    "Full Adder CARRY (Cout) = A·B + Cin·(A ⊕ B) = A·B + B·Cin + A·Cin"
+  ],
+  "circuit_topology": "Half Adder: 1 XOR + 1 AND in parallel across (A, B). Full Adder: two cascaded Half Adders with their carry outputs combined by an OR gate.",
+  "component_relationships": [
+    "XOR1(A, B) -> S1",
+    "AND1(A, B) -> C1",
+    "XOR2(S1, Cin) -> Sum",
+    "AND2(S1, Cin) -> C2",
+    "OR1(C1, C2) -> Cout"
+  ],
+  "simulation_type": "Digital Combinational Truth-Table Verification (4 states for Half Adder, 8 states for Full Adder)",
+  "procedure": "1. For Half Adder, wire inputs A, B to an XOR gate (Sum) and an AND gate (Carry).\n2. Verify all 4 input states (00, 01, 10, 11).\n3. For Full Adder, cascade a second XOR and AND gate with input Cin, and OR the two carry terms.\n4. Verify all 8 input states (000 through 111).",
+  "expected_observations": "Full Adder outputs Sum=1 when an odd number of inputs are 1 (001, 010, 100, 111) and Cout=1 when at least two inputs are 1 (011, 101, 110, 111).",
+  "result": "The Half Adder and Full Adder circuits were simulated and their truth tables were verified.",
+  "common_mistakes": [
+    "Using an XOR gate instead of an OR gate to combine the two intermediate carry outputs in a Full Adder",
+    "Forgetting the Carry-In (Cin) input when building the Full Adder truth table"
+  ],
+  "important_terminology": [
+    "Half Adder",
+    "Full Adder",
+    "Carry-In (Cin)",
+    "Carry-Out (Cout)",
+    "Cascaded Addition"
+  ],
+  "related_experiments": [
+    7,
+    9,
+    10
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is the main limitation of a Half Adder?",
+      "a": "A Half Adder has no Carry-In (Cin) input, so it cannot add the carry bit propagated from a previous lower-order bit position."
+    },
+    {
+      "category": "why",
+      "q": "Why is the Full Adder Carry-Out expression `AB + BCin + ACin` called the majority function?",
+      "a": "Because Cout is 1 whenever a majority (2 or all 3) of the inputs A, B, Cin are 1."
+    },
+    {
+      "category": "how",
+      "q": "How do you build a Full Adder from two Half Adders?",
+      "a": "Connect the first Half Adder to A and B to get S1 = A⊕B and C1 = AB. Connect the second Half Adder to S1 and Cin to get Sum = S1⊕Cin and C2 = S1·Cin. Combine C1 and C2 with an OR gate to get Cout."
+    },
+    {
+      "category": "component",
+      "q": "How many 2-input XOR, AND, and OR gates are in a standard Full Adder?",
+      "a": "Two 2-input XOR gates, two 2-input AND gates, and one 2-input OR gate (5 gates total)."
+    },
+    {
+      "category": "procedure",
+      "q": "For which input row of the Full Adder are both Sum and Cout equal to 1?",
+      "a": "Only when A = 1, B = 1, and Cin = 1 (binary 1 + 1 + 1 = 3 = 11_2)."
+    },
+    {
+      "category": "code",
+      "q": "Can the final OR gate in a two-half-adder Full Adder be replaced by an XOR gate?",
+      "a": "Yes, because C1 = A·B and C2 = (A⊕B)·Cin can never both be 1 simultaneously, so C1 + C2 is identical to C1 ⊕ C2."
+    },
+    {
+      "category": "topology",
+      "q": "How many Full Adders are needed to build a 4-bit ripple carry adder?",
+      "a": "One Half Adder (for the LSB) and three Full Adders, or four Full Adders with the first Cin tied to 0."
+    },
+    {
+      "category": "calculation",
+      "q": "If A = 1, B = 0, Cin = 1, what are S1, C1, C2, Sum, and Cout?",
+      "a": "S1 = 1⊕0 = 1; C1 = 1·0 = 0; Sum = 1⊕1 = 0; C2 = 1·1 = 1; Cout = 0 + 1 = 1. (So Sum = 0, Cout = 1)."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "If a student's Full Adder gives Cout = 0 when A=1, B=1, Cin=1, what mistake did they likely make?",
+      "a": "They likely connected the second AND gate to (A, Cin) incorrectly or omitted the OR gate combining C1 and C2."
+    },
+    {
+      "category": "expected_output",
+      "q": "Which minterms produce Sum = 1 and which produce Cout = 1 in a Full Adder?",
+      "a": "Sum = Sigma_m(1, 2, 4, 7) and Cout = Sigma_m(3, 5, 6, 7)."
+    }
+  ],
+  "raw_text": "EXPERIMENT-8\n\nDate:\n\nSIMULATION OF HALF ADDER AND FULL ADDER CIRCUIT IN MULTISIM\nAim:\nTo design and simulate the half adder and full adder circuits using Multisim and verify their\ntruth tables.\nApparatus Required:\n•\n\nComputer with Multisim software installed\n\n•\n\nBasic logic gates (AND, OR, NOT, XOR)\n\n•\n\nDigital input switches (Logic Toggles)\n\n•\n\nDigital output indicators (LEDs)\n\nCircuit diagram\n\nProcedure:\nPart 1: Half Adder\n1. Open Multisim:\no\n\nLaunch Multisim on your computer.\n\n2. Create a New Project:\no\n\nGo to File > New > Project.\n\no\n\nName your project and click Create.\n\n3. Place Components for Half Adder:\no\n\nSelect the Place menu and choose Component.\n\no\n\nIn the Select a component window, choose TTL as the family.\n\no\n\nSelect the following components and place them on the schematic workspace:\n▪\n\n25 | P a g e\n\nXOR gate (7408)\n\n▪\n\nAND gate (7432)\n\n▪\n\nDigital input switches (Logic Toggles)\n\n▪\n\nDigital output indicators (LEDs)\n\n4. Connect the Circuit:\no\n\nConnect the inputs of the XOR gate to the input switches. This gate will\nproduce the SUM output.\n\no\n\nConnect the inputs of the AND gate to the same input switches. This gate will\nproduce the CARRY output.\n\no\n\nConnect the outputs of the XOR gate and the AND gate to separate LEDs to\ndisplay the SUM and CARRY respectively.\n\n5. Configure Inputs and Simulate:\no\n\nSet the input switches to all possible combinations (00, 01, 10, 11).\n\no\n\nRun the simulation and observe the outputs for each combination.\n\n6. Verify the Truth Table:\no\n\nThe expected truth table for the half adder is:\nInput A Input B Sum (XOR) Carry (AND)\n\nResult:\n\n26 | P a g e\n\n0\n\n0\n\n0\n\n0\n\n0\n\n1\n\n1\n\n0\n\n1\n\n0\n\n1\n\n0\n\n1\n\n1\n\n0\n\n1\n\nPart 2: Full Adder\n1. Open Multisim:\nUse the same project or create a new one.\nCircuit diagram:\n\n2. Place Components for Full Adder:\no\n\nSelect the Place menu and choose Component.\n\no\n\nIn the Select a component window, choose TTL as the family.\n\no\n\nSelect the following components and place them on the schematic workspace:\n▪\n\nXOR gates (7408)\n\n▪\n\nAND gates (7432)\n\n▪\n\nOR gate (7432)\n\n▪\n\nDigital input switches (Logic Toggles)\n\n▪\n\nDigital output indicators (LEDs)\n\n3. Connect the Circuit:\no\n\n27 | P a g e\n\nFor the SUM output:\n▪\n\nConnect two input switches (A and B) to the inputs of the first XOR\ngate.\n\n▪\n\nConnect the output of this XOR gate and the third input switch (Cin) to\nthe inputs of the second XOR gate. The output of this second XOR\ngate will be the SUM.\n\no\n\no\n\nFor the CARRY output:\n▪\n\nConnect inputs A and B to the inputs of the first AND gate.\n\n▪\n\nConnect the output of the first XOR gate and Cin to the inputs of the\nsecond AND gate.\n\n▪\n\nConnect the outputs of the two AND gates to the inputs of the OR gate.\nThe output of this OR gate will be the CARRY.\n\nConnect the outputs of the second XOR gate (SUM) and the OR gate\n(CARRY) to separate LEDs.\n\n4. Configure Inputs and Simulate:\no\n\nSet the input switches to all possible combinations (000, 001, 010, 011, 100,\n101, 110, 111).\n\no\n\nRun the simulation and observe the outputs for each combination.\n\n5. Verify the Truth Table:\no\n\nThe expected truth table for the full adder is:\nInput A Input B Cin Sum (XOR) Carry (OR)\n\nResult:\n\n28 | P a g e\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n1\n\n0\n\n1\n\n0\n\n1\n\n0\n\n0\n\n1\n\n0\n\n1\n\n1\n\n0\n\n0\n\n1\n\n0\n\n0\n\n1\n\n1\n\n0\n\n0\n\n1\n\n1\n\n0\n\n1\n\n1\n\n0\n\n1\n\n0\n\n1\n\n1\n\n1\n\n1\n\n1\n\n1",
+  "page_start": 25,
+  "page_end": 28,
+  "software": "Multisim / SIMLAB Digital Logic Engine",
+  "tags": "Half Adder, Full Adder, Carry-In (Cin), Carry-Out (Cout), Cascaded Addition",
+  "diagram_images": [
+    "Manual complete_page-0025-compressed.jpg",
+    "Manual complete_page-0026-compressed.jpg",
+    "Manual complete_page-0027-compressed.jpg",
+    "Manual complete_page-0028-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (Half Adder and Full Adder Digital Circuit (Experiment 8))\n# 1. Run Digital Logic Truth Table Verification\nprint('=== DIGITAL TRUTH TABLE VERIFICATION ===')\nrows = []\nfor idx in range(8):\n    A, B, C = (idx >> 2) & 1, (idx >> 1) & 1, idx & 1\n    sum_bit = A ^ B ^ C\n    carry_bit = (A & B) | (B & C) | (A & C)\n    sop_y = 1 if idx in (1, 3, 6) else 0\n    rows.append((A, B, C, sum_bit, carry_bit, sop_y))\n    print(f'A={A} B={B} C={C} | Sum={sum_bit} Carry={carry_bit} | SOP_Y={sop_y}')\n\n# 2. Extract digital signals & 3. Plot digital timing waveforms\nt = np.arange(8)\narr = np.array(rows)\nfig, axes = plt.subplots(4, 1, figsize=(10, 7), sharex=True)\nlabels = ['Input A', 'Input B', 'Input C', 'Output Y']\ncols = [0, 1, 2, 3 if 'ADDER' in 'HALF_FULL_ADDER' else 5]\nfor ax, col_idx, lbl in zip(axes, cols, labels):\n    ax.step(t, arr[:, col_idx], where='post', linewidth=2)\n    ax.set_ylabel(lbl)\n    ax.set_ylim(-0.2, 1.2)\n    ax.grid(True)\naxes[0].set_title('Digital Logic Truth-Table Timing Waveforms')\naxes[-1].set_xlabel('Input State Index (0..7)')\nplt.tight_layout()\nplt.savefig('digital_truth_table_waveforms.png', dpi=150)\nplt.show()\n",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (Half Adder and Full Adder Digital Circuit (Experiment 8))\n# 1. Run Digital Logic Truth Table Verification\nprint('=== DIGITAL TRUTH TABLE VERIFICATION ===')\nrows = []\nfor idx in range(8):\n    A, B, C = (idx >> 2) & 1, (idx >> 1) & 1, idx & 1\n    sum_bit = A ^ B ^ C\n    carry_bit = (A & B) | (B & C) | (A & C)\n    sop_y = 1 if idx in (1, 3, 6) else 0\n    rows.append((A, B, C, sum_bit, carry_bit, sop_y))\n    print(f'A={A} B={B} C={C} | Sum={sum_bit} Carry={carry_bit} | SOP_Y={sop_y}')\n\n# 2. Extract digital signals & 3. Plot digital timing waveforms\nt = np.arange(8)\narr = np.array(rows)\nfig, axes = plt.subplots(4, 1, figsize=(10, 7), sharex=True)\nlabels = ['Input A', 'Input B', 'Input C', 'Output Y']\ncols = [0, 1, 2, 3 if 'ADDER' in 'HALF_FULL_ADDER' else 5]\nfor ax, col_idx, lbl in zip(axes, cols, labels):\n    ax.step(t, arr[:, col_idx], where='post', linewidth=2)\n    ax.set_ylabel(lbl)\n    ax.set_ylim(-0.2, 1.2)\n    ax.grid(True)\naxes[0].set_title('Digital Logic Truth-Table Timing Waveforms')\naxes[-1].set_xlabel('Input State Index (0..7)')\nplt.tight_layout()\nplt.savefig('digital_truth_table_waveforms.png', dpi=150)\nplt.show()\n",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Half Adder and Full Adder Digital Circuit (Experiment 8)",
+      "circuit_type": "HALF_FULL_ADDER",
+      "experiment": 8,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "truth_table"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "A",
+          "B",
+          "C",
+          "OUT",
+          "GND"
+        ],
+        "edges": [],
+        "edge_list_lines": [],
+        "resolved_graph_lines": []
+      },
+      "resolved_graph": [],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "A",
+            "B",
+            "C",
+            "OUT",
+            "GND"
+          ],
+          "edges": [],
+          "edge_list_lines": [],
+          "resolved_graph_lines": []
+        },
+        "ascii_diagram": "",
+        "edge_list_lines": [],
+        "resolved_graph_lines": [],
+        "user_connection_clauses": [],
+        "formatted_preview": "\n\n"
+      }
+    },
+    "components": [],
+    "nodes": [
+      "A",
+      "B",
+      "C",
+      "OUT",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "digital_truth_table"
+    }
+  },
+  "circuit_template_id": "exp8_half_full_adder",
+  "viva": [
+    {
+      "q": "What is the main limitation of a Half Adder?",
+      "a": "A Half Adder has no Carry-In (Cin) input, so it cannot add the carry bit propagated from a previous lower-order bit position.",
+      "category": "definition",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "Why is the Full Adder Carry-Out expression `AB + BCin + ACin` called the majority function?",
+      "a": "Because Cout is 1 whenever a majority (2 or all 3) of the inputs A, B, Cin are 1.",
+      "category": "why",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "How do you build a Full Adder from two Half Adders?",
+      "a": "Connect the first Half Adder to A and B to get S1 = A⊕B and C1 = AB. Connect the second Half Adder to S1 and Cin to get Sum = S1⊕Cin and C2 = S1·Cin. Combine C1 and C2 with an OR gate to get Cout.",
+      "category": "how",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "How many 2-input XOR, AND, and OR gates are in a standard Full Adder?",
+      "a": "Two 2-input XOR gates, two 2-input AND gates, and one 2-input OR gate (5 gates total).",
+      "category": "component",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "For which input row of the Full Adder are both Sum and Cout equal to 1?",
+      "a": "Only when A = 1, B = 1, and Cin = 1 (binary 1 + 1 + 1 = 3 = 11_2).",
+      "category": "procedure",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "Can the final OR gate in a two-half-adder Full Adder be replaced by an XOR gate?",
+      "a": "Yes, because C1 = A·B and C2 = (A⊕B)·Cin can never both be 1 simultaneously, so C1 + C2 is identical to C1 ⊕ C2.",
+      "category": "code",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "How many Full Adders are needed to build a 4-bit ripple carry adder?",
+      "a": "One Half Adder (for the LSB) and three Full Adders, or four Full Adders with the first Cin tied to 0.",
+      "category": "topology",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "If A = 1, B = 0, Cin = 1, what are S1, C1, C2, Sum, and Cout?",
+      "a": "S1 = 1⊕0 = 1; C1 = 1·0 = 0; Sum = 1⊕1 = 0; C2 = 1·1 = 1; Cout = 0 + 1 = 1. (So Sum = 0, Cout = 1).",
+      "category": "calculation",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "If a student's Full Adder gives Cout = 0 when A=1, B=1, Cin=1, what mistake did they likely make?",
+      "a": "They likely connected the second AND gate to (A, Cin) incorrectly or omitted the OR gate combining C1 and C2.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "Which minterms produce Sum = 1 and which produce Cout = 1 in a Full Adder?",
+      "a": "Sum = Sigma_m(1, 2, 4, 7) and Cout = Sigma_m(3, 5, 6, 7).",
+      "category": "expected_output",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    }
+  ]
+}

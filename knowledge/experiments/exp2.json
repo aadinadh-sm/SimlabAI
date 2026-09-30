@@ -1,0 +1,663 @@
+{
+  "exp_number": 2,
+  "title": "Simulation of a Current-Controlled Current Source (CCCS) Circuit Using PySpice",
+  "category": "Analog / PySpice",
+  "family": "PYSPICE_DC",
+  "pages": [
+    5,
+    6
+  ],
+  "aim": "To simulate a circuit containing a Current-Controlled Current Source (CCCS) using PySpice and compute its DC node voltages and controlling branch current.",
+  "apparatus_components": [
+    "DC Voltage Source V1 = 50 V (Node 1 to GND)",
+    "Zero-Volt Current-Sense Source Vtest = 0 V (Node 1 to Node 2)",
+    "Resistor R1 = 6 Ω (Node 2 to Node 3, carries controlling current)",
+    "Resistor R2 = 8 Ω (Node 3 to GND)",
+    "Resistor R3 = 2 Ω (Node 3 to Node 4)",
+    "Resistor R4 = 4 Ω (Node 4 to GND)",
+    "Independent DC Current Source I1 = 5 A (GND to Node 4)",
+    "CCCS F1 (Node 4 to Node 3, controlled by Vtest, current gain = 3)"
+  ],
+  "theory": "A Current-Controlled Current Source (CCCS, SPICE 'F' element) produces an output current proportional to the current flowing through a controlling branch: I_out = gain * I_sense. Because SPICE requires a voltage source name to sense branch current, a dummy 0 V voltage source (`Vtest`) is placed in series with R1 between Node 1 and Node 2. Vtest introduces zero voltage drop (V(1) = V(2)) while measuring the exact controlling current I(Vtest) = (V1 - V3) / R1.",
+  "equations": [
+    "Controlling Current: I(Vtest) = (V1 - V3) / R1",
+    "CCCS Output Current: I(F1) = gain * I(Vtest) = 3 * I(Vtest) (from Node 4 to Node 3)",
+    "KCL at Node 3: (V3 - V2)/R1 + V3/R2 + (V3 - V4)/R3 - gain * I(Vtest) = 0",
+    "KCL at Node 4: (V4 - V3)/R3 + V4/R4 + gain * I(Vtest) - I1 = 0"
+  ],
+  "circuit_topology": "Two-mesh resistive network with V1 (50V) and dummy ammeter Vtest (0V) feeding R1 into Node 3, R2 to GND, R3 coupling Node 3 to Node 4, R4 to GND, I1 injecting into Node 4, and CCCS F1 between Node 4 and Node 3.",
+  "component_relationships": [
+    "V1: N1 -> GND (50 V)",
+    "Vtest: N1 -> N2 (0 V current-sense ammeter)",
+    "R1: N2 -> N3 (6 Ω series controlling branch)",
+    "R2: N3 -> GND (8 Ω shunt)",
+    "R3: N3 -> N4 (2 Ω coupling resistor)",
+    "R4: N4 -> GND (4 Ω output shunt)",
+    "I1: GND -> N4 (5 A current source)",
+    "F1: N4 -> N3 (CCCS controlled by Vtest with gain = 3)"
+  ],
+  "simulation_type": "DC Operating Point (.op) solving node voltages V(1)..V(4) and branch current I(Vtest)",
+  "procedure": "1. Create `circuit = Circuit('CCCS Circuit')`.\n2. Add `V1` (50V) at (1, gnd) and `Vtest` (0V) at (1, 2) to sense the controlling current.\n3. Connect R1 (2,3), R2 (3,gnd), R3 (3,4), R4 (4,gnd), and current source I1 (gnd, 4, 5A).\n4. Add CCCS `circuit.F(1, 4, 3, 'Vtest', 3)`.\n5. Run `simulator.operating_point()` and print `analysis.nodes` and `analysis.branches`.",
+  "expected_observations": "Node 1 = 50.0 V, Node 2 = 50.0 V (since Vtest = 0 V), Node 3 = 38.0952 V, Node 4 = 16.6667 V, Controlling Current I(Vtest) = 1.9841 A.",
+  "result": "The CCCS circuit was simulated in PySpice and the DC node voltages and branch currents were verified.",
+  "common_mistakes": [
+    "Omitting the 0 V dummy source `Vtest` and trying to pass `'R1'` directly as the controlling element to `circuit.F(...)`",
+    "Deleting `Vtest` when substituting custom user resistor values",
+    "Reversing the polarity of `I1` or `F1`"
+  ],
+  "important_terminology": [
+    "CCCS (F Element)",
+    "Controlling Current",
+    "Zero-Volt Ammeter Source (Vtest)",
+    "Current Gain",
+    "Branch Current (`analysis.branches`)"
+  ],
+  "related_experiments": [
+    1,
+    3
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is a Current-Controlled Current Source (CCCS)?",
+      "a": "A CCCS is a dependent current source whose output current is equal to a dimensionless gain factor multiplied by a controlling current in another branch."
+    },
+    {
+      "category": "why",
+      "q": "Why do we insert `Vtest` with 0 V in Experiment 2?",
+      "a": "SPICE's `F` element requires a voltage source name to measure controlling current. A 0 V voltage source acts as an ideal ammeter (zero resistance, zero voltage drop) in series with R1."
+    },
+    {
+      "category": "how",
+      "q": "How is the CCCS defined in PySpice code?",
+      "a": "Using `circuit.F(1, 4, 3, 'Vtest', 3)`, where 4 and 3 are output nodes, `'Vtest'` is the current-sensing voltage source, and 3 is the current gain."
+    },
+    {
+      "category": "component",
+      "q": "Why are Node 1 and Node 2 at the exact same voltage in Experiment 2?",
+      "a": "Because `Vtest` is a 0 V source connected between Node 1 and Node 2, so V(1) - V(2) = 0 V."
+    },
+    {
+      "category": "procedure",
+      "q": "How do you print branch currents after running `operating_point()` in PySpice?",
+      "a": "By iterating over `for branch in analysis.branches.values(): print(str(branch), float(branch))`."
+    },
+    {
+      "category": "code",
+      "q": "Can we pass `'R1'` instead of `'Vtest'` to `circuit.F()` in standard SPICE?",
+      "a": "No, standard SPICE syntax requires a voltage source identifier as the current sensor for an F-element."
+    },
+    {
+      "category": "topology",
+      "q": "Between which nodes is the independent current source `I1` connected in Experiment 2?",
+      "a": "Between `circuit.gnd` and Node 4, injecting 5 A into Node 4."
+    },
+    {
+      "category": "calculation",
+      "q": "If I(Vtest) is 1.9841 A and the CCCS gain is 3, what is the current through F1?",
+      "a": "I(F1) = 3 * 1.9841 A = 5.9524 A."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "What happens if a student removes `Vtest` when modifying resistor values in Experiment 2?",
+      "a": "The CCCS `F1` loses its controlling current reference and Ngspice fails with an unknown controlling source error."
+    },
+    {
+      "category": "expected_output",
+      "q": "What happens to Node 3 voltage if the CCCS gain is increased?",
+      "a": "Because F1 pumps current from Node 4 into Node 3, increasing the gain raises Node 3's voltage closer to V1."
+    }
+  ],
+  "raw_text": "EXPERIMENT-2\n\nDate:\n\nSIMULATION OF A CURRENT-CONTROLLED CURRENT SOURCE (CCCS)\nCIRCUIT USING PYSPICE\nAim:\nTo analyze the behavior of a circuit containing resistors, voltage sources, and a currentcontrolled current source (CCCS) by computing the DC biases and currents through various\nelements.\nApparatus Required:\n1. Python programming environment with PySpice library installed\n2. Computer with an internet connection to set up the Python environment\nCircuit diagram:\n\nProcedure:\n1. Setup the Python Environment:\no Ensure that Python and the PySpice library are installed on your computer. If\nnot, install PySpice using the command:\npip install PySpice\n2. Write the Circuit Code:\no Open a new text document and write the following code to define the circuit\nwith resistors, voltage sources, and a CCCS:\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n# Define the circuit\ncircuit = Circuit('Circuit with CCCS')\n# Add resistors\ncircuit.R(1, 2, 3, 6@u_Ω)\ncircuit.R(2, 3, circuit.gnd, 8@u_Ω)\n5|Page\n\ncircuit.R(3, 3, 4, 2@u_Ω)\ncircuit.R(4, 4, circuit.gnd, 4@u_Ω)\n# Add voltage sources\ncircuit.V(1, 1, circuit.gnd, 50@u_V)\ncircuit.V('test', 1, 2, 0@u_V)\n# Add current source\ncircuit.I(1, circuit.gnd, 4, 5@u_A)\n# Add CCCS (F element)\ncircuit.F(1, 4, 3, 'Vtest', 3)\n# Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n# Print the results\nfor node in analysis.nodes.values():\nprint('Node {}: {:4.1f} V'.format(str(node), float(node)))\nfor branch in analysis.branches.values():\nprint('Branch {}: {:5.2f} A'.format(str(branch), float(branch)))\nSave the text document in .py format.\n3. Run the Simulation:\no Execute the Python script to run the simulation. This will compute the DC\nbiases and currents through various components in the circuit.\n4. Analyze the Results:\no Observe the output of the script, which will display the voltage at each node\nand the current through each branch in the circuit.\nResult:\n\n6|Page",
+  "page_start": 5,
+  "page_end": 6,
+  "software": "PySpice, Python 3.x, Ngspice",
+  "tags": "CCCS (F Element), Controlling Current, Zero-Volt Ammeter Source (Vtest), Current Gain, Branch Current (`analysis.branches`)",
+  "diagram_images": [
+    "Manual complete_page-0005-compressed.jpg",
+    "Manual complete_page-0006-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (manual_template)\ncircuit = Circuit('Current-Controlled Current Source (CCCS) Circuit (Experiment 2)')\n\ncircuit.V(1, 1, circuit.gnd, 50@u_V)\ncircuit.V('test', 1, 2, 0@u_V)\ncircuit.R(1, 2, 3, 6@u_Ohm)\ncircuit.R(2, 3, circuit.gnd, 8@u_Ohm)\ncircuit.R(3, 3, 4, 2@u_Ohm)\ncircuit.R(4, 4, circuit.gnd, 4@u_Ohm)\ncircuit.I(1, circuit.gnd, 4, 5@u_A)\n# Add CCCS (F element)\ncircuit.F(1, 4, 3, 'Vtest', 3)\n\n# 1. Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n\n# 2. Extract and print Node Voltages and Branch Currents\nnode_voltages = {}\nfor node in analysis.nodes.values():\n    node_voltages[str(node)] = float(node)\n    print('Node {}: {:4.2f} V'.format(str(node), float(node)))\nbranch_currents = {}\nfor branch in analysis.branches.values():\n    branch_currents[str(branch)] = float(branch)\n    print('Branch {}: {:5.2f} A'.format(str(branch), float(branch)))",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (manual_template)\ncircuit = Circuit('Current-Controlled Current Source (CCCS) Circuit (Experiment 2)')\n\ncircuit.V(1, 1, circuit.gnd, 50@u_V)\ncircuit.V('test', 1, 2, 0@u_V)\ncircuit.R(1, 2, 3, 6@u_Ohm)\ncircuit.R(2, 3, circuit.gnd, 8@u_Ohm)\ncircuit.R(3, 3, 4, 2@u_Ohm)\ncircuit.R(4, 4, circuit.gnd, 4@u_Ohm)\ncircuit.I(1, circuit.gnd, 4, 5@u_A)\n# Add CCCS (F element)\ncircuit.F(1, 4, 3, 'Vtest', 3)\n\n# 1. Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n\n# 2. Extract and print Node Voltages and Branch Currents\nnode_voltages = {}\nfor node in analysis.nodes.values():\n    node_voltages[str(node)] = float(node)\n    print('Node {}: {:4.2f} V'.format(str(node), float(node)))\nbranch_currents = {}\nfor branch in analysis.branches.values():\n    branch_currents[str(branch)] = float(branch)\n    print('Branch {}: {:5.2f} A'.format(str(branch), float(branch)))",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Current-Controlled Current Source (CCCS) Circuit (Experiment 2)",
+      "circuit_type": "CCCS",
+      "experiment": 2,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage",
+        "branch_current"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "50 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "Vtest",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "0 V",
+            "control_info": null,
+            "edge_line": "Vtest: N1 → N2",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "3",
+            "from_node": "N2",
+            "to_node": "N3",
+            "display_value": "6 Ω",
+            "control_info": null,
+            "edge_line": "R1: N2 → N3",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "3",
+            "raw_to": "GND",
+            "from_node": "N3",
+            "to_node": "GND",
+            "display_value": "8 Ω",
+            "control_info": null,
+            "edge_line": "R2: N3 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R3",
+            "type": "resistor",
+            "raw_from": "3",
+            "raw_to": "4",
+            "from_node": "N3",
+            "to_node": "N4",
+            "display_value": "2 Ω",
+            "control_info": null,
+            "edge_line": "R3: N3 → N4",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R4",
+            "type": "resistor",
+            "raw_from": "4",
+            "raw_to": "GND",
+            "from_node": "N4",
+            "to_node": "GND",
+            "display_value": "4 Ω",
+            "control_info": null,
+            "edge_line": "R4: N4 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "I1",
+            "type": "current_source",
+            "raw_from": "GND",
+            "raw_to": "4",
+            "from_node": "GND",
+            "to_node": "N4",
+            "display_value": "5 A",
+            "control_info": null,
+            "edge_line": "I1: GND → N4",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "F1",
+            "type": "cccs",
+            "raw_from": "4",
+            "raw_to": "3",
+            "from_node": "N4",
+            "to_node": "N3",
+            "display_value": "gain = 3 A/A",
+            "control_info": "ctrl: Vtest",
+            "edge_line": "F1: N4 → N3",
+            "is_source": false,
+            "is_passive": false
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "Vtest: N1 → N2",
+          "R1: N2 → N3",
+          "R2: N3 → GND",
+          "R3: N3 → N4",
+          "R4: N4 → GND",
+          "I1: GND → N4",
+          "F1: N4 → N3"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "Vtest: N1 → N2",
+          "R1: N2 → N3",
+          "R2: N3 → GND",
+          "R3: N3 → N4",
+          "R4: N4 → GND",
+          "I1: GND → N4",
+          "F1: N4 → N3"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "Vtest: N1 → N2",
+        "R1: N2 → N3",
+        "R2: N3 → GND",
+        "R3: N3 → N4",
+        "R4: N4 → GND",
+        "I1: GND → N4",
+        "F1: N4 → N3"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "N3",
+            "N4",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "50 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "Vtest",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "0 V",
+              "control_info": null,
+              "edge_line": "Vtest: N1 → N2",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "3",
+              "from_node": "N2",
+              "to_node": "N3",
+              "display_value": "6 Ω",
+              "control_info": null,
+              "edge_line": "R1: N2 → N3",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "3",
+              "raw_to": "GND",
+              "from_node": "N3",
+              "to_node": "GND",
+              "display_value": "8 Ω",
+              "control_info": null,
+              "edge_line": "R2: N3 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R3",
+              "type": "resistor",
+              "raw_from": "3",
+              "raw_to": "4",
+              "from_node": "N3",
+              "to_node": "N4",
+              "display_value": "2 Ω",
+              "control_info": null,
+              "edge_line": "R3: N3 → N4",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R4",
+              "type": "resistor",
+              "raw_from": "4",
+              "raw_to": "GND",
+              "from_node": "N4",
+              "to_node": "GND",
+              "display_value": "4 Ω",
+              "control_info": null,
+              "edge_line": "R4: N4 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "I1",
+              "type": "current_source",
+              "raw_from": "GND",
+              "raw_to": "4",
+              "from_node": "GND",
+              "to_node": "N4",
+              "display_value": "5 A",
+              "control_info": null,
+              "edge_line": "I1: GND → N4",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "F1",
+              "type": "cccs",
+              "raw_from": "4",
+              "raw_to": "3",
+              "from_node": "N4",
+              "to_node": "N3",
+              "display_value": "gain = 3 A/A",
+              "control_info": "ctrl: Vtest",
+              "edge_line": "F1: N4 → N3",
+              "is_source": false,
+              "is_passive": false
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "Vtest: N1 → N2",
+            "R1: N2 → N3",
+            "R2: N3 → GND",
+            "R3: N3 → N4",
+            "R4: N4 → GND",
+            "I1: GND → N4",
+            "F1: N4 → N3"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "Vtest: N1 → N2",
+            "R1: N2 → N3",
+            "R2: N3 → GND",
+            "R3: N3 → N4",
+            "R4: N4 → GND",
+            "I1: GND → N4",
+            "F1: N4 → N3"
+          ]
+        },
+        "ascii_diagram": "[V1 = 50 V] (N1 → GND)\n[Vtest = 0 V] (N1 → N2)\n[I1 = 5 A] (GND → N4)\n ├── R1 (6 Ω): N2 → N3\n ├── R2 (8 Ω): N3 → GND\n ├── R3 (2 Ω): N3 → N4\n ├── R4 (4 Ω): N4 → GND\n └── F1 (gain = 3 A/A, ctrl: Vtest): N4 → N3",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "Vtest: N1 → N2",
+          "R1: N2 → N3",
+          "R2: N3 → GND",
+          "R3: N3 → N4",
+          "R4: N4 → GND",
+          "I1: GND → N4",
+          "F1: N4 → N3"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "Vtest: N1 → N2",
+          "R1: N2 → N3",
+          "R2: N3 → GND",
+          "R3: N3 → N4",
+          "R4: N4 → GND",
+          "I1: GND → N4",
+          "F1: N4 → N3"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 50 V] (N1 → GND)\n[Vtest = 0 V] (N1 → N2)\n[I1 = 5 A] (GND → N4)\n ├── R1 (6 Ω): N2 → N3\n ├── R2 (8 Ω): N3 → GND\n ├── R3 (2 Ω): N3 → N4\n ├── R4 (4 Ω): N4 → GND\n └── F1 (gain = 3 A/A, ctrl: Vtest): N4 → N3\n\nV1: N1 → GND\nVtest: N1 → N2\nR1: N2 → N3\nR2: N3 → GND\nR3: N3 → N4\nR4: N4 → GND\nI1: GND → N4\nF1: N4 → N3"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 50.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "Vtest",
+        "type": "dc_voltage_source",
+        "value": 0.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "2"
+        ],
+        "role": "current_sense"
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 6.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 8.0,
+        "unit": "ohm",
+        "nodes": [
+          "3",
+          "GND"
+        ]
+      },
+      {
+        "id": "R3",
+        "type": "resistor",
+        "value": 2.0,
+        "unit": "ohm",
+        "nodes": [
+          "3",
+          "4"
+        ]
+      },
+      {
+        "id": "R4",
+        "type": "resistor",
+        "value": 4.0,
+        "unit": "ohm",
+        "nodes": [
+          "4",
+          "GND"
+        ]
+      },
+      {
+        "id": "I1",
+        "type": "current_source",
+        "value": 5.0,
+        "unit": "A",
+        "nodes": [
+          "GND",
+          "4"
+        ]
+      },
+      {
+        "id": "F1",
+        "type": "cccs",
+        "controlling_source": "Vtest",
+        "gain": 3,
+        "nodes": [
+          "4",
+          "3"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  },
+  "circuit_template_id": "exp2_cccs",
+  "viva": [
+    {
+      "q": "What is a Current-Controlled Current Source (CCCS)?",
+      "a": "A CCCS is a dependent current source whose output current is equal to a dimensionless gain factor multiplied by a controlling current in another branch.",
+      "category": "definition",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Why do we insert `Vtest` with 0 V in Experiment 2?",
+      "a": "SPICE's `F` element requires a voltage source name to measure controlling current. A 0 V voltage source acts as an ideal ammeter (zero resistance, zero voltage drop) in series with R1.",
+      "category": "why",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "How is the CCCS defined in PySpice code?",
+      "a": "Using `circuit.F(1, 4, 3, 'Vtest', 3)`, where 4 and 3 are output nodes, `'Vtest'` is the current-sensing voltage source, and 3 is the current gain.",
+      "category": "how",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Why are Node 1 and Node 2 at the exact same voltage in Experiment 2?",
+      "a": "Because `Vtest` is a 0 V source connected between Node 1 and Node 2, so V(1) - V(2) = 0 V.",
+      "category": "component",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "How do you print branch currents after running `operating_point()` in PySpice?",
+      "a": "By iterating over `for branch in analysis.branches.values(): print(str(branch), float(branch))`.",
+      "category": "procedure",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Can we pass `'R1'` instead of `'Vtest'` to `circuit.F()` in standard SPICE?",
+      "a": "No, standard SPICE syntax requires a voltage source identifier as the current sensor for an F-element.",
+      "category": "code",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Between which nodes is the independent current source `I1` connected in Experiment 2?",
+      "a": "Between `circuit.gnd` and Node 4, injecting 5 A into Node 4.",
+      "category": "topology",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "If I(Vtest) is 1.9841 A and the CCCS gain is 3, what is the current through F1?",
+      "a": "I(F1) = 3 * 1.9841 A = 5.9524 A.",
+      "category": "calculation",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "What happens if a student removes `Vtest` when modifying resistor values in Experiment 2?",
+      "a": "The CCCS `F1` loses its controlling current reference and Ngspice fails with an unknown controlling source error.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "What happens to Node 3 voltage if the CCCS gain is increased?",
+      "a": "Because F1 pumps current from Node 4 into Node 3, increasing the gain raises Node 3's voltage closer to V1.",
+      "category": "expected_output",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    }
+  ]
+}

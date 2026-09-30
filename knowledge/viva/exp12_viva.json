@@ -1,0 +1,116 @@
+{
+  "exp_number": 12,
+  "title": "Design a Voltage Regulator Using Zener Diode in MATLAB/Simulink",
+  "questions": [
+    {
+      "q": "Why is a Zener regulator called a shunt regulator?",
+      "a": "Because the regulating Zener diode is connected in parallel (shunt) with the load resistor RL.",
+      "category": "definition",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "Why must the Zener diode be connected in reverse bias in Experiment 12?",
+      "a": "Because Zener voltage regulation occurs at the reverse breakdown voltage Vz (e.g., 5.1 V). In forward bias, it behaves like an ordinary diode with a 0.7 V drop.",
+      "category": "why",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "How do you determine if the Zener diode is in breakdown (regulating) for given V_in, Rs, and RL?",
+      "a": "Calculate the voltage divider voltage without the Zener: V_th = V_in * RL / (Rs + RL). If V_th > Vz, the Zener is in breakdown and V_out = Vz.",
+      "category": "how",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "What happens if series resistor Rs is removed from the Zener regulator?",
+      "a": "The voltage source V_in is connected directly across the Zener diode with nothing to drop (V_in - Vz), causing infinite/destructive current through the Zener.",
+      "category": "component",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "What is the minimum input voltage V_in_min required for a 5.1 V Zener to regulate with Rs = 220 Ω and RL = 1 kΩ?",
+      "a": "V_in_min = Vz * (Rs + RL) / RL = 5.1 * (1220 / 1000) = 6.222 V.",
+      "category": "procedure",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "How do you orient a reverse-biased Zener diode at Node 2 in PySpice?",
+      "a": "`circuit.Diode('Z1', circuit.gnd, 2, model='DZ5V1')` — anode at `circuit.gnd` and cathode at Node `2`.",
+      "category": "code",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "Which components share Node 2 (the regulated output node) in Experiment 12?",
+      "a": "Series resistor Rs (from Node 1), Zener cathode DZ1 (to GND), and load resistor RL (to GND).",
+      "category": "topology",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "For V_in = 12 V, Vz = 5.1 V, Rs = 220 Ω, and RL = 1 kΩ, calculate I_s, I_L, and I_Z.",
+      "a": "I_s = (12 - 5.1)/220 = 31.36 mA; I_L = 5.1/1000 = 5.10 mA; I_Z = 31.36 - 5.10 = 26.26 mA.",
+      "category": "calculation",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "If your simulation shows V_out = 0.7 V instead of 5.1 V, what is wrong?",
+      "a": "The Zener diode anode and cathode are reversed (connected in forward bias instead of reverse bias).",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "What happens to Zener current I_Z if the load resistor RL is disconnected (open load)?",
+      "a": "I_L drops to 0, so the entire series current I_s (31.36 mA) flows through the Zener diode.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,319 @@
+{
+  "template_id": "exp12_zener_regulator",
+  "experiment_number": 12,
+  "topology_category": "EXACT MANUAL TOPOLOGY",
+  "circuit_type": "ZENER_REGULATOR",
+  "name": "Zener Diode Voltage Regulator (Experiment 12)",
+  "components": [
+    "V1",
+    "Rs",
+    "DZ1",
+    "RL"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 12.0,
+      "unit": "V"
+    },
+    "Rs": {
+      "value": 220.0,
+      "unit": "ohm"
+    },
+    "DZ1": {
+      "value": 5.1,
+      "unit": "V"
+    },
+    "RL": {
+      "value": 1000.0,
+      "unit": "ohm"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "Rs": "resistor",
+    "DZ1": "zener",
+    "RL": "resistor"
+  },
+  "nodes": [
+    "1",
+    "2",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,GND",
+    "Rs -> N1,N2",
+    "DZ1 -> GND,N2",
+    "RL -> N2,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "op",
+  "simulation_parameters": {
+    "type": "op"
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1 (Vin)": 12.0,
+      "2 (Vout Regulated)": 5.1
+    },
+    "branch_currents": {
+      "I_Rs": 0.031364,
+      "I_RL (Load)": 0.0051,
+      "I_Zener": 0.026264
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Zener Diode Voltage Regulator (Experiment 12)",
+      "circuit_type": "ZENER_REGULATOR",
+      "experiment": 12,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage",
+        "branch_current",
+        "waveform"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "Rs",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "220 Ω",
+            "control_info": null,
+            "edge_line": "Rs: N1 → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "DZ1",
+            "type": "zener",
+            "raw_from": "GND",
+            "raw_to": "2",
+            "from_node": "GND",
+            "to_node": "N2",
+            "display_value": "5.1 V",
+            "control_info": null,
+            "edge_line": "DZ1: GND → N2",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "RL",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "RL: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "Rs: N1 → N2",
+        "DZ1: GND → N2",
+        "RL: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "Rs",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "220 Ω",
+              "control_info": null,
+              "edge_line": "Rs: N1 → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "DZ1",
+              "type": "zener",
+              "raw_from": "GND",
+              "raw_to": "2",
+              "from_node": "GND",
+              "to_node": "N2",
+              "display_value": "5.1 V",
+              "control_info": null,
+              "edge_line": "DZ1: GND → N2",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "RL",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "RL: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "Rs: N1 → N2",
+            "DZ1: GND → N2",
+            "RL: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "Rs: N1 → N2",
+            "DZ1: GND → N2",
+            "RL: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → GND)\n ├── Rs (220 Ω): N1 → N2\n ├── DZ1 (5.1 V): GND → N2\n └── RL (1 kΩ): N2 → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → GND)\n ├── Rs (220 Ω): N1 → N2\n ├── DZ1 (5.1 V): GND → N2\n └── RL (1 kΩ): N2 → GND\n\nV1: N1 → GND\nRs: N1 → N2\nDZ1: GND → N2\nRL: N2 → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "Rs",
+        "type": "resistor",
+        "value": 220.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "DZ1",
+        "type": "zener",
+        "value": 5.1,
+        "unit": "V",
+        "nodes": [
+          "GND",
+          "2"
+        ]
+      },
+      {
+        "id": "RL",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  }
+}

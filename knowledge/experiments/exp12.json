@@ -1,0 +1,478 @@
+{
+  "exp_number": 12,
+  "title": "Design a Voltage Regulator Using Zener Diode in MATLAB/Simulink",
+  "category": "Power / Analog",
+  "family": "SIMULINK_SEMICONDUCTOR",
+  "pages": [
+    39,
+    40
+  ],
+  "aim": "To design and simulate a shunt DC voltage regulator using a Zener diode in reverse breakdown and verify constant output voltage across the load.",
+  "apparatus_components": [
+    "Unregulated DC Input Voltage Source V1 = 12 V (Node 1 to GND)",
+    "Series Current-Limiting Resistor Rs = 220 Ω (Node 1 to Node 2)",
+    "Zener Diode DZ1 (Vz = 5.1 V, connected in reverse bias across load: Anode at GND, Cathode at Node 2)",
+    "Load Resistor RL = 1 kΩ (Node 2 to GND)"
+  ],
+  "theory": "A Zener diode is heavily doped to operate reliably in the reverse breakdown region at a sharp breakdown voltage V_Z (e.g., 5.1 V). In a Zener shunt regulator, series resistor R_s drops the excess input voltage (V_in - V_Z), while the reverse-biased Zener diode is connected in parallel across load resistor R_L. As long as the open-load Thevenin voltage V_th = V_in * R_L / (R_s + R_L) exceeds V_Z, the Zener clamps V_out at V_Z and absorbs any current fluctuations: I_Z = I_s - I_L.",
+  "equations": [
+    "Unloaded Thevenin Voltage: V_th = V_in * R_L / (R_s + R_L)",
+    "Regulated Output Voltage: V_out = V_Z (when V_th >= V_Z), else V_th",
+    "Series Current: I_s = (V_in - V_out) / R_s",
+    "Load Current: I_L = V_out / R_L",
+    "Zener Current: I_Z = I_s - I_L"
+  ],
+  "circuit_topology": "Series resistor Rs from Node 1 to Node 2, with reverse-biased Zener diode DZ1 and load resistor RL connected in parallel from Node 2 to GND.",
+  "component_relationships": [
+    "V1: N1 -> GND (12 V unregulated DC input)",
+    "Rs: N1 -> N2 (220 Ω series current-limiting resistor)",
+    "DZ1: GND (Anode) -> N2 (Cathode) (5.1 V Zener diode in reverse bias across load)",
+    "RL: N2 -> GND (1 kΩ load resistor in parallel with DZ1)"
+  ],
+  "simulation_type": "DC Operating Point & Line Regulation Sweep",
+  "procedure": "1. Connect unregulated DC supply V1 (12 V) to Node 1 and series resistor Rs (220 Ω) between Node 1 and Node 2.\n2. Connect Zener diode DZ1 (Vz = 5.1 V) in reverse bias (cathode at Node 2, anode at GND) in parallel with load resistor RL (1 kΩ).\n3. Simulate and verify that V(2) remains clamped at 5.1 V despite changes in V1 above the breakdown threshold.",
+  "expected_observations": "With V1 = 12 V, Rs = 220 Ω, RL = 1 kΩ, and Vz = 5.1 V: V_out = 5.1000 V, I_s = 31.36 mA, I_L = 5.10 mA, and I_Z = 26.26 mA.",
+  "result": "The Zener diode voltage regulator was simulated and constant 5.1 V regulated output voltage across the load was verified.",
+  "common_mistakes": [
+    "Connecting the Zener diode in forward bias instead of reverse bias (which clamps V_out to 0.7 V instead of V_Z = 5.1 V)",
+    "Omitting series resistor Rs, which shorts the voltage source across the Zener diode"
+  ],
+  "important_terminology": [
+    "Zener Breakdown Voltage (Vz)",
+    "Shunt Voltage Regulator",
+    "Line Regulation",
+    "Load Regulation",
+    "Series Limiting Resistor (Rs)"
+  ],
+  "related_experiments": [
+    11,
+    13,
+    14
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "Why is a Zener regulator called a shunt regulator?",
+      "a": "Because the regulating Zener diode is connected in parallel (shunt) with the load resistor RL."
+    },
+    {
+      "category": "why",
+      "q": "Why must the Zener diode be connected in reverse bias in Experiment 12?",
+      "a": "Because Zener voltage regulation occurs at the reverse breakdown voltage Vz (e.g., 5.1 V). In forward bias, it behaves like an ordinary diode with a 0.7 V drop."
+    },
+    {
+      "category": "how",
+      "q": "How do you determine if the Zener diode is in breakdown (regulating) for given V_in, Rs, and RL?",
+      "a": "Calculate the voltage divider voltage without the Zener: V_th = V_in * RL / (Rs + RL). If V_th > Vz, the Zener is in breakdown and V_out = Vz."
+    },
+    {
+      "category": "component",
+      "q": "What happens if series resistor Rs is removed from the Zener regulator?",
+      "a": "The voltage source V_in is connected directly across the Zener diode with nothing to drop (V_in - Vz), causing infinite/destructive current through the Zener."
+    },
+    {
+      "category": "procedure",
+      "q": "What is the minimum input voltage V_in_min required for a 5.1 V Zener to regulate with Rs = 220 Ω and RL = 1 kΩ?",
+      "a": "V_in_min = Vz * (Rs + RL) / RL = 5.1 * (1220 / 1000) = 6.222 V."
+    },
+    {
+      "category": "code",
+      "q": "How do you orient a reverse-biased Zener diode at Node 2 in PySpice?",
+      "a": "`circuit.Diode('Z1', circuit.gnd, 2, model='DZ5V1')` — anode at `circuit.gnd` and cathode at Node `2`."
+    },
+    {
+      "category": "topology",
+      "q": "Which components share Node 2 (the regulated output node) in Experiment 12?",
+      "a": "Series resistor Rs (from Node 1), Zener cathode DZ1 (to GND), and load resistor RL (to GND)."
+    },
+    {
+      "category": "calculation",
+      "q": "For V_in = 12 V, Vz = 5.1 V, Rs = 220 Ω, and RL = 1 kΩ, calculate I_s, I_L, and I_Z.",
+      "a": "I_s = (12 - 5.1)/220 = 31.36 mA; I_L = 5.1/1000 = 5.10 mA; I_Z = 31.36 - 5.10 = 26.26 mA."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "If your simulation shows V_out = 0.7 V instead of 5.1 V, what is wrong?",
+      "a": "The Zener diode anode and cathode are reversed (connected in forward bias instead of reverse bias)."
+    },
+    {
+      "category": "expected_output",
+      "q": "What happens to Zener current I_Z if the load resistor RL is disconnected (open load)?",
+      "a": "I_L drops to 0, so the entire series current I_s (31.36 mA) flows through the Zener diode."
+    }
+  ],
+  "raw_text": "EXPERIMENT-13\n\nDate:\n\nSIMULATION OF HALFWAVE RECTIFIER IN MATLAB/SIMULINK\nAim:\nTo simulate the operation of half-wave rectifier with and without filter circuits in\nMATLAB/Simulink and analyse their output waveforms.\nApparatus Required:\n•\n\nMATLAB/Simulink software installed on a computer.\n\n•\n\nDiode – for rectification.\n\n•\n\nAC Voltage Source – to supply the input signal.\n\n•\n\nResistive Load (R) – to represent the load for the rectifier.\n\n•\n\nCapacitor (optional) – for filtering the output (to smooth the ripple).\n\n•\n\nScope block – to observe the waveforms.\n\n•\n\nVoltage Measurement Blocks – to measure input and output voltages.\n\n•\n\nCurrent Measurement Blocks – to measure load current.\n\n•\n\nPower GUI block – for simulation control.\n\nCircuit Diagram\n\nProcedure:\n1. Simulation of Half-Wave Rectifier (Without Filter):\nStep 1: Open MATLAB/Simulink and create a new model.\nStep 2: Drag and drop the following components from the Simulink library:\n•\n\nAC Voltage Source (set to peak or RMS value as per requirement).\n\n•\n\nDiode (ideal or real model).\n\n39 | P a g e\n\n•\n\nResistive Load (R).\n\n•\n\nGround block (to ensure proper simulation).\n\n•\n\nScope block (to observe waveforms).\n\nStep 3: Connect the components as per the circuit diagram of a half-wave rectifier:\n•\n\nConnect the positive terminal of the AC source to the anode of the diode.\n\n•\n\nConnect the cathode of the diode to one end of the load resistor.\n\n•\n\nConnect the other end of the resistor to ground.\n\n•\n\nConnect the negative terminal of the AC source to the ground.\n\n•\n\nAttach the Scope block at the output (across the load resistor) to visualize the rectified\noutput waveform.\n\nStep 4: Set simulation parameters:\n•\n\nRun the simulation for at least 2 to 3 cycles of the AC waveform (adjust simulation\ntime accordingly).\n\nStep 5: Observe the waveform of the rectified signal on the Scope block.\n•\n\nYou will observe a pulsating DC output with a large ripple.\n2. Simulation of Half-Wave Rectifier (With Filter):\n\nStep 1: In the previous half-wave rectifier circuit, add a Capacitor across the load resistor (R).\nStep 2: Adjust the capacitance value depending on the desired smoothing effect (refer to\nI\n\nLoad\ncapacitance calculation using formulae C = f*∆V\n.\n\nStep 3: Run the simulation and observe the output waveform on the Scope block.\n•\n\nThe output should now be a smoothed DC signal with less ripple compared to the\nunfiltered output.\n\nResult\n\n40 | P a g e",
+  "page_start": 39,
+  "page_end": 40,
+  "software": "MATLAB Simulink / SIMLAB Numerical Engine",
+  "tags": "Zener Breakdown Voltage (Vz), Shunt Voltage Regulator, Line Regulation, Load Regulation, Series Limiting Resistor (Rs)",
+  "diagram_images": [
+    "Manual complete_page-0039-compressed.jpg",
+    "Manual complete_page-0040-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (manual_template)\ncircuit = Circuit('Zener Diode Voltage Regulator (Experiment 12)')\n\ncircuit.model('ZENER_D', 'D', BV=5.1@u_V, IBV=5@u_mA)\ncircuit.V(1, 1, circuit.gnd, 12@u_V)\ncircuit.R('Rs', 1, 2, 220@u_Ohm)\ncircuit.Diode('Z1', circuit.gnd, 2, model='ZENER_D')\ncircuit.R('RL', 2, circuit.gnd, 1@u_kOhm)\n\n# 1. Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n\n# 2. Extract and print Node Voltages and Branch Currents\nnode_voltages = {}\nfor node in analysis.nodes.values():\n    node_voltages[str(node)] = float(node)\n    print('Node {}: {:4.2f} V'.format(str(node), float(node)))\nbranch_currents = {}\nfor branch in analysis.branches.values():\n    branch_currents[str(branch)] = float(branch)\n    print('Branch {}: {:5.2f} A'.format(str(branch), float(branch)))",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (manual_template)\ncircuit = Circuit('Zener Diode Voltage Regulator (Experiment 12)')\n\ncircuit.model('ZENER_D', 'D', BV=5.1@u_V, IBV=5@u_mA)\ncircuit.V(1, 1, circuit.gnd, 12@u_V)\ncircuit.R('Rs', 1, 2, 220@u_Ohm)\ncircuit.Diode('Z1', circuit.gnd, 2, model='ZENER_D')\ncircuit.R('RL', 2, circuit.gnd, 1@u_kOhm)\n\n# 1. Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n\n# 2. Extract and print Node Voltages and Branch Currents\nnode_voltages = {}\nfor node in analysis.nodes.values():\n    node_voltages[str(node)] = float(node)\n    print('Node {}: {:4.2f} V'.format(str(node), float(node)))\nbranch_currents = {}\nfor branch in analysis.branches.values():\n    branch_currents[str(branch)] = float(branch)\n    print('Branch {}: {:5.2f} A'.format(str(branch), float(branch)))",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Zener Diode Voltage Regulator (Experiment 12)",
+      "circuit_type": "ZENER_REGULATOR",
+      "experiment": 12,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage",
+        "branch_current",
+        "waveform"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "Rs",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "220 Ω",
+            "control_info": null,
+            "edge_line": "Rs: N1 → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "DZ1",
+            "type": "zener",
+            "raw_from": "GND",
+            "raw_to": "2",
+            "from_node": "GND",
+            "to_node": "N2",
+            "display_value": "5.1 V",
+            "control_info": null,
+            "edge_line": "DZ1: GND → N2",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "RL",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "RL: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "Rs: N1 → N2",
+        "DZ1: GND → N2",
+        "RL: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "Rs",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "220 Ω",
+              "control_info": null,
+              "edge_line": "Rs: N1 → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "DZ1",
+              "type": "zener",
+              "raw_from": "GND",
+              "raw_to": "2",
+              "from_node": "GND",
+              "to_node": "N2",
+              "display_value": "5.1 V",
+              "control_info": null,
+              "edge_line": "DZ1: GND → N2",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "RL",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "RL: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "Rs: N1 → N2",
+            "DZ1: GND → N2",
+            "RL: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "Rs: N1 → N2",
+            "DZ1: GND → N2",
+            "RL: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → GND)\n ├── Rs (220 Ω): N1 → N2\n ├── DZ1 (5.1 V): GND → N2\n └── RL (1 kΩ): N2 → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "Rs: N1 → N2",
+          "DZ1: GND → N2",
+          "RL: N2 → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → GND)\n ├── Rs (220 Ω): N1 → N2\n ├── DZ1 (5.1 V): GND → N2\n └── RL (1 kΩ): N2 → GND\n\nV1: N1 → GND\nRs: N1 → N2\nDZ1: GND → N2\nRL: N2 → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "Rs",
+        "type": "resistor",
+        "value": 220.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "DZ1",
+        "type": "zener",
+        "value": 5.1,
+        "unit": "V",
+        "nodes": [
+          "GND",
+          "2"
+        ]
+      },
+      {
+        "id": "RL",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  },
+  "circuit_template_id": "exp12_zener_regulator",
+  "viva": [
+    {
+      "q": "Why is a Zener regulator called a shunt regulator?",
+      "a": "Because the regulating Zener diode is connected in parallel (shunt) with the load resistor RL.",
+      "category": "definition",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "Why must the Zener diode be connected in reverse bias in Experiment 12?",
+      "a": "Because Zener voltage regulation occurs at the reverse breakdown voltage Vz (e.g., 5.1 V). In forward bias, it behaves like an ordinary diode with a 0.7 V drop.",
+      "category": "why",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "How do you determine if the Zener diode is in breakdown (regulating) for given V_in, Rs, and RL?",
+      "a": "Calculate the voltage divider voltage without the Zener: V_th = V_in * RL / (Rs + RL). If V_th > Vz, the Zener is in breakdown and V_out = Vz.",
+      "category": "how",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "What happens if series resistor Rs is removed from the Zener regulator?",
+      "a": "The voltage source V_in is connected directly across the Zener diode with nothing to drop (V_in - Vz), causing infinite/destructive current through the Zener.",
+      "category": "component",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "What is the minimum input voltage V_in_min required for a 5.1 V Zener to regulate with Rs = 220 Ω and RL = 1 kΩ?",
+      "a": "V_in_min = Vz * (Rs + RL) / RL = 5.1 * (1220 / 1000) = 6.222 V.",
+      "category": "procedure",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "How do you orient a reverse-biased Zener diode at Node 2 in PySpice?",
+      "a": "`circuit.Diode('Z1', circuit.gnd, 2, model='DZ5V1')` — anode at `circuit.gnd` and cathode at Node `2`.",
+      "category": "code",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "Which components share Node 2 (the regulated output node) in Experiment 12?",
+      "a": "Series resistor Rs (from Node 1), Zener cathode DZ1 (to GND), and load resistor RL (to GND).",
+      "category": "topology",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "For V_in = 12 V, Vz = 5.1 V, Rs = 220 Ω, and RL = 1 kΩ, calculate I_s, I_L, and I_Z.",
+      "a": "I_s = (12 - 5.1)/220 = 31.36 mA; I_L = 5.1/1000 = 5.10 mA; I_Z = 31.36 - 5.10 = 26.26 mA.",
+      "category": "calculation",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "If your simulation shows V_out = 0.7 V instead of 5.1 V, what is wrong?",
+      "a": "The Zener diode anode and cathode are reversed (connected in forward bias instead of reverse bias).",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    },
+    {
+      "q": "What happens to Zener current I_Z if the load resistor RL is disconnected (open load)?",
+      "a": "I_L drops to 0, so the entire series current I_s (31.36 mA) flows through the Zener diode.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Zener Breakdown Voltage (Vz)",
+        "Shunt Voltage Regulator",
+        "Line Regulation",
+        "Load Regulation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,603 @@
+{
+  "exp_number": 6,
+  "title": "Simulation of a Pacemaker Circuit in PySpice",
+  "category": "Biomedical / PySpice",
+  "family": "PYSPICE_TRANSIENT",
+  "pages": [
+    15,
+    16,
+    17,
+    18
+  ],
+  "aim": "To design and simulate a cardiac pacemaker timing and discharge circuit in PySpice for a specified heart rate (BPM) and switching threshold factor.",
+  "apparatus_components": [
+    "DC Supply Voltage Vs (V1) = 6 V (Node 1 to GND)",
+    "Calculated Timing Resistor R1 = 755.9 kΩ (Node 1 to 'control', computed from H=70 BPM, C1=1 µF, switching_factor=0.68)",
+    "Timing Capacitor C1 = 1 µF (Node 'control' to GND)",
+    "Voltage-Controlled Switch S1 (Node 'control' to 'out', threshold Vo = 0.68 * Vs = 4.08 V)",
+    "Heart Muscle Equivalent Load Resistor R2 = 1 kΩ (Node 'out' to GND)"
+  ],
+  "theory": "An artificial cardiac pacemaker generates periodic electrical impulses to stimulate heart contraction. In Experiment 6, capacitor C1 (1 µF) charges from supply Vs (6 V) through timing resistor R1 until the capacitor voltage reaches the threshold Vo = switching_factor * Vs (0.68 * 6 V = 4.08 V) at the end of one heartbeat period T = 60 / H. Using V_C(T) = Vs * (1 - exp(-T / (R1*C1))), the required timing resistance is R1 = -T / (C1 * ln(1 - Vo/Vs)). When V_C reaches Vo, Switch S1 closes and discharges C1 rapidly into the 1 kΩ cardiac load resistor R2.",
+  "equations": [
+    "Cardiac Period: T = 60 / H (for H = 70 BPM, T = 0.8571 s)",
+    "Switching Threshold Voltage: Vo = switching_factor * Vs = 0.68 * 6 V = 4.08 V",
+    "Timing Resistor Formula: R1 = -(60 / H) / (C1 * ln(1 - Vo / Vs))",
+    "For H = 70 BPM, Vs = 6 V, C1 = 1 µF, Vo/Vs = 0.68: R1 = 0.8571 / (1e-6 * 1.1394) ≈ 752.2 kΩ"
+  ],
+  "circuit_topology": "RC charging relaxation network (Vs -> R1 -> C1 at node 'control') coupled via threshold switch S1 to cardiac load resistor R2 at node 'out'.",
+  "component_relationships": [
+    "V1 (Vs): N1 -> GND (6 V DC supply)",
+    "R1: N1 -> control (calculated timing resistor)",
+    "C1: control -> GND (1 µF timing capacitor)",
+    "S1: control -> out (closes when V(control) >= Vo)",
+    "R2: out -> GND (1 kΩ heart tissue load)"
+  ],
+  "simulation_type": "Theoretical R1 Calculation + Transient Analysis (simulator.transient)",
+  "procedure": "1. Specify heart rate `H` (BPM), supply `Vs` (6V), `C1` (1µF), and `switching_factor` (0.68).\n2. Calculate threshold `Vo = switching_factor * Vs` and timing resistor `R1 = -(60 / H) / (C1 * math.log(1 - Vo / Vs))`.\n3. Build the PySpice circuit with V1, R1, C1, S1, and R2 (1 kΩ).\n4. Run transient simulation and plot the charging voltage at `'control'` and pacing pulse at `'out'`.",
+  "expected_observations": "Capacitor voltage at node `'control'` rises exponentially from 0 V to threshold Vo = 4.08 V in T = 0.857 s, triggering Switch S1 and delivering a sharp 4.08 V pacing spike across R2 at node `'out'`.",
+  "result": "The pacemaker circuit was simulated in PySpice, R1 was calculated for the target heart rate, and the pacing waveform was verified.",
+  "common_mistakes": [
+    "Using log10 instead of natural logarithm `math.log` (`ln`) when calculating R1",
+    "Forgetting to convert heart rate H (BPM) into period T = 60 / H seconds"
+  ],
+  "important_terminology": [
+    "Pacemaker",
+    "Beats Per Minute (BPM)",
+    "Switching Factor",
+    "Threshold Voltage (Vo)",
+    "Relaxation Oscillator"
+  ],
+  "related_experiments": [
+    4,
+    5
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "How does an RC timing circuit work in a cardiac pacemaker?",
+      "a": "The capacitor charges exponentially through a calibrated resistor R1 until it hits a trigger voltage Vo after T = 60/BPM seconds, firing a discharge pulse into the heart load R2."
+    },
+    {
+      "category": "why",
+      "q": "Why is R2 (1 kΩ) much smaller than R1 (~752 kΩ) in the pacemaker circuit?",
+      "a": "R1 must be large so C1 charges slowly over ~0.86 seconds, whereas R2 must be small (1 kΩ) so C1 discharges rapidly in a few milliseconds to deliver a crisp pacing pulse."
+    },
+    {
+      "category": "how",
+      "q": "How do you calculate the timing resistor R1 for a heart rate of 80 BPM with C1 = 1 µF and switching factor 0.68?",
+      "a": "T = 60 / 80 = 0.75 s. Since -ln(1 - 0.68) = -ln(0.32) = 1.1394, R1 = 0.75 / (1e-6 * 1.1394) ≈ 658.2 kΩ."
+    },
+    {
+      "category": "component",
+      "q": "What does resistor R2 represent physically in Experiment 6?",
+      "a": "R2 (1 kΩ) models the electrical impedance of the heart muscle (myocardium) across the pacemaker electrodes."
+    },
+    {
+      "category": "procedure",
+      "q": "What happens to the calculated R1 if the patient requires a faster heart rate (higher BPM)?",
+      "a": "A higher BPM requires a shorter period T = 60/H, so R1 must decrease proportionally to charge C1 faster."
+    },
+    {
+      "category": "code",
+      "q": "Why does the R1 formula in Experiment 6 independent of the supply voltage magnitude Vs when `switching_factor = Vo/Vs` is fixed?",
+      "a": "Because `Vo / Vs` is the dimensionless switching factor (0.68), so Vs cancels out inside `ln(1 - Vo/Vs)`."
+    },
+    {
+      "category": "topology",
+      "q": "Which node holds the timing capacitor voltage and which node delivers the output pulse in Experiment 6?",
+      "a": "Node `'control'` holds the timing capacitor voltage across C1, and Node `'out'` delivers the pacing pulse across R2."
+    },
+    {
+      "category": "calculation",
+      "q": "What is the peak discharge current delivered to the 1 kΩ load R2 when Vs = 6 V and switching factor = 0.68?",
+      "a": "Vo = 0.68 * 6 V = 4.08 V, so I_peak = Vo / R2 = 4.08 V / 1 kΩ = 4.08 mA."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "Why would `math.log(1 - Vo/Vs)` raise a ValueError in Python?",
+      "a": "If `Vo >= Vs` (`switching_factor >= 1.0`), `1 - Vo/Vs <= 0`, which is physically impossible because an RC circuit fed by Vs can never charge above Vs."
+    },
+    {
+      "category": "expected_output",
+      "q": "What is the discharge time constant when Switch S1 closes in Experiment 6?",
+      "a": "tau_discharge = R2 * C1 = 1 kΩ * 1 µF = 1 ms, which is ~750 times faster than the charging time constant."
+    }
+  ],
+  "raw_text": "plt.legend(('position a', 'position b'), loc=(.05, .1))\naxe.set_yticks([-1, 0, 1])\naxe = plt.subplot(212)\nplt.title('Voltage across Capacitor')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid()\nplot(analysis['output'], axis=axe, color='black')\naxe.set_yticks([-60, 0, 30])\ncursor = Cursor(axe, useblit=True, color='red', linewidth=1)\nfigure, axe = plt.subplots(figsize=(11, 6))\nplt.title('Capacitor current after switching')\nplt.xlabel('Time [s]')\nplt.ylabel('Current [A]')\nplt.grid()\nplot((analysis['b'] - analysis['2']) / circuit.R3.resistance, axis=axe,\ncolor='black')\nplt.show()\nSave the text document in .py format.\n3. Run the Simulation:\no Execute the Python script to run the simulation. This will compute the\ntransient response of the RC circuit and generate plots showing the voltage\nacross the capacitor and the current through the circuit after switching.\n4. Analyze the Results:\no Observe the output of the script, which will display the following plots:\n▪ Switch activations over time\n▪ Voltage across the capacitor over time\n▪ Capacitor current after switching\nResult:\n\n15 | P a g e\n\nEXPERIMENT-6\n\nDate:\n\nSIMULATION OF A PACEMAKER CIRCUIT IN PYSPICE\nAim:\nTo simulate the operation of a pacemaker circuit and determine the required resistor value to\nachieve a desired heart rate.\nApparatus Required:\n1. Python programming environment with PySpice and Matplotlib libraries installed\n2. Computer with an internet connection to set up the Python environment\nCircuit diagram:\n\nProcedure:\n1. Setup the Python Environment:\no Ensure that Python, PySpice, and Matplotlib libraries are installed on your\ncomputer. If not, install them using the following commands:\npip install PySpice matplotlib\n2. Write the Theoretical Calculations:\no Open a text document and write the following code to perform the theoretical\ncalculations:\nimport numpy as np\nfrom engineering_notation import EngNumber\n# Given values\nH = 70 # Heart rate in beats per minute\nVs = 6 # Supply voltage in volts\nSwitching_factor = 0.68\nVo = Switching_factor * Vs\nC = 47e-6 # Capacitance in farads\n# Calculate the required resistor value\nR = -60 / (H * C * np.log(1 - (Vo / Vs)))\nprint('R={0}'.format(EngNumber(R)))\n\n16 | P a g e\n\n3. Write the Circuit Code:\no Define the pacemaker circuit with the calculated resistor value and simulate its\ntransient response:\nimport matplotlib.pyplot as plt\nfrom matplotlib.widgets import Cursor\nimport numpy as np\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Probe.Plot import plot\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n# Given values\nVs = 6@u_V\nSwitching_factor = 0.68\nVo = Switching_factor * Vs\nC = 47@u_uF\n# Calculated resistor value\nH = 70 # Heart rate in beats per minute\nR = -60 / (H * (C.value) * np.log(1 - (Vo.value / Vs.value)))\n# Print the calculated resistor value\nprint('R={0}'.format(EngNumber(R)))\n# Define the circuit\ncircuit = Circuit('Pacemaker Circuit')\nsteptime = 1@u_ms\nfinaltime = 60@u_s\n# Define the switch model\ncircuit.model('switch', 'SW', Ron=1@u_mΩ, Roff=1@u_GΩ, Vt=2.05@u_V,\nVh=2.03@u_V)\n# Define the circuit components\ncircuit.V(1, 1, circuit.gnd, Vs)\ncircuit.R(1, 1, 'control', R@u_Ω)\ncircuit.VoltageControlledSwitch(1, 'control', 'out', 'control', circuit.gnd,\nmodel='switch')\ncircuit.C(1, 'control', circuit.gnd, C)\ncircuit.R(2, 'out', circuit.gnd, 50@u_Ω)\n# Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nic = 0@u_V\nsimulator.initial_condition(control=ic)\n17 | P a g e\n\nanalysis = simulator.transient(step_time=steptime, end_time=finaltime)\n# Plot the results\nfigure, axe = plt.subplots(figsize=(10, 5))\nplt.title('Voltage across Capacitor')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid()\nplot(analysis['control'], axis=axe, color='black')\ncursor = Cursor(axe, useblit=True, color='red', linewidth=1)\nplt.show()\nSave the text document in .py format.\n4. Run the Simulation:\no Execute the Python script to run the simulation. This will compute the\ntransient response of the pacemaker circuit and generate a plot showing the\nvoltage across the capacitor.\n5. Analyze the Results:\no Observe the output of the script, which will display the plot of the voltage\nacross the capacitor over time. The plot should show the periodic charging and\ndischarging behavior corresponding to the pacemaker's operation.\nResult:\n\n18 | P a g e",
+  "page_start": 15,
+  "page_end": 18,
+  "software": "PySpice, Python 3.x, Ngspice",
+  "tags": "Pacemaker, Beats Per Minute (BPM), Switching Factor, Threshold Voltage (Vo), Relaxation Oscillator",
+  "diagram_images": [
+    "Manual complete_page-0015-compressed.jpg",
+    "Manual complete_page-0016-compressed.jpg",
+    "Manual complete_page-0017-compressed.jpg",
+    "Manual complete_page-0018-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Probe.Plot import plot\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Explicit SI second unit shortcut (PySpice u_s is microseconds, so use u_time_s = UnitValueShorcut(U_s) for seconds)\nu_time_s = UnitValueShorcut(U_s)\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\n# Given Pacemaker Parameters (Experiment 6)\nH = 70  # Heart rate in beats per minute (Target Period T = 60 / H = 0.8571 s)\nVs = 6@u_V\nSwitching_factor = 0.68\nVo = Switching_factor * Vs\nC = 47@u_uF\n\n# Calculate required timing resistor R and RC time constant tau\nT_target = 60.0 / H\nR = -60 / (H * (C.value) * np.log(1 - (Vo.value / Vs.value)))\ntau = R * C.value\nprint(f'Calculated Target Period T = {T_target:.4f} s')\nprint(f'Calculated Timing Resistor R = {R:.2f} Ohm, RC tau = {tau:.4f} s')\n\ncircuit = Circuit('Pacemaker Circuit')\ncircuit.model('switch', 'SW', Ron=1@u_mOhm, Roff=1@u_GOhm, Vt=2.05@u_V, Vh=2.03@u_V)\ncircuit.V(1, 1, circuit.gnd, Vs)\ncircuit.R(1, 1, 'control', R@u_Ohm)\ncircuit.VoltageControlledSwitch(1, 'control', 'out', 'control', circuit.gnd, model='switch')\ncircuit.C(1, 'control', circuit.gnd, C)\ncircuit.R(2, 'out', circuit.gnd, 50@u_Ohm)\n\n# 1. Run the transient simulation (step_time > 0, end_time > 0, step_time <= end_time verified)\n# NOTE ON MANUAL DIAGNOSTIC WINDOW vs 5-CYCLE SIMULATION WINDOW:\n# - Raw manual script had step_time=1 ms, end_time=60 us (60 microseconds << tau=0.7523 s, T=0.8571 s),\n#   where step_time (1 ms) > end_time (60 us) and Simulation window is insufficient to observe the requested behavior.\n# - Step/Stop consistency check adjusted the 60 us diagnostic window timestep to step_time=1@u_us, end_time=60@u_us.\n# - To observe 5 complete pacemaker cycles (T = 60/70 = 0.8571 s -> 5*T = 4.28571 seconds),\n#   the executable transient call below uses compatible step_time=1@u_ms (1 milliseconds) and end_time=4.28571@u_time_s (4.28571 seconds).\nstep_time = 1@u_ms\nend_time = 4.28571@u_time_s  # 4.28571 seconds (5 cycles of T = 0.8571 s)\nassert float(step_time) > 0 and float(end_time) > 0 and float(step_time) <= float(end_time)\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nsimulator.initial_condition(control=0@u_V)\nanalysis = simulator.transient(step_time=step_time, end_time=end_time)\n\n# 2. Extract the simulated node voltages & compute calculated load current (analysis.branches not used)\ntime_axis = np.array(analysis.time)\nv_capacitor = np.array(analysis['control'])\nv_output = np.array(analysis['out'])\ni_load = v_output / float(circuit.R2.resistance)  # Calculated load current from V(out)/R2\n\n# 3. Create the plots and 4. Label axes appropriately\nfigure1 = plt.figure(1, (20, 10))\nplt.subplot(211)\nplot(analysis['control'], color='blue')\nplt.title('Pacemaker Timing Capacitor Voltage V(control)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(('Capacitor Voltage V_C(t) [control]',), loc='upper right')\n\nplt.subplot(212)\nplot(analysis['out'], color='red')\nplt.title('Pacemaker Output Pulses V(out)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(('Pacemaker Output Voltage V(out)',), loc='upper right')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('pacemaker_capacitor_and_output_voltage.png', dpi=150)\nplt.show()\n",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Probe.Plot import plot\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Explicit SI second unit shortcut (PySpice u_s is microseconds, so use u_time_s = UnitValueShorcut(U_s) for seconds)\nu_time_s = UnitValueShorcut(U_s)\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\n# Given Pacemaker Parameters (Experiment 6)\nH = 70  # Heart rate in beats per minute (Target Period T = 60 / H = 0.8571 s)\nVs = 6@u_V\nSwitching_factor = 0.68\nVo = Switching_factor * Vs\nC = 47@u_uF\n\n# Calculate required timing resistor R and RC time constant tau\nT_target = 60.0 / H\nR = -60 / (H * (C.value) * np.log(1 - (Vo.value / Vs.value)))\ntau = R * C.value\nprint(f'Calculated Target Period T = {T_target:.4f} s')\nprint(f'Calculated Timing Resistor R = {R:.2f} Ohm, RC tau = {tau:.4f} s')\n\ncircuit = Circuit('Pacemaker Circuit')\ncircuit.model('switch', 'SW', Ron=1@u_mOhm, Roff=1@u_GOhm, Vt=2.05@u_V, Vh=2.03@u_V)\ncircuit.V(1, 1, circuit.gnd, Vs)\ncircuit.R(1, 1, 'control', R@u_Ohm)\ncircuit.VoltageControlledSwitch(1, 'control', 'out', 'control', circuit.gnd, model='switch')\ncircuit.C(1, 'control', circuit.gnd, C)\ncircuit.R(2, 'out', circuit.gnd, 50@u_Ohm)\n\n# 1. Run the transient simulation (step_time > 0, end_time > 0, step_time <= end_time verified)\n# NOTE ON MANUAL DIAGNOSTIC WINDOW vs 5-CYCLE SIMULATION WINDOW:\n# - Raw manual script had step_time=1 ms, end_time=60 us (60 microseconds << tau=0.7523 s, T=0.8571 s),\n#   where step_time (1 ms) > end_time (60 us) and Simulation window is insufficient to observe the requested behavior.\n# - Step/Stop consistency check adjusted the 60 us diagnostic window timestep to step_time=1@u_us, end_time=60@u_us.\n# - To observe 5 complete pacemaker cycles (T = 60/70 = 0.8571 s -> 5*T = 4.28571 seconds),\n#   the executable transient call below uses compatible step_time=1@u_ms (1 milliseconds) and end_time=4.28571@u_time_s (4.28571 seconds).\nstep_time = 1@u_ms\nend_time = 4.28571@u_time_s  # 4.28571 seconds (5 cycles of T = 0.8571 s)\nassert float(step_time) > 0 and float(end_time) > 0 and float(step_time) <= float(end_time)\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nsimulator.initial_condition(control=0@u_V)\nanalysis = simulator.transient(step_time=step_time, end_time=end_time)\n\n# 2. Extract the simulated node voltages & compute calculated load current (analysis.branches not used)\ntime_axis = np.array(analysis.time)\nv_capacitor = np.array(analysis['control'])\nv_output = np.array(analysis['out'])\ni_load = v_output / float(circuit.R2.resistance)  # Calculated load current from V(out)/R2\n\n# 3. Create the plots and 4. Label axes appropriately\nfigure1 = plt.figure(1, (20, 10))\nplt.subplot(211)\nplot(analysis['control'], color='blue')\nplt.title('Pacemaker Timing Capacitor Voltage V(control)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(('Capacitor Voltage V_C(t) [control]',), loc='upper right')\n\nplt.subplot(212)\nplot(analysis['out'], color='red')\nplt.title('Pacemaker Output Pulses V(out)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(('Pacemaker Output Voltage V(out)',), loc='upper right')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('pacemaker_capacitor_and_output_voltage.png', dpi=150)\nplt.show()\n",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Pacemaker RC Timing Circuit (Experiment 6)",
+      "circuit_type": "PACEMAKER",
+      "experiment": 6,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "parameters": {
+        "heart_rate_bpm": 70.0,
+        "switching_factor": 0.68,
+        "calculated_R_ohm": 16005.38,
+        "target_period_s": 0.857143,
+        "rc_tau_s": 0.752253,
+        "expected_threshold_vo_V": 4.08,
+        "recommended_stop_s": 4.285714,
+        "recommended_5_cycle_duration_s": 4.285714,
+        "five_cycle_duration_s": 4.285714,
+        "five_cycle_stop_expr": "4.28571@u_time_s",
+        "five_cycle_stop_text": "4.28571 seconds",
+        "five_cycle_step_expr": "1@u_ms",
+        "five_cycle_step_text": "1 milliseconds"
+      },
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": false,
+        "REQUESTED_BEHAVIOR_OBSERVED": false,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "INCOMPLETE_INSUFFICIENT_SIMULATION_WINDOW",
+        "TASK_COMPLETED": false
+      },
+      "requested_outputs": [
+        "capacitor_voltage",
+        "waveform",
+        "calculated_load_current",
+        "time_constant"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "control",
+          "out",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "6 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "control",
+            "from_node": "N1",
+            "to_node": "control",
+            "display_value": "16.0054 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → control",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "C1",
+            "type": "capacitor",
+            "raw_from": "control",
+            "raw_to": "GND",
+            "from_node": "control",
+            "to_node": "GND",
+            "display_value": "47 µF",
+            "control_info": null,
+            "edge_line": "C1: control → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "S1",
+            "type": "vc_switch",
+            "raw_from": "control",
+            "raw_to": "out",
+            "from_node": "control",
+            "to_node": "out",
+            "display_value": "vc_switch",
+            "control_info": "ctrl: control → GND",
+            "edge_line": "S1: control → out",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "out",
+            "raw_to": "GND",
+            "from_node": "out",
+            "to_node": "GND",
+            "display_value": "50 Ω",
+            "control_info": null,
+            "edge_line": "R2: out → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "R1: N1 → control",
+        "C1: control → GND",
+        "S1: control → out",
+        "R2: out → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "control",
+            "out",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "6 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "control",
+              "from_node": "N1",
+              "to_node": "control",
+              "display_value": "16.0054 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → control",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "C1",
+              "type": "capacitor",
+              "raw_from": "control",
+              "raw_to": "GND",
+              "from_node": "control",
+              "to_node": "GND",
+              "display_value": "47 µF",
+              "control_info": null,
+              "edge_line": "C1: control → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "S1",
+              "type": "vc_switch",
+              "raw_from": "control",
+              "raw_to": "out",
+              "from_node": "control",
+              "to_node": "out",
+              "display_value": "vc_switch",
+              "control_info": "ctrl: control → GND",
+              "edge_line": "S1: control → out",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "out",
+              "raw_to": "GND",
+              "from_node": "out",
+              "to_node": "GND",
+              "display_value": "50 Ω",
+              "control_info": null,
+              "edge_line": "R2: out → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → control",
+            "C1: control → GND",
+            "S1: control → out",
+            "R2: out → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → control",
+            "C1: control → GND",
+            "S1: control → out",
+            "R2: out → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 6 V] (N1 → GND)\n ├── R1 (16.0054 kΩ): N1 → control\n ├── C1 (47 µF): control → GND\n ├── S1 (vc_switch, ctrl: control → GND): control → out\n └── R2 (50 Ω): out → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 6 V] (N1 → GND)\n ├── R1 (16.0054 kΩ): N1 → control\n ├── C1 (47 µF): control → GND\n ├── S1 (vc_switch, ctrl: control → GND): control → out\n └── R2 (50 Ω): out → GND\n\nV1: N1 → GND\nR1: N1 → control\nC1: control → GND\nS1: control → out\nR2: out → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 6.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 16005.38,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "control"
+        ]
+      },
+      {
+        "id": "C1",
+        "type": "capacitor",
+        "value": 4.7e-05,
+        "unit": "F",
+        "nodes": [
+          "control",
+          "GND"
+        ]
+      },
+      {
+        "id": "S1",
+        "type": "vc_switch",
+        "nodes": [
+          "control",
+          "out"
+        ],
+        "control_nodes": [
+          "control",
+          "GND"
+        ],
+        "vt": 2.05,
+        "vh": 2.03,
+        "ron": 0.001,
+        "roff": 1000000000.0
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 50.0,
+        "unit": "ohm",
+        "nodes": [
+          "out",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "control",
+      "out",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "raw_step": 0.001,
+      "raw_stop": 6e-05,
+      "step": 1e-06,
+      "stop": 6e-05,
+      "step_code_expr": "1@u_us",
+      "stop_code_expr": "60@u_us",
+      "step_textual": "1 microseconds",
+      "stop_textual": "60 microseconds",
+      "recommended_cycles": 5,
+      "recommended_step_s": 0.001,
+      "recommended_stop_s": 4.285714,
+      "recommended_step_code_expr": "1@u_ms",
+      "recommended_stop_code_expr": "4.28571@u_time_s",
+      "five_cycle_step_s": 0.001,
+      "five_cycle_stop_s": 4.285714,
+      "five_cycle_step_expr": "1@u_ms",
+      "five_cycle_stop_expr": "4.28571@u_time_s",
+      "five_cycle_step_text": "1 milliseconds",
+      "five_cycle_stop_text": "4.28571 seconds",
+      "target_period_s": 0.857143,
+      "rc_tau_s": 0.752253,
+      "window_sufficient": false,
+      "unit_mismatch_detected": true,
+      "unit_mismatch_detail": "Pre-simulation Step/Stop & Window Audit: Raw manual parameters had `step_time = 1 milliseconds` (`1@u_ms`) and `end_time = 60 microseconds` (`60@u_us`). 1) Step/Stop Inconsistency: `1 milliseconds` > `60 microseconds` violates `step_time <= end_time` (1 ms cannot be used as the timestep for a 60 us simulation); adjusted 60 us diagnostic timestep to `step_time = 1@u_us` (1 microseconds). 2) Insufficient Observation Window: `60 microseconds` << RC tau = 0.7523 s and target period T = 60/70 = 0.8571 s. To observe 5 complete cycles, required duration = 5 * 0.857143 s = `4.28571 seconds` (`end_time = 4.28571@u_time_s` with `step_time = 1@u_ms`).",
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": false,
+        "raw_pair_consistent": false,
+        "was_adjusted": true,
+        "adjustment_reason": "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s). OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`).",
+        "window_sufficient": false,
+        "raw_step_s": 0.001,
+        "raw_stop_s": 6e-05,
+        "raw_step_expr": "1@u_ms",
+        "raw_stop_expr": "60@u_us",
+        "raw_step_text": "1 milliseconds",
+        "raw_stop_text": "60 microseconds",
+        "compat_step_for_raw_stop_s": 1e-06,
+        "compat_raw_step_expr": "1@u_us",
+        "compat_raw_step_text": "1 microseconds",
+        "required_cycles": 5,
+        "required_duration_s": 4.285714,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "4.28571@u_time_s",
+        "req_stop_text": "4.28571 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": [
+          "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s).",
+          "OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`)."
+        ]
+      }
+    }
+  },
+  "circuit_template_id": "exp6_pacemaker",
+  "viva": [
+    {
+      "q": "How does an RC timing circuit work in a cardiac pacemaker?",
+      "a": "The capacitor charges exponentially through a calibrated resistor R1 until it hits a trigger voltage Vo after T = 60/BPM seconds, firing a discharge pulse into the heart load R2.",
+      "category": "definition",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Why is R2 (1 kΩ) much smaller than R1 (~752 kΩ) in the pacemaker circuit?",
+      "a": "R1 must be large so C1 charges slowly over ~0.86 seconds, whereas R2 must be small (1 kΩ) so C1 discharges rapidly in a few milliseconds to deliver a crisp pacing pulse.",
+      "category": "why",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "How do you calculate the timing resistor R1 for a heart rate of 80 BPM with C1 = 1 µF and switching factor 0.68?",
+      "a": "T = 60 / 80 = 0.75 s. Since -ln(1 - 0.68) = -ln(0.32) = 1.1394, R1 = 0.75 / (1e-6 * 1.1394) ≈ 658.2 kΩ.",
+      "category": "how",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What does resistor R2 represent physically in Experiment 6?",
+      "a": "R2 (1 kΩ) models the electrical impedance of the heart muscle (myocardium) across the pacemaker electrodes.",
+      "category": "component",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What happens to the calculated R1 if the patient requires a faster heart rate (higher BPM)?",
+      "a": "A higher BPM requires a shorter period T = 60/H, so R1 must decrease proportionally to charge C1 faster.",
+      "category": "procedure",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Why does the R1 formula in Experiment 6 independent of the supply voltage magnitude Vs when `switching_factor = Vo/Vs` is fixed?",
+      "a": "Because `Vo / Vs` is the dimensionless switching factor (0.68), so Vs cancels out inside `ln(1 - Vo/Vs)`.",
+      "category": "code",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Which node holds the timing capacitor voltage and which node delivers the output pulse in Experiment 6?",
+      "a": "Node `'control'` holds the timing capacitor voltage across C1, and Node `'out'` delivers the pacing pulse across R2.",
+      "category": "topology",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What is the peak discharge current delivered to the 1 kΩ load R2 when Vs = 6 V and switching factor = 0.68?",
+      "a": "Vo = 0.68 * 6 V = 4.08 V, so I_peak = Vo / R2 = 4.08 V / 1 kΩ = 4.08 mA.",
+      "category": "calculation",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Why would `math.log(1 - Vo/Vs)` raise a ValueError in Python?",
+      "a": "If `Vo >= Vs` (`switching_factor >= 1.0`), `1 - Vo/Vs <= 0`, which is physically impossible because an RC circuit fed by Vs can never charge above Vs.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What is the discharge time constant when Switch S1 closes in Experiment 6?",
+      "a": "tau_discharge = R2 * C1 = 1 kΩ * 1 µF = 1 ms, which is ~750 times faster than the charging time constant.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    }
+  ]
+}

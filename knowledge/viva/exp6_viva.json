@@ -1,0 +1,116 @@
+{
+  "exp_number": 6,
+  "title": "Simulation of a Pacemaker Circuit in PySpice",
+  "questions": [
+    {
+      "q": "How does an RC timing circuit work in a cardiac pacemaker?",
+      "a": "The capacitor charges exponentially through a calibrated resistor R1 until it hits a trigger voltage Vo after T = 60/BPM seconds, firing a discharge pulse into the heart load R2.",
+      "category": "definition",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Why is R2 (1 kΩ) much smaller than R1 (~752 kΩ) in the pacemaker circuit?",
+      "a": "R1 must be large so C1 charges slowly over ~0.86 seconds, whereas R2 must be small (1 kΩ) so C1 discharges rapidly in a few milliseconds to deliver a crisp pacing pulse.",
+      "category": "why",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "How do you calculate the timing resistor R1 for a heart rate of 80 BPM with C1 = 1 µF and switching factor 0.68?",
+      "a": "T = 60 / 80 = 0.75 s. Since -ln(1 - 0.68) = -ln(0.32) = 1.1394, R1 = 0.75 / (1e-6 * 1.1394) ≈ 658.2 kΩ.",
+      "category": "how",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What does resistor R2 represent physically in Experiment 6?",
+      "a": "R2 (1 kΩ) models the electrical impedance of the heart muscle (myocardium) across the pacemaker electrodes.",
+      "category": "component",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What happens to the calculated R1 if the patient requires a faster heart rate (higher BPM)?",
+      "a": "A higher BPM requires a shorter period T = 60/H, so R1 must decrease proportionally to charge C1 faster.",
+      "category": "procedure",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Why does the R1 formula in Experiment 6 independent of the supply voltage magnitude Vs when `switching_factor = Vo/Vs` is fixed?",
+      "a": "Because `Vo / Vs` is the dimensionless switching factor (0.68), so Vs cancels out inside `ln(1 - Vo/Vs)`.",
+      "category": "code",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Which node holds the timing capacitor voltage and which node delivers the output pulse in Experiment 6?",
+      "a": "Node `'control'` holds the timing capacitor voltage across C1, and Node `'out'` delivers the pacing pulse across R2.",
+      "category": "topology",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What is the peak discharge current delivered to the 1 kΩ load R2 when Vs = 6 V and switching factor = 0.68?",
+      "a": "Vo = 0.68 * 6 V = 4.08 V, so I_peak = Vo / R2 = 4.08 V / 1 kΩ = 4.08 mA.",
+      "category": "calculation",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "Why would `math.log(1 - Vo/Vs)` raise a ValueError in Python?",
+      "a": "If `Vo >= Vs` (`switching_factor >= 1.0`), `1 - Vo/Vs <= 0`, which is physically impossible because an RC circuit fed by Vs can never charge above Vs.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    },
+    {
+      "q": "What is the discharge time constant when Switch S1 closes in Experiment 6?",
+      "a": "tau_discharge = R2 * C1 = 1 kΩ * 1 µF = 1 ms, which is ~750 times faster than the charging time constant.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Pacemaker",
+        "Beats Per Minute (BPM)",
+        "Switching Factor",
+        "Threshold Voltage (Vo)"
+      ]
+    }
+  ]
+}

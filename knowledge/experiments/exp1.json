@@ -1,0 +1,570 @@
+{
+  "exp_number": 1,
+  "title": "Computation of DC Biases in a Resistor Bridge Using PySpice",
+  "category": "Analog / PySpice",
+  "family": "PYSPICE_DC",
+  "pages": [
+    3,
+    4
+  ],
+  "aim": "To compute the DC biases (steady-state node voltages) at various nodes in a five-resistor Wheatstone-style bridge circuit using Python and PySpice.",
+  "apparatus_components": [
+    "Python 3.x environment with PySpice and Ngspice",
+    "DC Voltage Source Vinput = 10 V (Node 1 to GND)",
+    "Resistor R1 = 2 kΩ (Node 1 to Node 2)",
+    "Resistor R2 = 1 kΩ (Node 1 to Node 3)",
+    "Resistor R3 = 1 kΩ (Node 2 to GND)",
+    "Resistor R4 = 2 kΩ (Node 3 to GND)",
+    "Bridge Resistor R5 = 2 kΩ (Node 3 to Node 2)"
+  ],
+  "theory": "A resistor bridge (Wheatstone bridge topology) consists of two upper branch resistors (R1, R2), two lower shunt resistors to ground (R3, R4), and a central bridging resistor (R5) connecting the two middle nodes (Node 2 and Node 3). Under DC excitation, Kirchhoff's Current Law (KCL) at Node 2 and Node 3 determines the node voltages V(2) and V(3). When R1*R4 = R2*R3, the bridge is balanced and V(2) = V(3); in the manual's unbalanced configuration (R1=2kΩ, R2=1kΩ, R3=1kΩ, R4=2kΩ, R5=2kΩ), current flows from Node 3 to Node 2 through R5.",
+  "equations": [
+    "KCL at Node 2: (V2 - V1)/R1 + V2/R3 + (V2 - V3)/R5 = 0",
+    "KCL at Node 3: (V3 - V1)/R2 + V3/R4 + (V3 - V2)/R5 = 0",
+    "Bridge Voltage: V_bridge = V(3) - V(2)",
+    "With V1=10V, R1=2kΩ, R2=1kΩ, R3=1kΩ, R4=2kΩ, R5=2kΩ -> V(1)=10.0V, V(2)=4.0V, V(3)=6.0V"
+  ],
+  "circuit_topology": "Five-resistor bridge network driven by Vinput between Node 1 and GND, with R5 bridging interior nodes 2 and 3.",
+  "component_relationships": [
+    "Vinput: N1 -> GND (10 V DC source)",
+    "R1: N1 -> N2 (2 kΩ upper-left arm)",
+    "R2: N1 -> N3 (1 kΩ upper-right arm)",
+    "R3: N2 -> GND (1 kΩ lower-left arm)",
+    "R4: N3 -> GND (2 kΩ lower-right arm)",
+    "R5: N3 -> N2 (2 kΩ center bridge arm)"
+  ],
+  "simulation_type": "DC Operating Point (.op) via simulator.operating_point()",
+  "procedure": "1. Install and import PySpice (`Circuit`, `u_V`, `u_kOhm`).\n2. Instantiate `circuit = Circuit('Resistor Bridge')`.\n3. Add `Vinput` (10V) between node 1 and `circuit.gnd`, and add R1..R5 across their respective bridge nodes.\n4. Run `analysis = simulator.operating_point()` at 25°C.\n5. Iterate over `analysis.nodes.values()` and print each node's DC voltage.",
+  "expected_observations": "Node 1 = 10.0 V, Node 2 = 4.0 V, Node 3 = 6.0 V. Because V(3) > V(2), a 1 mA current flows from Node 3 to Node 2 through R5.",
+  "result": "The DC bias voltages at all nodes of the resistor bridge circuit were computed using PySpice operating point analysis: V(1)=10.0 V, V(2)=4.0 V, V(3)=6.0 V.",
+  "common_mistakes": [
+    "Connecting R5 to ground instead of between interior nodes 3 and 2",
+    "Forgetting `circuit.gnd` on Vinput, R3, or R4, causing a singular matrix / floating node error",
+    "Treating the 5 resistors as a series chain instead of a bridge topology"
+  ],
+  "important_terminology": [
+    "DC Bias",
+    "Operating Point (.op)",
+    "Wheatstone Bridge",
+    "Nodal Analysis (KCL)",
+    "Reference Ground (circuit.gnd)"
+  ],
+  "related_experiments": [
+    2,
+    3
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is meant by DC bias or operating point in PySpice?",
+      "a": "DC bias (operating point) is the steady-state DC voltage at every node and DC current through every branch when only constant DC sources are applied."
+    },
+    {
+      "category": "why",
+      "q": "Why must every SPICE circuit include `circuit.gnd`?",
+      "a": "SPICE solves nodal matrix equations relative to a 0 V reference node (`circuit.gnd`). Without ground, the conductance matrix is singular and node voltages are undefined."
+    },
+    {
+      "category": "how",
+      "q": "How do you run a DC bias simulation in PySpice?",
+      "a": "Create a simulator with `simulator = circuit.simulator(temperature=25, nominal_temperature=25)` and call `analysis = simulator.operating_point()`."
+    },
+    {
+      "category": "component",
+      "q": "What role does R5 play in Experiment 1?",
+      "a": "R5 is the central bridge resistor connected between Node 3 and Node 2, coupling the left and right voltage divider arms."
+    },
+    {
+      "category": "procedure",
+      "q": "How are node voltages extracted from the `analysis` object in Experiment 1?",
+      "a": "By looping over `for node in analysis.nodes.values():` and converting `str(node)` for the node name and `float(node)` for its voltage in volts."
+    },
+    {
+      "category": "code",
+      "q": "What does `2@u_kΩ` or `2@u_kOhm` mean in PySpice?",
+      "a": "The `@` operator attaches a physical unit from `PySpice.Unit` (`kOhm` = 10^3 ohms) to a numeric value."
+    },
+    {
+      "category": "topology",
+      "q": "Which components share Node 2 in the Experiment 1 resistor bridge?",
+      "a": "R1 (from Node 1 to Node 2), R3 (from Node 2 to GND), and R5 (between Node 3 and Node 2) all meet at Node 2."
+    },
+    {
+      "category": "calculation",
+      "q": "Why is Node 2 at 4.0 V and Node 3 at 6.0 V in Experiment 1?",
+      "a": "Solving KCL: at Node 2, (V2-10)/2k + V2/1k + (V2-V3)/2k = 0 => 2V2 - V3 = 2; at Node 3, (V3-10)/1k + V3/2k + (V3-V2)/2k = 0 => -V2 + 4V3 = 20. Solving gives V2 = 4 V and V3 = 6 V."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "What happens if you accidentally connect both ends of R5 to Node 2?",
+      "a": "R5 becomes short-circuited across a single node, which invalidates the bridge topology and triggers a short-circuit validation error."
+    },
+    {
+      "category": "expected_output",
+      "q": "When would the voltage across R5 become zero in Experiment 1?",
+      "a": "When the bridge is balanced, i.e., R1 * R4 = R2 * R3, making V(2) equal to V(3)."
+    }
+  ],
+  "raw_text": "EXPERIMENT-1\n\nDate:\n\nCOMPUTATION OF DC BIASES IN A RESISTOR BRIDGE USING PYSPICE\nAim:\nTo compute the DC biases at various nodes in a resistor bridge circuit using a Python-based\ncircuit simulation.\nApparatus Required:\n1. Python programming environment with PySpice library installed\n2. Computer with an internet connection to set up the Python environment\n\nCircuit diagram:\n\nProcedure:\n1. Setup the Python Environment:\no Ensure that Python and PySpice library are installed on your computer. If not,\ninstall PySpice using the command:\npip install PySpice\n2. Write the Circuit Code:\no Open a new text document and write the following code to define the resistor\nbridge circuit and compute the DC biases:\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\n\n3|Page\n\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n# Define the circuit\ncircuit = Circuit('Resistor Bridge')\n# Add components\ncircuit.V('input', 1, circuit.gnd, 10@u_V)\ncircuit.R(1, 1, 2, 2@u_kΩ)\ncircuit.R(2, 1, 3, 1@u_kΩ)\ncircuit.R(3, 2, circuit.gnd, 1@u_kΩ)\ncircuit.R(4, 3, circuit.gnd, 2@u_kΩ)\ncircuit.R(5, 3, 2, 2@u_kΩ)\n# Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n# Print the results\nfor node in analysis.nodes.values():\nprint('Node {}: {:4.1f} V'.format(str(node), float(node))) # Format value +\nunit\nSave the text document in .py format.\n3. Run the Simulation:\no Execute the Python script to run the simulation. This will compute the DC\nbiases at each node in the resistor bridge.\n4. Analyze the Results:\no Observe the output of the script, which will display the voltage at each node in\nthe resistor bridge.\nResult:\n\n4|Page",
+  "page_start": 3,
+  "page_end": 4,
+  "software": "PySpice, Python 3.x, Ngspice",
+  "tags": "DC Bias, Operating Point (.op), Wheatstone Bridge, Nodal Analysis (KCL), Reference Ground (circuit.gnd)",
+  "diagram_images": [
+    "Manual complete_page-0003-compressed.jpg",
+    "Manual complete_page-0004-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (manual_template)\ncircuit = Circuit('Resistor Bridge Circuit (Experiment 1)')\n\ncircuit.V('input', 1, circuit.gnd, 10@u_V)\ncircuit.R(1, 1, 2, 2@u_kOhm)\ncircuit.R(2, 1, 3, 1@u_kOhm)\ncircuit.R(3, 2, circuit.gnd, 1@u_kOhm)\ncircuit.R(4, 3, circuit.gnd, 2@u_kOhm)\ncircuit.R(5, 3, 2, 2@u_kOhm)\n\n# 1. Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n\n# 2. Extract and print Node Voltages and Branch Currents\nnode_voltages = {}\nfor node in analysis.nodes.values():\n    node_voltages[str(node)] = float(node)\n    print('Node {}: {:4.2f} V'.format(str(node), float(node)))\nbranch_currents = {}\nfor branch in analysis.branches.values():\n    branch_currents[str(branch)] = float(branch)\n    print('Branch {}: {:5.2f} A'.format(str(branch), float(branch)))",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (manual_template)\ncircuit = Circuit('Resistor Bridge Circuit (Experiment 1)')\n\ncircuit.V('input', 1, circuit.gnd, 10@u_V)\ncircuit.R(1, 1, 2, 2@u_kOhm)\ncircuit.R(2, 1, 3, 1@u_kOhm)\ncircuit.R(3, 2, circuit.gnd, 1@u_kOhm)\ncircuit.R(4, 3, circuit.gnd, 2@u_kOhm)\ncircuit.R(5, 3, 2, 2@u_kOhm)\n\n# 1. Perform the simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.operating_point()\n\n# 2. Extract and print Node Voltages and Branch Currents\nnode_voltages = {}\nfor node in analysis.nodes.values():\n    node_voltages[str(node)] = float(node)\n    print('Node {}: {:4.2f} V'.format(str(node), float(node)))\nbranch_currents = {}\nfor branch in analysis.branches.values():\n    branch_currents[str(branch)] = float(branch)\n    print('Branch {}: {:5.2f} A'.format(str(branch), float(branch)))",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Resistor Bridge Circuit (Experiment 1)",
+      "circuit_type": "RESISTOR_BRIDGE",
+      "experiment": 1,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage",
+        "branch_current"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "N3",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "Vinput",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "10 V",
+            "control_info": null,
+            "edge_line": "Vinput: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "2 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "3",
+            "from_node": "N1",
+            "to_node": "N3",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R2: N1 → N3",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R3",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R3: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R4",
+            "type": "resistor",
+            "raw_from": "3",
+            "raw_to": "GND",
+            "from_node": "N3",
+            "to_node": "GND",
+            "display_value": "2 kΩ",
+            "control_info": null,
+            "edge_line": "R4: N3 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R5",
+            "type": "resistor",
+            "raw_from": "3",
+            "raw_to": "2",
+            "from_node": "N3",
+            "to_node": "N2",
+            "display_value": "2 kΩ",
+            "control_info": null,
+            "edge_line": "R5: N3 → N2",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "Vinput: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N1 → N3",
+          "R3: N2 → GND",
+          "R4: N3 → GND",
+          "R5: N3 → N2"
+        ],
+        "resolved_graph_lines": [
+          "Vinput: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N1 → N3",
+          "R3: N2 → GND",
+          "R4: N3 → GND",
+          "R5: N3 → N2"
+        ]
+      },
+      "resolved_graph": [
+        "Vinput: N1 → GND",
+        "R1: N1 → N2",
+        "R2: N1 → N3",
+        "R3: N2 → GND",
+        "R4: N3 → GND",
+        "R5: N3 → N2"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "N3",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "Vinput",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "10 V",
+              "control_info": null,
+              "edge_line": "Vinput: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "2 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "3",
+              "from_node": "N1",
+              "to_node": "N3",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R2: N1 → N3",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R3",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R3: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R4",
+              "type": "resistor",
+              "raw_from": "3",
+              "raw_to": "GND",
+              "from_node": "N3",
+              "to_node": "GND",
+              "display_value": "2 kΩ",
+              "control_info": null,
+              "edge_line": "R4: N3 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R5",
+              "type": "resistor",
+              "raw_from": "3",
+              "raw_to": "2",
+              "from_node": "N3",
+              "to_node": "N2",
+              "display_value": "2 kΩ",
+              "control_info": null,
+              "edge_line": "R5: N3 → N2",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "Vinput: N1 → GND",
+            "R1: N1 → N2",
+            "R2: N1 → N3",
+            "R3: N2 → GND",
+            "R4: N3 → GND",
+            "R5: N3 → N2"
+          ],
+          "resolved_graph_lines": [
+            "Vinput: N1 → GND",
+            "R1: N1 → N2",
+            "R2: N1 → N3",
+            "R3: N2 → GND",
+            "R4: N3 → GND",
+            "R5: N3 → N2"
+          ]
+        },
+        "ascii_diagram": "[Vinput = 10 V] (N1 → GND)\n ├── R1 (2 kΩ): N1 → N2\n ├── R2 (1 kΩ): N1 → N3\n ├── R3 (1 kΩ): N2 → GND\n ├── R4 (2 kΩ): N3 → GND\n └── R5 (2 kΩ): N3 → N2",
+        "edge_list_lines": [
+          "Vinput: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N1 → N3",
+          "R3: N2 → GND",
+          "R4: N3 → GND",
+          "R5: N3 → N2"
+        ],
+        "resolved_graph_lines": [
+          "Vinput: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N1 → N3",
+          "R3: N2 → GND",
+          "R4: N3 → GND",
+          "R5: N3 → N2"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[Vinput = 10 V] (N1 → GND)\n ├── R1 (2 kΩ): N1 → N2\n ├── R2 (1 kΩ): N1 → N3\n ├── R3 (1 kΩ): N2 → GND\n ├── R4 (2 kΩ): N3 → GND\n └── R5 (2 kΩ): N3 → N2\n\nVinput: N1 → GND\nR1: N1 → N2\nR2: N1 → N3\nR3: N2 → GND\nR4: N3 → GND\nR5: N3 → N2"
+      }
+    },
+    "components": [
+      {
+        "id": "Vinput",
+        "type": "dc_voltage_source",
+        "value": 10.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 2000.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "3"
+        ]
+      },
+      {
+        "id": "R3",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      },
+      {
+        "id": "R4",
+        "type": "resistor",
+        "value": 2000.0,
+        "unit": "ohm",
+        "nodes": [
+          "3",
+          "GND"
+        ]
+      },
+      {
+        "id": "R5",
+        "type": "resistor",
+        "value": 2000.0,
+        "unit": "ohm",
+        "nodes": [
+          "3",
+          "2"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "3",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  },
+  "circuit_template_id": "exp1_resistor_bridge",
+  "viva": [
+    {
+      "q": "What is meant by DC bias or operating point in PySpice?",
+      "a": "DC bias (operating point) is the steady-state DC voltage at every node and DC current through every branch when only constant DC sources are applied.",
+      "category": "definition",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "Why must every SPICE circuit include `circuit.gnd`?",
+      "a": "SPICE solves nodal matrix equations relative to a 0 V reference node (`circuit.gnd`). Without ground, the conductance matrix is singular and node voltages are undefined.",
+      "category": "why",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "How do you run a DC bias simulation in PySpice?",
+      "a": "Create a simulator with `simulator = circuit.simulator(temperature=25, nominal_temperature=25)` and call `analysis = simulator.operating_point()`.",
+      "category": "how",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "What role does R5 play in Experiment 1?",
+      "a": "R5 is the central bridge resistor connected between Node 3 and Node 2, coupling the left and right voltage divider arms.",
+      "category": "component",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "How are node voltages extracted from the `analysis` object in Experiment 1?",
+      "a": "By looping over `for node in analysis.nodes.values():` and converting `str(node)` for the node name and `float(node)` for its voltage in volts.",
+      "category": "procedure",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "What does `2@u_kΩ` or `2@u_kOhm` mean in PySpice?",
+      "a": "The `@` operator attaches a physical unit from `PySpice.Unit` (`kOhm` = 10^3 ohms) to a numeric value.",
+      "category": "code",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "Which components share Node 2 in the Experiment 1 resistor bridge?",
+      "a": "R1 (from Node 1 to Node 2), R3 (from Node 2 to GND), and R5 (between Node 3 and Node 2) all meet at Node 2.",
+      "category": "topology",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "Why is Node 2 at 4.0 V and Node 3 at 6.0 V in Experiment 1?",
+      "a": "Solving KCL: at Node 2, (V2-10)/2k + V2/1k + (V2-V3)/2k = 0 => 2V2 - V3 = 2; at Node 3, (V3-10)/1k + V3/2k + (V3-V2)/2k = 0 => -V2 + 4V3 = 20. Solving gives V2 = 4 V and V3 = 6 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "What happens if you accidentally connect both ends of R5 to Node 2?",
+      "a": "R5 becomes short-circuited across a single node, which invalidates the bridge topology and triggers a short-circuit validation error.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "When would the voltage across R5 become zero in Experiment 1?",
+      "a": "When the bridge is balanced, i.e., R1 * R4 = R2 * R3, making V(2) equal to V(3).",
+      "category": "expected_output",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    }
+  ]
+}

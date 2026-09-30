@@ -1,0 +1,116 @@
+{
+  "exp_number": 8,
+  "title": "Simulation of Half Adder and Full Adder Circuit in Multisim",
+  "questions": [
+    {
+      "q": "What is the main limitation of a Half Adder?",
+      "a": "A Half Adder has no Carry-In (Cin) input, so it cannot add the carry bit propagated from a previous lower-order bit position.",
+      "category": "definition",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "Why is the Full Adder Carry-Out expression `AB + BCin + ACin` called the majority function?",
+      "a": "Because Cout is 1 whenever a majority (2 or all 3) of the inputs A, B, Cin are 1.",
+      "category": "why",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "How do you build a Full Adder from two Half Adders?",
+      "a": "Connect the first Half Adder to A and B to get S1 = A⊕B and C1 = AB. Connect the second Half Adder to S1 and Cin to get Sum = S1⊕Cin and C2 = S1·Cin. Combine C1 and C2 with an OR gate to get Cout.",
+      "category": "how",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "How many 2-input XOR, AND, and OR gates are in a standard Full Adder?",
+      "a": "Two 2-input XOR gates, two 2-input AND gates, and one 2-input OR gate (5 gates total).",
+      "category": "component",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "For which input row of the Full Adder are both Sum and Cout equal to 1?",
+      "a": "Only when A = 1, B = 1, and Cin = 1 (binary 1 + 1 + 1 = 3 = 11_2).",
+      "category": "procedure",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "Can the final OR gate in a two-half-adder Full Adder be replaced by an XOR gate?",
+      "a": "Yes, because C1 = A·B and C2 = (A⊕B)·Cin can never both be 1 simultaneously, so C1 + C2 is identical to C1 ⊕ C2.",
+      "category": "code",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "How many Full Adders are needed to build a 4-bit ripple carry adder?",
+      "a": "One Half Adder (for the LSB) and three Full Adders, or four Full Adders with the first Cin tied to 0.",
+      "category": "topology",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "If A = 1, B = 0, Cin = 1, what are S1, C1, C2, Sum, and Cout?",
+      "a": "S1 = 1⊕0 = 1; C1 = 1·0 = 0; Sum = 1⊕1 = 0; C2 = 1·1 = 1; Cout = 0 + 1 = 1. (So Sum = 0, Cout = 1).",
+      "category": "calculation",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "If a student's Full Adder gives Cout = 0 when A=1, B=1, Cin=1, what mistake did they likely make?",
+      "a": "They likely connected the second AND gate to (A, Cin) incorrectly or omitted the OR gate combining C1 and C2.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    },
+    {
+      "q": "Which minterms produce Sum = 1 and which produce Cout = 1 in a Full Adder?",
+      "a": "Sum = Sigma_m(1, 2, 4, 7) and Cout = Sigma_m(3, 5, 6, 7).",
+      "category": "expected_output",
+      "key_concepts": [
+        "Half Adder",
+        "Full Adder",
+        "Carry-In (Cin)",
+        "Carry-Out (Cout)"
+      ]
+    }
+  ]
+}

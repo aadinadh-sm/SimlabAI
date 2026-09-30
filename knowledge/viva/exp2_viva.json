@@ -1,0 +1,116 @@
+{
+  "exp_number": 2,
+  "title": "Simulation of a Current-Controlled Current Source (CCCS) Circuit Using PySpice",
+  "questions": [
+    {
+      "q": "What is a Current-Controlled Current Source (CCCS)?",
+      "a": "A CCCS is a dependent current source whose output current is equal to a dimensionless gain factor multiplied by a controlling current in another branch.",
+      "category": "definition",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Why do we insert `Vtest` with 0 V in Experiment 2?",
+      "a": "SPICE's `F` element requires a voltage source name to measure controlling current. A 0 V voltage source acts as an ideal ammeter (zero resistance, zero voltage drop) in series with R1.",
+      "category": "why",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "How is the CCCS defined in PySpice code?",
+      "a": "Using `circuit.F(1, 4, 3, 'Vtest', 3)`, where 4 and 3 are output nodes, `'Vtest'` is the current-sensing voltage source, and 3 is the current gain.",
+      "category": "how",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Why are Node 1 and Node 2 at the exact same voltage in Experiment 2?",
+      "a": "Because `Vtest` is a 0 V source connected between Node 1 and Node 2, so V(1) - V(2) = 0 V.",
+      "category": "component",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "How do you print branch currents after running `operating_point()` in PySpice?",
+      "a": "By iterating over `for branch in analysis.branches.values(): print(str(branch), float(branch))`.",
+      "category": "procedure",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Can we pass `'R1'` instead of `'Vtest'` to `circuit.F()` in standard SPICE?",
+      "a": "No, standard SPICE syntax requires a voltage source identifier as the current sensor for an F-element.",
+      "category": "code",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "Between which nodes is the independent current source `I1` connected in Experiment 2?",
+      "a": "Between `circuit.gnd` and Node 4, injecting 5 A into Node 4.",
+      "category": "topology",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "If I(Vtest) is 1.9841 A and the CCCS gain is 3, what is the current through F1?",
+      "a": "I(F1) = 3 * 1.9841 A = 5.9524 A.",
+      "category": "calculation",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "What happens if a student removes `Vtest` when modifying resistor values in Experiment 2?",
+      "a": "The CCCS `F1` loses its controlling current reference and Ngspice fails with an unknown controlling source error.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    },
+    {
+      "q": "What happens to Node 3 voltage if the CCCS gain is increased?",
+      "a": "Because F1 pumps current from Node 4 into Node 3, increasing the gain raises Node 3's voltage closer to V1.",
+      "category": "expected_output",
+      "key_concepts": [
+        "CCCS (F Element)",
+        "Controlling Current",
+        "Zero-Volt Ammeter Source (Vtest)",
+        "Current Gain"
+      ]
+    }
+  ]
+}

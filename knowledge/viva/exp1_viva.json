@@ -1,0 +1,116 @@
+{
+  "exp_number": 1,
+  "title": "Computation of DC Biases in a Resistor Bridge Using PySpice",
+  "questions": [
+    {
+      "q": "What is meant by DC bias or operating point in PySpice?",
+      "a": "DC bias (operating point) is the steady-state DC voltage at every node and DC current through every branch when only constant DC sources are applied.",
+      "category": "definition",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "Why must every SPICE circuit include `circuit.gnd`?",
+      "a": "SPICE solves nodal matrix equations relative to a 0 V reference node (`circuit.gnd`). Without ground, the conductance matrix is singular and node voltages are undefined.",
+      "category": "why",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "How do you run a DC bias simulation in PySpice?",
+      "a": "Create a simulator with `simulator = circuit.simulator(temperature=25, nominal_temperature=25)` and call `analysis = simulator.operating_point()`.",
+      "category": "how",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "What role does R5 play in Experiment 1?",
+      "a": "R5 is the central bridge resistor connected between Node 3 and Node 2, coupling the left and right voltage divider arms.",
+      "category": "component",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "How are node voltages extracted from the `analysis` object in Experiment 1?",
+      "a": "By looping over `for node in analysis.nodes.values():` and converting `str(node)` for the node name and `float(node)` for its voltage in volts.",
+      "category": "procedure",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "What does `2@u_kΩ` or `2@u_kOhm` mean in PySpice?",
+      "a": "The `@` operator attaches a physical unit from `PySpice.Unit` (`kOhm` = 10^3 ohms) to a numeric value.",
+      "category": "code",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "Which components share Node 2 in the Experiment 1 resistor bridge?",
+      "a": "R1 (from Node 1 to Node 2), R3 (from Node 2 to GND), and R5 (between Node 3 and Node 2) all meet at Node 2.",
+      "category": "topology",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "Why is Node 2 at 4.0 V and Node 3 at 6.0 V in Experiment 1?",
+      "a": "Solving KCL: at Node 2, (V2-10)/2k + V2/1k + (V2-V3)/2k = 0 => 2V2 - V3 = 2; at Node 3, (V3-10)/1k + V3/2k + (V3-V2)/2k = 0 => -V2 + 4V3 = 20. Solving gives V2 = 4 V and V3 = 6 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "What happens if you accidentally connect both ends of R5 to Node 2?",
+      "a": "R5 becomes short-circuited across a single node, which invalidates the bridge topology and triggers a short-circuit validation error.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    },
+    {
+      "q": "When would the voltage across R5 become zero in Experiment 1?",
+      "a": "When the bridge is balanced, i.e., R1 * R4 = R2 * R3, making V(2) equal to V(3).",
+      "category": "expected_output",
+      "key_concepts": [
+        "DC Bias",
+        "Operating Point (.op)",
+        "Wheatstone Bridge",
+        "Nodal Analysis (KCL)"
+      ]
+    }
+  ]
+}

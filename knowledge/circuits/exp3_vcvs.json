@@ -1,0 +1,483 @@
+{
+  "template_id": "exp3_vcvs",
+  "experiment_number": 3,
+  "topology_category": "EXACT MANUAL TOPOLOGY",
+  "circuit_type": "VCVS",
+  "name": "Voltage-Controlled Voltage Source (VCVS) Circuit (Experiment 3)",
+  "components": [
+    "V1",
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "E1"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 65.0,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 5.0,
+      "unit": "ohm"
+    },
+    "R2": {
+      "value": 6.0,
+      "unit": "ohm"
+    },
+    "R3": {
+      "value": 4.0,
+      "unit": "ohm"
+    },
+    "R4": {
+      "value": 8.0,
+      "unit": "ohm"
+    },
+    "R5": {
+      "value": 15.0,
+      "unit": "ohm"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "R1": "resistor",
+    "R2": "resistor",
+    "R3": "resistor",
+    "R4": "resistor",
+    "R5": "resistor",
+    "E1": "vcvs"
+  },
+  "nodes": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N2,N1",
+    "R1 -> N3,GND",
+    "R2 -> N1,GND",
+    "R3 -> N2,N3",
+    "R4 -> N3,N4",
+    "R5 -> N5,GND",
+    "E1 -> N4,N5"
+  ],
+  "ground": "GND",
+  "control_relationships": [
+    "E1 controlled by nodes (2, 3)"
+  ],
+  "source_polarity": [
+    "V1: (+) N2 to (-) N1"
+  ],
+  "analysis_type": "op",
+  "simulation_parameters": {
+    "type": "op"
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1": -24.0,
+      "2": 41.0,
+      "3": 25.0,
+      "4": 33.0,
+      "5": -15.0
+    },
+    "branch_currents": {
+      "v1": -4.0,
+      "e1": -1.0
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Voltage-Controlled Voltage Source (VCVS) Circuit (Experiment 3)",
+      "circuit_type": "VCVS",
+      "experiment": 3,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage",
+        "branch_current"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "2",
+            "raw_to": "1",
+            "from_node": "N2",
+            "to_node": "N1",
+            "display_value": "65 V",
+            "control_info": null,
+            "edge_line": "V1: N2 → N1",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "3",
+            "raw_to": "GND",
+            "from_node": "N3",
+            "to_node": "GND",
+            "display_value": "5 Ω",
+            "control_info": null,
+            "edge_line": "R1: N3 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "6 Ω",
+            "control_info": null,
+            "edge_line": "R2: N1 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R3",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "3",
+            "from_node": "N2",
+            "to_node": "N3",
+            "display_value": "4 Ω",
+            "control_info": null,
+            "edge_line": "R3: N2 → N3",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R4",
+            "type": "resistor",
+            "raw_from": "3",
+            "raw_to": "4",
+            "from_node": "N3",
+            "to_node": "N4",
+            "display_value": "8 Ω",
+            "control_info": null,
+            "edge_line": "R4: N3 → N4",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R5",
+            "type": "resistor",
+            "raw_from": "5",
+            "raw_to": "GND",
+            "from_node": "N5",
+            "to_node": "GND",
+            "display_value": "15 Ω",
+            "control_info": null,
+            "edge_line": "R5: N5 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "E1",
+            "type": "vcvs",
+            "raw_from": "4",
+            "raw_to": "5",
+            "from_node": "N4",
+            "to_node": "N5",
+            "display_value": "gain = 3 V/V",
+            "control_info": "ctrl: N2 → N3",
+            "edge_line": "E1: N4 → N5",
+            "is_source": false,
+            "is_passive": false
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N2 → N1",
+          "R1: N3 → GND",
+          "R2: N1 → GND",
+          "R3: N2 → N3",
+          "R4: N3 → N4",
+          "R5: N5 → GND",
+          "E1: N4 → N5"
+        ],
+        "resolved_graph_lines": [
+          "V1: N2 → N1",
+          "R1: N3 → GND",
+          "R2: N1 → GND",
+          "R3: N2 → N3",
+          "R4: N3 → N4",
+          "R5: N5 → GND",
+          "E1: N4 → N5"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N2 → N1",
+        "R1: N3 → GND",
+        "R2: N1 → GND",
+        "R3: N2 → N3",
+        "R4: N3 → N4",
+        "R5: N5 → GND",
+        "E1: N4 → N5"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "N3",
+            "N4",
+            "N5",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "2",
+              "raw_to": "1",
+              "from_node": "N2",
+              "to_node": "N1",
+              "display_value": "65 V",
+              "control_info": null,
+              "edge_line": "V1: N2 → N1",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "3",
+              "raw_to": "GND",
+              "from_node": "N3",
+              "to_node": "GND",
+              "display_value": "5 Ω",
+              "control_info": null,
+              "edge_line": "R1: N3 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "6 Ω",
+              "control_info": null,
+              "edge_line": "R2: N1 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R3",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "3",
+              "from_node": "N2",
+              "to_node": "N3",
+              "display_value": "4 Ω",
+              "control_info": null,
+              "edge_line": "R3: N2 → N3",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R4",
+              "type": "resistor",
+              "raw_from": "3",
+              "raw_to": "4",
+              "from_node": "N3",
+              "to_node": "N4",
+              "display_value": "8 Ω",
+              "control_info": null,
+              "edge_line": "R4: N3 → N4",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R5",
+              "type": "resistor",
+              "raw_from": "5",
+              "raw_to": "GND",
+              "from_node": "N5",
+              "to_node": "GND",
+              "display_value": "15 Ω",
+              "control_info": null,
+              "edge_line": "R5: N5 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "E1",
+              "type": "vcvs",
+              "raw_from": "4",
+              "raw_to": "5",
+              "from_node": "N4",
+              "to_node": "N5",
+              "display_value": "gain = 3 V/V",
+              "control_info": "ctrl: N2 → N3",
+              "edge_line": "E1: N4 → N5",
+              "is_source": false,
+              "is_passive": false
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N2 → N1",
+            "R1: N3 → GND",
+            "R2: N1 → GND",
+            "R3: N2 → N3",
+            "R4: N3 → N4",
+            "R5: N5 → GND",
+            "E1: N4 → N5"
+          ],
+          "resolved_graph_lines": [
+            "V1: N2 → N1",
+            "R1: N3 → GND",
+            "R2: N1 → GND",
+            "R3: N2 → N3",
+            "R4: N3 → N4",
+            "R5: N5 → GND",
+            "E1: N4 → N5"
+          ]
+        },
+        "ascii_diagram": "[V1 = 65 V] (N2 → N1)\n ├── R1 (5 Ω): N3 → GND\n ├── R2 (6 Ω): N1 → GND\n ├── R3 (4 Ω): N2 → N3\n ├── R4 (8 Ω): N3 → N4\n ├── R5 (15 Ω): N5 → GND\n └── E1 (gain = 3 V/V, ctrl: N2 → N3): N4 → N5",
+        "edge_list_lines": [
+          "V1: N2 → N1",
+          "R1: N3 → GND",
+          "R2: N1 → GND",
+          "R3: N2 → N3",
+          "R4: N3 → N4",
+          "R5: N5 → GND",
+          "E1: N4 → N5"
+        ],
+        "resolved_graph_lines": [
+          "V1: N2 → N1",
+          "R1: N3 → GND",
+          "R2: N1 → GND",
+          "R3: N2 → N3",
+          "R4: N3 → N4",
+          "R5: N5 → GND",
+          "E1: N4 → N5"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 65 V] (N2 → N1)\n ├── R1 (5 Ω): N3 → GND\n ├── R2 (6 Ω): N1 → GND\n ├── R3 (4 Ω): N2 → N3\n ├── R4 (8 Ω): N3 → N4\n ├── R5 (15 Ω): N5 → GND\n └── E1 (gain = 3 V/V, ctrl: N2 → N3): N4 → N5\n\nV1: N2 → N1\nR1: N3 → GND\nR2: N1 → GND\nR3: N2 → N3\nR4: N3 → N4\nR5: N5 → GND\nE1: N4 → N5"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 65.0,
+        "unit": "V",
+        "nodes": [
+          "2",
+          "1"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 5.0,
+        "unit": "ohm",
+        "nodes": [
+          "3",
+          "GND"
+        ]
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 6.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R3",
+        "type": "resistor",
+        "value": 4.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "id": "R4",
+        "type": "resistor",
+        "value": 8.0,
+        "unit": "ohm",
+        "nodes": [
+          "3",
+          "4"
+        ]
+      },
+      {
+        "id": "R5",
+        "type": "resistor",
+        "value": 15.0,
+        "unit": "ohm",
+        "nodes": [
+          "5",
+          "GND"
+        ]
+      },
+      {
+        "id": "E1",
+        "type": "vcvs",
+        "gain": 3,
+        "nodes": [
+          "4",
+          "5"
+        ],
+        "control_nodes": [
+          "2",
+          "3"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  }
+}

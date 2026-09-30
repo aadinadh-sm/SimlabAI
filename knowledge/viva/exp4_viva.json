@@ -1,0 +1,116 @@
+{
+  "exp_number": 4,
+  "title": "Simulating Natural Response of RC Circuits Using PySpice",
+  "questions": [
+    {
+      "q": "What is the natural response of an RC circuit?",
+      "a": "It is the transient discharge of energy stored in the capacitor through connected resistors when no independent voltage or current source drives the RC network.",
+      "category": "definition",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "Why does Experiment 4 include two switches S1 and S2?",
+      "a": "S1 connects V1 to charge the capacitor prior to switchingtime (50 ms), and at 50 ms S1 opens while S2 closes to isolate V1 and discharge C1 purely through R2, R3, and R4.",
+      "category": "why",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "How is the discharge time constant calculated in Experiment 4?",
+      "a": "First find R_eq = R2 + (R3 || R4) = 32 kΩ + (240k * 60k)/(240k + 60k) = 32 kΩ + 48 kΩ = 80 kΩ. Then tau = R_eq * C1 = 80 kΩ * 0.5 µF = 40 ms.",
+      "category": "how",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "What is the purpose of `Rtesta` and `Rtestb` in Experiment 4?",
+      "a": "They provide a DC path to ground and load termination for the control pulse voltage sources `Vpulse2` and `Vpulse3` at nodes `posa` and `posb`.",
+      "category": "component",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "How do you set the initial capacitor voltage in PySpice before running transient analysis?",
+      "a": "By calling `simulator.initial_condition(output=0@u_V)` before `simulator.transient(...)`.",
+      "category": "procedure",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "How is the switch model declared in PySpice?",
+      "a": "Using `circuit.model('switch', 'SW', Ron=1@u_mOhm, Roff=1@u_GOhm)`.",
+      "category": "code",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "How are R2, R3, and R4 connected in the discharge network of Experiment 4?",
+      "a": "R3 and R4 are in parallel between Node 2 and GND, and R2 is in series between Switch S2 (Node 'b') and Node 2.",
+      "category": "topology",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "What is the capacitor voltage at 1 time constant after switching (t = 50 ms + 40 ms = 90 ms)?",
+      "a": "V_C(90 ms) = 100 V * e^(-1) ≈ 36.79 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "What happens if a student asks for Capacitor Voltage plot and the script only runs `simulator.transient()` without `matplotlib`?",
+      "a": "No waveform is displayed or saved; the script must extract `analysis['output']`, plot it against `analysis.time`, label axes, and call `plt.show()` / `plt.savefig()`.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    },
+    {
+      "q": "What happens to the discharge curve if C1 is doubled from 0.5 µF to 1.0 µF?",
+      "a": "The discharge time constant tau doubles from 40 ms to 80 ms, so the capacitor discharges twice as slowly.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Natural Response",
+        "Time Constant (tau)",
+        "Voltage-Controlled Switch (SW)",
+        "Equivalent Discharge Resistance (R_eq)"
+      ]
+    }
+  ]
+}

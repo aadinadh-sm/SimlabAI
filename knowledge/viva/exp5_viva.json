@@ -1,0 +1,116 @@
+{
+  "exp_number": 5,
+  "title": "Simulating Step Response of RC Circuits Using PySpice",
+  "questions": [
+    {
+      "q": "What is the complete step response of an RC circuit?",
+      "a": "It is the sum of the natural response and forced response when an RC circuit with initial capacitor voltage V_0 is subjected to a sudden DC source change: V_C(t) = V_inf + (V_0 - V_inf) * e^(-t/tau).",
+      "category": "definition",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "Why does the capacitor voltage settle at 20 V instead of 40 V before switching in Experiment 5?",
+      "a": "Because R1 (10 kΩ) and R2 (10 kΩ) form an equal voltage divider across V1 (40 V), so the Thevenin voltage seen by C1 is 40 V * (10k / 20k) = 20 V.",
+      "category": "why",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "How is the final steady-state voltage V_inf = -60 V obtained in Experiment 5?",
+      "a": "V2 (75 V) has its positive terminal at GND and negative at Node 3, so V(3) = -75 V. With C1 open-circuited in steady state, R4 (200 kΩ) and R5 (50 kΩ) divide -75 V to give V(4) = -75 * (200k / 250k) = -60 V.",
+      "category": "how",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "What is the post-switching equivalent resistance R_eq in Experiment 5?",
+      "a": "Looking from C1 into S2 after switching, R_eq = R3 + (R4 || R5) = 160 kΩ + (200k * 50k)/(200k + 50k) = 160 kΩ + 40 kΩ = 200 kΩ.",
+      "category": "component",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "At what time does the switch transition occur in Experiment 5?",
+      "a": "At `switchingtime = 20@u_ms` (20 milliseconds).",
+      "category": "procedure",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "How is V2's inverted polarity written in PySpice for Experiment 5?",
+      "a": "`circuit.V(2, circuit.gnd, 3, 75@u_V)` — placing `circuit.gnd` as the positive node and `3` as the negative node.",
+      "category": "code",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "What is the pre-switching Thevenin resistance and time constant in Experiment 5?",
+      "a": "R_th_pre = R1 || R2 = 10 kΩ || 10 kΩ = 5 kΩ, so tau_pre = 5 kΩ * 0.25 µF = 1.25 ms.",
+      "category": "topology",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "What is the capacitor voltage at t = 20 ms + 50 ms = 70 ms in Experiment 5?",
+      "a": "V_C(70 ms) = -60 + (20 - (-60)) * e^(-1) = -60 + 80 * 0.3679 = -30.57 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "Why must we always include `plt.plot(analysis.time, analysis['output'])` when the user asks to show capacitor voltage?",
+      "a": "Because requested outputs are explicit requirements; running `.transient()` without extracting and plotting `analysis['output']` leaves the task incomplete.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "How long after switching (t = 20 ms) does the capacitor take to reach within 1% of -60 V?",
+      "a": "About 5 time constants: 5 * 50 ms = 250 ms after switching.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    }
+  ]
+}

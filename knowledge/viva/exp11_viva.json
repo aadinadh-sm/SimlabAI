@@ -1,0 +1,116 @@
+{
+  "exp_number": 11,
+  "title": "Characteristics of PN-Junction Diode in MATLAB/Simulink",
+  "questions": [
+    {
+      "q": "What is the cut-in (knee) voltage of a silicon PN-junction diode?",
+      "a": "Approximately 0.7 V for silicon (and 0.3 V for germanium), which is the forward voltage threshold above which the diode conducts significant forward current.",
+      "category": "definition",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "Why is a series resistor R1 always included when testing a diode's forward I-V curve?",
+      "a": "Because once V_D exceeds 0.7 V, the diode's impedance becomes very small; without R1 to limit current, the current would spike exponentially and destroy the diode.",
+      "category": "why",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How do you extract the diode voltage V_D and diode current I_D in a PySpice DC sweep of Experiment 11?",
+      "a": "`v_diode = np.array(analysis['1']) - np.array(analysis['2'])` and `i_diode = np.array(analysis['2']) / R1`.",
+      "category": "how",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How is the X-Y Graph block used in the Simulink model of Experiment 11?",
+      "a": "The Voltage Sensor across the diode feeds the X-input and the Current Sensor in series with the diode feeds the Y-input to plot I_D vs V_D directly.",
+      "category": "component",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How do you simulate reverse bias characteristics in Experiment 11?",
+      "a": "Reverse the diode polarity (or sweep V1 across negative voltages), observing near-zero leakage current until reverse breakdown.",
+      "category": "procedure",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How is a 1N4007 silicon diode model defined in PySpice?",
+      "a": "`circuit.model('D1N4007', 'D', IS=1e-14@u_A, N=1.0, BV=1000@u_V)` and instantiated via `circuit.Diode(1, 1, 2, model='D1N4007')`.",
+      "category": "code",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "In Experiment 11, which node is connected to the diode's anode and which to its cathode?",
+      "a": "Node 1 (source positive terminal) connects to the Anode, and Node 2 (resistor R1) connects to the Cathode.",
+      "category": "topology",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "If the source voltage is 10 V, R1 = 1 kΩ, and the silicon diode drop is 0.7 V, what is the diode current?",
+      "a": "I_D = (10 V - 0.7 V) / 1 kΩ = 9.3 mA.",
+      "category": "calculation",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "If the plotted I-V curve is a straight line starting from 0.7 V up to 10 V on the X-axis, what mistake was made?",
+      "a": "The X-axis was plotted using the total source voltage V(1) instead of the voltage across the diode alone, V(1) - V(2).",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How does temperature affect the forward I-V curve of a silicon diode?",
+      "a": "The knee voltage decreases by about 2 mV per °C increase in temperature, shifting the forward I-V curve slightly to the left.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    }
+  ]
+}

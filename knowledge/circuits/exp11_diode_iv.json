@@ -1,0 +1,270 @@
+{
+  "template_id": "exp11_diode_iv",
+  "experiment_number": 11,
+  "topology_category": "EXACT MANUAL TOPOLOGY",
+  "circuit_type": "DIODE_IV_CHARACTERISTICS",
+  "name": "PN-Junction Diode I-V Characteristics (Experiment 11)",
+  "components": [
+    "V1",
+    "D1",
+    "R1"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 12.0,
+      "unit": "V"
+    },
+    "D1": {
+      "value": 0.7,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 1000.0,
+      "unit": "ohm"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "D1": "diode",
+    "R1": "resistor"
+  },
+  "nodes": [
+    "1",
+    "2",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,GND",
+    "D1 -> N1,N2",
+    "R1 -> N2,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "op",
+  "simulation_parameters": {
+    "type": "op"
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1 (Input Peak)": 12.0,
+      "2/out (Output Peak)": 11.3
+    },
+    "branch_currents": {
+      "I_peak (Forward/Load Current)": 0.0113
+    },
+    "transient_metrics": {
+      "Diode Forward Knee Voltage Vf": "0.7 V",
+      "Peak Load Voltage": "11.3000 V"
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "PN-Junction Diode I-V Characteristics (Experiment 11)",
+      "circuit_type": "DIODE_IV_CHARACTERISTICS",
+      "experiment": 11,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "iv_curve",
+        "waveform",
+        "dc_operating_point"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "D1",
+            "type": "diode",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D1: N1 → N2",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "D1: N1 → N2",
+        "R1: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "D1",
+              "type": "diode",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D1: N1 → N2",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "D1: N1 → N2",
+            "R1: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "D1: N1 → N2",
+            "R1: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → GND)\n ├── D1 (0.7 V): N1 → N2\n └── R1 (1 kΩ): N2 → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → GND)\n ├── D1 (0.7 V): N1 → N2\n └── R1 (1 kΩ): N2 → GND\n\nV1: N1 → GND\nD1: N1 → N2\nR1: N2 → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "D1",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  }
+}

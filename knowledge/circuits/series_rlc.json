@@ -1,0 +1,383 @@
+{
+  "template_id": "series_rlc",
+  "experiment_number": null,
+  "topology_category": "GENERALIZED CIRCUIT",
+  "circuit_type": "SERIES_RLC",
+  "name": "Series Rlc Circuit",
+  "components": [
+    "V1",
+    "R1",
+    "L1",
+    "C1"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 10.0,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 100.0,
+      "unit": "ohm"
+    },
+    "L1": {
+      "value": 0.01,
+      "unit": "H"
+    },
+    "C1": {
+      "value": 1e-06,
+      "unit": "F"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "R1": "resistor",
+    "L1": "inductor",
+    "C1": "capacitor"
+  },
+  "nodes": [
+    "1",
+    "2",
+    "output",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,GND",
+    "R1 -> N1,N2",
+    "L1 -> N2,output",
+    "C1 -> output,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "transient",
+  "simulation_parameters": {
+    "type": "transient",
+    "step": 1e-05,
+    "stop": 0.02,
+    "step_stop_consistency": {
+      "step_positive": true,
+      "stop_positive": true,
+      "step_le_stop": true,
+      "raw_pair_consistent": true,
+      "was_adjusted": false,
+      "adjustment_reason": "",
+      "window_sufficient": true,
+      "raw_step_s": 1e-05,
+      "raw_stop_s": 0.02,
+      "raw_step_expr": "10@u_us",
+      "raw_stop_expr": "20@u_ms",
+      "raw_step_text": "10 microseconds",
+      "raw_stop_text": "20 milliseconds",
+      "compat_step_for_raw_stop_s": 1e-05,
+      "compat_raw_step_expr": "10@u_us",
+      "compat_raw_step_text": "10 microseconds",
+      "required_cycles": 5,
+      "required_duration_s": 1.0,
+      "compat_step_for_req_s": 0.001,
+      "req_step_expr": "1@u_ms",
+      "req_step_text": "1 milliseconds",
+      "req_stop_expr": "1@u_time_s",
+      "req_stop_text": "1 seconds",
+      "req_needs_u_second": true,
+      "changes_reported": []
+    }
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1": 10.0,
+      "2": 10.0,
+      "output": 10.0
+    },
+    "branch_currents": {
+      "I(R1)": 0.0,
+      "I(V1)": 0.0
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Series Rlc Circuit",
+      "circuit_type": "SERIES_RLC",
+      "experiment": null,
+      "topology_source": "ai_inferred",
+      "topology_classification": "GENERALIZED CIRCUIT",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage"
+      ],
+      "user_connection_clauses": [
+        "R1, L1, and C1 connected in series across V1"
+      ],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "output",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "10 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "100 Ω",
+            "control_info": null,
+            "edge_line": "R1: N1 → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "L1",
+            "type": "inductor",
+            "raw_from": "2",
+            "raw_to": "output",
+            "from_node": "N2",
+            "to_node": "output",
+            "display_value": "10 mH",
+            "control_info": null,
+            "edge_line": "L1: N2 → output",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "C1",
+            "type": "capacitor",
+            "raw_from": "output",
+            "raw_to": "GND",
+            "from_node": "output",
+            "to_node": "GND",
+            "display_value": "1 µF",
+            "control_info": null,
+            "edge_line": "C1: output → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "L1: N2 → output",
+          "C1: output → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "L1: N2 → output",
+          "C1: output → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "R1: N1 → N2",
+        "L1: N2 → output",
+        "C1: output → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "output",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "10 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "100 Ω",
+              "control_info": null,
+              "edge_line": "R1: N1 → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "L1",
+              "type": "inductor",
+              "raw_from": "2",
+              "raw_to": "output",
+              "from_node": "N2",
+              "to_node": "output",
+              "display_value": "10 mH",
+              "control_info": null,
+              "edge_line": "L1: N2 → output",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "C1",
+              "type": "capacitor",
+              "raw_from": "output",
+              "raw_to": "GND",
+              "from_node": "output",
+              "to_node": "GND",
+              "display_value": "1 µF",
+              "control_info": null,
+              "edge_line": "C1: output → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → N2",
+            "L1: N2 → output",
+            "C1: output → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → N2",
+            "L1: N2 → output",
+            "C1: output → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 10 V] (N1 → GND)\n ├── R1 (100 Ω): N1 → N2\n ├── L1 (10 mH): N2 → output\n └── C1 (1 µF): output → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "L1: N2 → output",
+          "C1: output → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "L1: N2 → output",
+          "C1: output → GND"
+        ],
+        "user_connection_clauses": [
+          "R1, L1, and C1 connected in series across V1"
+        ],
+        "formatted_preview": "[V1 = 10 V] (N1 → GND)\n ├── R1 (100 Ω): N1 → N2\n ├── L1 (10 mH): N2 → output\n └── C1 (1 µF): output → GND\n\nV1: N1 → GND\nR1: N1 → N2\nL1: N2 → output\nC1: output → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 10.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 100.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "L1",
+        "type": "inductor",
+        "value": 0.01,
+        "unit": "H",
+        "nodes": [
+          "2",
+          "output"
+        ]
+      },
+      {
+        "id": "C1",
+        "type": "capacitor",
+        "value": 1e-06,
+        "unit": "F",
+        "nodes": [
+          "output",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "output",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step": 1e-05,
+      "stop": 0.02,
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 1e-05,
+        "raw_stop_s": 0.02,
+        "raw_step_expr": "10@u_us",
+        "raw_stop_expr": "20@u_ms",
+        "raw_step_text": "10 microseconds",
+        "raw_stop_text": "20 milliseconds",
+        "compat_step_for_raw_stop_s": 1e-05,
+        "compat_raw_step_expr": "10@u_us",
+        "compat_raw_step_text": "10 microseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  }
+}

@@ -1,0 +1,822 @@
+{
+  "template_id": "exp4_rc_natural_response",
+  "experiment_number": 4,
+  "topology_category": "EXACT MANUAL TOPOLOGY",
+  "circuit_type": "RC_NATURAL_RESPONSE",
+  "name": "Natural Response of RC Circuit (Experiment 4)",
+  "components": [
+    "Vpulse2",
+    "Rtesta",
+    "Vpulse3",
+    "Rtestb",
+    "V1",
+    "R1",
+    "S1",
+    "C1",
+    "S2",
+    "R2",
+    "R3",
+    "R4"
+  ],
+  "component_values": {
+    "Rtesta": {
+      "value": 1000.0,
+      "unit": "ohm"
+    },
+    "Rtestb": {
+      "value": 1000.0,
+      "unit": "ohm"
+    },
+    "V1": {
+      "value": 100.0,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 10000.0,
+      "unit": "ohm"
+    },
+    "C1": {
+      "value": 5e-07,
+      "unit": "F"
+    },
+    "R2": {
+      "value": 32000.0,
+      "unit": "ohm"
+    },
+    "R3": {
+      "value": 240000.0,
+      "unit": "ohm"
+    },
+    "R4": {
+      "value": 60000.0,
+      "unit": "ohm"
+    }
+  },
+  "component_types": {
+    "Vpulse2": "pulse_voltage_source",
+    "Rtesta": "resistor",
+    "Vpulse3": "pulse_voltage_source",
+    "Rtestb": "resistor",
+    "V1": "dc_voltage_source",
+    "R1": "resistor",
+    "S1": "vc_switch",
+    "C1": "capacitor",
+    "S2": "vc_switch",
+    "R2": "resistor",
+    "R3": "resistor",
+    "R4": "resistor"
+  },
+  "nodes": [
+    "1",
+    "a",
+    "output",
+    "b",
+    "2",
+    "posa",
+    "posb",
+    "GND"
+  ],
+  "connections": [
+    "Vpulse2 -> posa,GND",
+    "Rtesta -> posa,GND",
+    "Vpulse3 -> posb,GND",
+    "Rtestb -> posb,GND",
+    "V1 -> N1,GND",
+    "R1 -> N1,a",
+    "S1 -> a,output",
+    "C1 -> output,GND",
+    "S2 -> output,b",
+    "R2 -> b,N2",
+    "R3 -> N2,GND",
+    "R4 -> N2,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [
+    "S1 controlled by nodes (posa, GND)",
+    "S2 controlled by nodes (posb, GND)"
+  ],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "transient",
+  "simulation_parameters": {
+    "type": "transient",
+    "step": 1e-06,
+    "switchingtime": 0.05,
+    "stop": 0.25,
+    "initial_condition": {
+      "output": 0.0
+    },
+    "step_stop_consistency": {
+      "step_positive": true,
+      "stop_positive": true,
+      "step_le_stop": true,
+      "raw_pair_consistent": true,
+      "was_adjusted": false,
+      "adjustment_reason": "",
+      "window_sufficient": true,
+      "raw_step_s": 1e-06,
+      "raw_stop_s": 0.25,
+      "raw_step_expr": "1@u_us",
+      "raw_stop_expr": "250@u_ms",
+      "raw_step_text": "1 microseconds",
+      "raw_stop_text": "250 milliseconds",
+      "compat_step_for_raw_stop_s": 1e-06,
+      "compat_raw_step_expr": "1@u_us",
+      "compat_raw_step_text": "1 microseconds",
+      "required_cycles": 5,
+      "required_duration_s": 1.0,
+      "compat_step_for_req_s": 0.001,
+      "req_step_expr": "1@u_ms",
+      "req_step_text": "1 milliseconds",
+      "req_stop_expr": "1@u_time_s",
+      "req_stop_text": "1 seconds",
+      "req_needs_u_second": true,
+      "changes_reported": []
+    }
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1 (Source V1)": 100.0,
+      "output (Capacitor V_C @ t=0)": 0.0,
+      "output (Capacitor V_C @ t=switchingtime)": 99.9955,
+      "output (Capacitor V_C @ t=switchingtime+tau)": 36.7863,
+      "output (Capacitor V_C @ t->inf)": 0.0
+    },
+    "branch_currents": {
+      "I_C(0+) [Initial Charging Current]": 0.01,
+      "I_C(t_sw+) [Post-Switch Discharge Current]": -0.00125,
+      "I_R2(t_sw+)": 0.00125
+    },
+    "transient_metrics": {
+      "Charging Time Constant (R1*C1)": "5 ms",
+      "Equivalent Discharge Resistance Req": "80 kΩ",
+      "Post-Switching Discharge Time Constant (tau)": "40 ms",
+      "Capacitor Voltage Equation (t >= t_sw)": "V_C(t) = 99.9955 * exp(-(t - 0.05) / 0.04) V",
+      "Capacitor Current Equation (t >= t_sw)": "i_C(t) = -0.001250 * exp(-(t - 0.05) / 0.04) A"
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Natural Response of RC Circuit (Experiment 4)",
+      "circuit_type": "RC_NATURAL_RESPONSE",
+      "experiment": 4,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "capacitor_voltage",
+        "capacitor_current",
+        "waveform",
+        "switch_activations",
+        "branch_current",
+        "time_constant"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "a",
+          "output",
+          "b",
+          "N2",
+          "posa",
+          "posb",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "Vpulse2",
+            "type": "pulse_voltage_source",
+            "raw_from": "posa",
+            "raw_to": "GND",
+            "from_node": "posa",
+            "to_node": "GND",
+            "display_value": "pulse_voltage_source",
+            "control_info": null,
+            "edge_line": "Vpulse2: posa → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "Rtesta",
+            "type": "resistor",
+            "raw_from": "posa",
+            "raw_to": "GND",
+            "from_node": "posa",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "Rtesta: posa → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "Vpulse3",
+            "type": "pulse_voltage_source",
+            "raw_from": "posb",
+            "raw_to": "GND",
+            "from_node": "posb",
+            "to_node": "GND",
+            "display_value": "pulse_voltage_source",
+            "control_info": null,
+            "edge_line": "Vpulse3: posb → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "Rtestb",
+            "type": "resistor",
+            "raw_from": "posb",
+            "raw_to": "GND",
+            "from_node": "posb",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "Rtestb: posb → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "100 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "a",
+            "from_node": "N1",
+            "to_node": "a",
+            "display_value": "10 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → a",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "S1",
+            "type": "vc_switch",
+            "raw_from": "a",
+            "raw_to": "output",
+            "from_node": "a",
+            "to_node": "output",
+            "display_value": "switch",
+            "control_info": "ctrl: posa → GND",
+            "edge_line": "S1: a → output",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "C1",
+            "type": "capacitor",
+            "raw_from": "output",
+            "raw_to": "GND",
+            "from_node": "output",
+            "to_node": "GND",
+            "display_value": "0.5 µF",
+            "control_info": null,
+            "edge_line": "C1: output → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "S2",
+            "type": "vc_switch",
+            "raw_from": "output",
+            "raw_to": "b",
+            "from_node": "output",
+            "to_node": "b",
+            "display_value": "switch",
+            "control_info": "ctrl: posb → GND",
+            "edge_line": "S2: output → b",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "b",
+            "raw_to": "2",
+            "from_node": "b",
+            "to_node": "N2",
+            "display_value": "32 kΩ",
+            "control_info": null,
+            "edge_line": "R2: b → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R3",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "240 kΩ",
+            "control_info": null,
+            "edge_line": "R3: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R4",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "60 kΩ",
+            "control_info": null,
+            "edge_line": "R4: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "Vpulse2: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse3: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R2: b → N2",
+          "R3: N2 → GND",
+          "R4: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "Vpulse2: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse3: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R2: b → N2",
+          "R3: N2 → GND",
+          "R4: N2 → GND"
+        ]
+      },
+      "resolved_graph": [
+        "Vpulse2: posa → GND",
+        "Rtesta: posa → GND",
+        "Vpulse3: posb → GND",
+        "Rtestb: posb → GND",
+        "V1: N1 → GND",
+        "R1: N1 → a",
+        "S1: a → output",
+        "C1: output → GND",
+        "S2: output → b",
+        "R2: b → N2",
+        "R3: N2 → GND",
+        "R4: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "a",
+            "output",
+            "b",
+            "N2",
+            "posa",
+            "posb",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "Vpulse2",
+              "type": "pulse_voltage_source",
+              "raw_from": "posa",
+              "raw_to": "GND",
+              "from_node": "posa",
+              "to_node": "GND",
+              "display_value": "pulse_voltage_source",
+              "control_info": null,
+              "edge_line": "Vpulse2: posa → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "Rtesta",
+              "type": "resistor",
+              "raw_from": "posa",
+              "raw_to": "GND",
+              "from_node": "posa",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "Rtesta: posa → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "Vpulse3",
+              "type": "pulse_voltage_source",
+              "raw_from": "posb",
+              "raw_to": "GND",
+              "from_node": "posb",
+              "to_node": "GND",
+              "display_value": "pulse_voltage_source",
+              "control_info": null,
+              "edge_line": "Vpulse3: posb → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "Rtestb",
+              "type": "resistor",
+              "raw_from": "posb",
+              "raw_to": "GND",
+              "from_node": "posb",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "Rtestb: posb → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "100 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "a",
+              "from_node": "N1",
+              "to_node": "a",
+              "display_value": "10 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → a",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "S1",
+              "type": "vc_switch",
+              "raw_from": "a",
+              "raw_to": "output",
+              "from_node": "a",
+              "to_node": "output",
+              "display_value": "switch",
+              "control_info": "ctrl: posa → GND",
+              "edge_line": "S1: a → output",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "C1",
+              "type": "capacitor",
+              "raw_from": "output",
+              "raw_to": "GND",
+              "from_node": "output",
+              "to_node": "GND",
+              "display_value": "0.5 µF",
+              "control_info": null,
+              "edge_line": "C1: output → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "S2",
+              "type": "vc_switch",
+              "raw_from": "output",
+              "raw_to": "b",
+              "from_node": "output",
+              "to_node": "b",
+              "display_value": "switch",
+              "control_info": "ctrl: posb → GND",
+              "edge_line": "S2: output → b",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "b",
+              "raw_to": "2",
+              "from_node": "b",
+              "to_node": "N2",
+              "display_value": "32 kΩ",
+              "control_info": null,
+              "edge_line": "R2: b → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R3",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "240 kΩ",
+              "control_info": null,
+              "edge_line": "R3: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R4",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "60 kΩ",
+              "control_info": null,
+              "edge_line": "R4: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "Vpulse2: posa → GND",
+            "Rtesta: posa → GND",
+            "Vpulse3: posb → GND",
+            "Rtestb: posb → GND",
+            "V1: N1 → GND",
+            "R1: N1 → a",
+            "S1: a → output",
+            "C1: output → GND",
+            "S2: output → b",
+            "R2: b → N2",
+            "R3: N2 → GND",
+            "R4: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "Vpulse2: posa → GND",
+            "Rtesta: posa → GND",
+            "Vpulse3: posb → GND",
+            "Rtestb: posb → GND",
+            "V1: N1 → GND",
+            "R1: N1 → a",
+            "S1: a → output",
+            "C1: output → GND",
+            "S2: output → b",
+            "R2: b → N2",
+            "R3: N2 → GND",
+            "R4: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[Vpulse2 = pulse_voltage_source] (posa → GND)\n[Vpulse3 = pulse_voltage_source] (posb → GND)\n[V1 = 100 V] (N1 → GND)\n ├── Rtesta (1 kΩ): posa → GND\n ├── Rtestb (1 kΩ): posb → GND\n ├── R1 (10 kΩ): N1 → a\n ├── S1 (switch, ctrl: posa → GND): a → output\n ├── C1 (0.5 µF): output → GND\n ├── S2 (switch, ctrl: posb → GND): output → b\n ├── R2 (32 kΩ): b → N2\n ├── R3 (240 kΩ): N2 → GND\n └── R4 (60 kΩ): N2 → GND",
+        "edge_list_lines": [
+          "Vpulse2: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse3: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R2: b → N2",
+          "R3: N2 → GND",
+          "R4: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "Vpulse2: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse3: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R2: b → N2",
+          "R3: N2 → GND",
+          "R4: N2 → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[Vpulse2 = pulse_voltage_source] (posa → GND)\n[Vpulse3 = pulse_voltage_source] (posb → GND)\n[V1 = 100 V] (N1 → GND)\n ├── Rtesta (1 kΩ): posa → GND\n ├── Rtestb (1 kΩ): posb → GND\n ├── R1 (10 kΩ): N1 → a\n ├── S1 (switch, ctrl: posa → GND): a → output\n ├── C1 (0.5 µF): output → GND\n ├── S2 (switch, ctrl: posb → GND): output → b\n ├── R2 (32 kΩ): b → N2\n ├── R3 (240 kΩ): N2 → GND\n └── R4 (60 kΩ): N2 → GND\n\nVpulse2: posa → GND\nRtesta: posa → GND\nVpulse3: posb → GND\nRtestb: posb → GND\nV1: N1 → GND\nR1: N1 → a\nS1: a → output\nC1: output → GND\nS2: output → b\nR2: b → N2\nR3: N2 → GND\nR4: N2 → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "Vpulse2",
+        "type": "pulse_voltage_source",
+        "initial_value": 1.0,
+        "pulsed_value": -1.0,
+        "delay_time": 0.05,
+        "pulse_width": 0.25,
+        "period": 0.25,
+        "unit": "V",
+        "nodes": [
+          "posa",
+          "GND"
+        ]
+      },
+      {
+        "id": "Rtesta",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "posa",
+          "GND"
+        ]
+      },
+      {
+        "id": "Vpulse3",
+        "type": "pulse_voltage_source",
+        "initial_value": -1.0,
+        "pulsed_value": 1.0,
+        "delay_time": 0.05,
+        "pulse_width": 0.25,
+        "period": 0.25,
+        "unit": "V",
+        "nodes": [
+          "posb",
+          "GND"
+        ]
+      },
+      {
+        "id": "Rtestb",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "posb",
+          "GND"
+        ]
+      },
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 100.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 10000.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "a"
+        ]
+      },
+      {
+        "id": "S1",
+        "type": "vc_switch",
+        "model": "switch",
+        "ron": 0.001,
+        "roff": 1000000000.0,
+        "nodes": [
+          "a",
+          "output"
+        ],
+        "control_nodes": [
+          "posa",
+          "GND"
+        ]
+      },
+      {
+        "id": "C1",
+        "type": "capacitor",
+        "value": 5e-07,
+        "unit": "F",
+        "nodes": [
+          "output",
+          "GND"
+        ]
+      },
+      {
+        "id": "S2",
+        "type": "vc_switch",
+        "model": "switch",
+        "ron": 0.001,
+        "roff": 1000000000.0,
+        "nodes": [
+          "output",
+          "b"
+        ],
+        "control_nodes": [
+          "posb",
+          "GND"
+        ]
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 32000.0,
+        "unit": "ohm",
+        "nodes": [
+          "b",
+          "2"
+        ]
+      },
+      {
+        "id": "R3",
+        "type": "resistor",
+        "value": 240000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      },
+      {
+        "id": "R4",
+        "type": "resistor",
+        "value": 60000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "a",
+      "output",
+      "b",
+      "2",
+      "posa",
+      "posb",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step": 1e-06,
+      "switchingtime": 0.05,
+      "stop": 0.25,
+      "initial_condition": {
+        "output": 0.0
+      },
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 1e-06,
+        "raw_stop_s": 0.25,
+        "raw_step_expr": "1@u_us",
+        "raw_stop_expr": "250@u_ms",
+        "raw_step_text": "1 microseconds",
+        "raw_stop_text": "250 milliseconds",
+        "compat_step_for_raw_stop_s": 1e-06,
+        "compat_raw_step_expr": "1@u_us",
+        "compat_raw_step_text": "1 microseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  }
+}

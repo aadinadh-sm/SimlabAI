@@ -1,0 +1,116 @@
+{
+  "exp_number": 9,
+  "title": "Implementation of Boolean Function in SOP and POS Form Using Multisim",
+  "questions": [
+    {
+      "q": "What is the difference between a minterm and a maxterm?",
+      "a": "A minterm is an AND product term of all variables that equals 1 for a single input combination, whereas a maxterm is an OR sum term of all variables that equals 0 for a single input combination.",
+      "category": "definition",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "Why are variables with value 1 complemented in a maxterm (POS) but uncomplemented in a minterm (SOP)?",
+      "a": "Because a minterm (AND) needs all inputs to be 1 to output 1, while a maxterm (OR) needs all inputs to be 0 to output 0.",
+      "category": "why",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "How can `A'B'C + A'BC + ABC'` in Experiment 9 be simplified algebraically?",
+      "a": "Factor `A'C` from the first two terms: `A'C(B' + B) + ABC' = A'C(1) + ABC' = A'C + ABC'`.",
+      "category": "how",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "What two-level gate structure implements an SOP expression?",
+      "a": "A first level of AND gates (producing the product terms) feeding a second-level OR gate (summing the products).",
+      "category": "component",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "If a 3-variable function has minterms Sigma_m(1, 3, 6), what are its maxterms?",
+      "a": "All remaining indices from 0..7: Pi_M(0, 2, 4, 5, 7).",
+      "category": "procedure",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "How do you evaluate `XSOP = A'B'C + A'BC + ABC'` for all 8 states in Python?",
+      "a": "Loop `for i in range(8): A, B, C = (i>>2)&1, (i>>1)&1, i&1; Y = int(((not A) and (not B) and C) or ((not A) and B and C) or (A and B and (not C)))`.",
+      "category": "code",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "What two-level gate structure implements a POS expression?",
+      "a": "A first level of OR gates (forming the sum terms) feeding a second-level AND gate.",
+      "category": "topology",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "Evaluate Y for (A=1, B=1, C=0) and (A=1, B=1, C=1) in Experiment 9.",
+      "a": "For (1,1,0) [m6], ABC' = 1·1·1 = 1 so Y = 1. For (1,1,1) [m7], all minterms are 0 so Y = 0.",
+      "category": "calculation",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "If the SOP circuit outputs 1 for (0,1,0) instead of (1,1,0), what wiring error occurred?",
+      "a": "Input A on the third AND gate was accidentally connected to A' instead of A.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "How many 1s and how many 0s appear in the output column of Experiment 9?",
+      "a": "Three 1s (at m1, m3, m6) and five 0s (at m0, m2, m4, m5, m7).",
+      "category": "expected_output",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    }
+  ]
+}

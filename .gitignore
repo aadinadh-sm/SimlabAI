@@ -1,0 +1,25 @@
+# Large LLM weights & binary runtimes (exceed GitHub 100MB limit)
+models/*.gguf
+models/*.bin
+runtime/python/
+runtime/llama/
+runtime/simulators/
+
+# PyInstaller & build outputs
+_internal/
+build/
+dist_bin/
+SimLabAI.exe
+
+# Node dependencies & Rust build cache
+node_modules/
+apps/desktop/node_modules/
+apps/desktop/src-tauri/target/
+
+# Python caches & logs
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+workspace/logs/
+*.log

@@ -1,0 +1,297 @@
+{
+  "exp_number": 10,
+  "title": "Implementation of Combinational Circuit Using Minimum Number of NAND Gates Using Multisim",
+  "category": "Digital Combinational",
+  "family": "DIGITAL_LOGIC",
+  "pages": [
+    34,
+    35,
+    36
+  ],
+  "aim": "To implement a Boolean combinational function (such as F = AB + BC + AC or Experiment 9's SOP function) using the minimum number of universal NAND gates.",
+  "apparatus_components": [
+    "2-Input and 3-Input NAND Gates (IC 7400 / IC 7410)",
+    "Digital Inputs (A, B, C) and Output Probe F"
+  ],
+  "theory": "By De Morgan's theorem and double negation, any two-level AND-OR (SOP) circuit can be converted directly into a two-level NAND-NAND circuit: F = AB + BC + AC = ((AB + BC + AC)')' = ((AB)' · (BC)' · (AC)')'. Every first-level AND gate and the second-level OR gate are replaced by NAND gates, eliminating the need for separate AND, OR, and NOT IC packages.",
+  "equations": [
+    "Target Function: F = A·B + B·C + A·C (or XSOP = A'C + ABC')",
+    "Double Inversion: F = ((A·B + B·C + A·C)')'",
+    "De Morgan NAND-NAND Form: F = ( (A·B)' · (B·C)' · (A·C)' )'"
+  ],
+  "circuit_topology": "Two-level all-NAND network where first-stage NAND gates compute `(AB)'`, `(BC)'`, `(AC)'` and a final 3-input NAND gate combines them into `F`.",
+  "component_relationships": [
+    "NAND1(A, B) -> N_AB",
+    "NAND2(B, C) -> N_BC",
+    "NAND3(A, C) -> N_AC",
+    "NAND4(N_AB, N_BC, N_AC) -> Output F"
+  ],
+  "simulation_type": "Digital Combinational All-NAND Truth-Table Verification",
+  "procedure": "1. Minimize the Boolean expression using a K-map into minimum SOP form.\n2. Apply double inversion and De Morgan's Law to convert AND-OR into NAND-NAND form.\n3. Wire the circuit using only NAND gates (using single-input-tied NANDs as inverters if needed).\n4. Verify all 8 rows of the 3-input truth table.",
+  "expected_observations": "The NAND-only implementation produces the exact same 8-row truth table as the original AND-OR SOP circuit while using a single IC family.",
+  "result": "The combinational logic circuit was implemented using the minimum number of NAND gates and its truth table was verified.",
+  "common_mistakes": [
+    "Adding an extra inverter after the final NAND gate, which outputs F' instead of F",
+    "Failing to simplify the SOP expression via K-map before converting to NAND gates"
+  ],
+  "important_terminology": [
+    "Universal NAND Gate",
+    "De Morgan's Theorem",
+    "Double Negation",
+    "NAND-NAND Realization",
+    "Karnaugh Map (K-Map) Minimization"
+  ],
+  "related_experiments": [
+    7,
+    8,
+    9
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "Why is NAND-NAND implementation preferred in digital hardware design?",
+      "a": "Because NAND gates have smaller transistor count, faster propagation delay in CMOS/TTL, and allow an entire board to use a single quad-NAND IC type (7400)."
+    },
+    {
+      "category": "why",
+      "q": "Why does a two-level AND-OR circuit convert directly into a two-level NAND-NAND circuit?",
+      "a": "Because the output bubble of the first-level NAND gates cancels with the input bubbles of the negative-OR (which is functionally a NAND gate) by De Morgan's Law: ((X)' · (Y)')' = X + Y."
+    },
+    {
+      "category": "how",
+      "q": "How many 2-input NAND gates are needed to implement `F = A'C + ABC'`?",
+      "a": "Using `A'C = ((A'C)')'`, one NAND inverter for `A'`, one NAND for `(A'C)'`, one 3-input NAND for `(ABC')'` (with C' from a NAND inverter), and one final NAND to combine them."
+    },
+    {
+      "category": "component",
+      "q": "Which TTL IC provides triple 3-input NAND gates?",
+      "a": "The 7410 TTL IC provides three independent 3-input NAND gates."
+    },
+    {
+      "category": "procedure",
+      "q": "What is the first step before converting a Boolean expression to minimum NAND gates?",
+      "a": "Minimize the Boolean expression into minimal Sum-of-Products (SOP) form using Boolean algebra or a Karnaugh map."
+    },
+    {
+      "category": "code",
+      "q": "How do you write a NAND function in Python?",
+      "a": "`def nand(*inputs): return int(not all(inputs))`."
+    },
+    {
+      "category": "topology",
+      "q": "How do you implement an OR gate `A + B` using only 2-input NAND gates?",
+      "a": "Use 3 NAND gates: NAND1(A,A) = A', NAND2(B,B) = B', and NAND3(A', B') = (A'·B')' = A + B."
+    },
+    {
+      "category": "calculation",
+      "q": "In `F = ((AB)' · (BC)' · (AC)')'`, if A=1, B=1, C=0, what are the outputs of the three first-stage NAND gates and final output F?",
+      "a": "(AB)' = (1·1)' = 0; (BC)' = (1·0)' = 1; (AC)' = (1·0)' = 1. Final NAND(0, 1, 1) = (0·1·1)' = 1."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "If every output bit of your NAND circuit is inverted compared to the target truth table, what is wrong?",
+      "a": "There is either a missing second-level NAND inversion or an extra NAND inverter added at the output."
+    },
+    {
+      "category": "expected_output",
+      "q": "How many NAND gates are needed to build a single XOR gate `A ⊕ B`?",
+      "a": "Four 2-input NAND gates."
+    }
+  ],
+  "raw_text": "o\n\nStep 1: Run the simulation in Multisim.\n\no\n\nStep 2: Toggle the switches for inputs A, B, and C to test all possible\ncombinations (000, 001, 010, 011, 100, 101, 110, 111).\n\no\n\nStep 3: Observe the LED to verify whether the output F is correct according to\nthe Boolean function F=AB+BC+AC\n\n3. Verify the Output:\no\n\nStep 1: Record the LED output for each input combination.\n\no\n\nStep 2: Compare the recorded results with the expected truth table for the\nBoolean function.\n\nResult\nAfter implementing the circuit and running the simulation, the output F for all input\ncombinations was observed. The results are summarized as follows:\nInputs A Inputs B Inputs C Expected Output F=AB+BC+AC Observed Output\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n1\n\n0\n\n0\n\n0\n\n1\n\n0\n\n0\n\n0\n\n0\n\n1\n\n1\n\n1\n\n1\n\n1\n\n0\n\n0\n\n0\n\n0\n\n1\n\n0\n\n1\n\n1\n\n1\n\n1\n\n1\n\n0\n\n1\n\n1\n\n1\n\n1\n\n1\n\n1\n\n1\n\nThe observed output matches the expected output, confirming the correct implementation\nof the Boolean function F=AB+BC+AC.\n\n34 | P a g e\n\nEXPERIMENT-11\n\nDate:\n\nCHARATERISTICS OF PN-JUNCTION DIODE IN MATLAB/SIMULINK\nAim\nTo plot and analyze the I-V characteristics of a diode using MATLAB.\nApparatus Required\n1. MATLAB Software: For simulation and plotting.\n2. Diode model: Standard diode model in Simulink\n3. Resistor: A resistor connected in series with the diode to limit the current.\n4. Controlled Voltage Source.\n5. Ramp.\n6. Multimeter: To measure the current and voltage through the diode.\n7. Scope: To visualize the I-V characteristics of the diode.\nCircuit Diagram\n\nProcedure\n1. Open MATLAB and Simulink: Start by launching MATLAB and opening Simulink.\n2. Create a new Simulink model: Select \"Blank Model\" and create a new Simulink file.\n3. Add components:\no\n\n35 | P a g e\n\nDrag and drop the following components:\n\n▪\n\nControlled Voltage Source: To provide the input voltage.\n\n▪\n\nDiode: Available in the Simscape > Electrical > Specialized Power\nSystems > Power Electronics library.\n\n▪\n\nResistor: To limit current.\n\n▪\n\nRamp: To vary the voltage\n\n▪\n\nMultilmeter : To measure the voltage and current\n\n▪\n\nScope: To display the I-V curve.\n\n4. Connect the circuit:\no\n\nConnect the components to form a circuit where the DC voltage source is\nconnected in series with the diode and resistor. The current and voltage\nmeasurement blocks should be connected in series with the diode and to the\nscope for visualization.\n\n5. Run the simulation:\no\n\nSet the DC voltage source to sweep across a range of voltages (e.g., -1V to 1V).\n\no\n\nRun the simulation and observe the I-V characteristics on the scope.\n\n6. Analyze the I-V curve:\no\n\nThe scope will show the voltage versus current curve of the diode, which\nrepresents its I-V characteristics.\n\nResult\nThe I-V characteristics of the diode follow an exponential relation for\nforward bias and almost negligible current for reverse bias.\n\n36 | P a g e",
+  "page_start": 34,
+  "page_end": 36,
+  "software": "Multisim / SIMLAB Digital Logic Engine",
+  "tags": "Universal NAND Gate, De Morgan's Theorem, Double Negation, NAND-NAND Realization, Karnaugh Map (K-Map) Minimization",
+  "diagram_images": [
+    "Manual complete_page-0034-compressed.jpg",
+    "Manual complete_page-0035-compressed.jpg",
+    "Manual complete_page-0036-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (Combinational Circuit Using Minimum NAND Gates (Experiment 10))\n# 1. Run Digital Logic Truth Table Verification\nprint('=== DIGITAL TRUTH TABLE VERIFICATION ===')\nrows = []\nfor idx in range(8):\n    A, B, C = (idx >> 2) & 1, (idx >> 1) & 1, idx & 1\n    sum_bit = A ^ B ^ C\n    carry_bit = (A & B) | (B & C) | (A & C)\n    sop_y = 1 if idx in (1, 3, 6) else 0\n    rows.append((A, B, C, sum_bit, carry_bit, sop_y))\n    print(f'A={A} B={B} C={C} | Sum={sum_bit} Carry={carry_bit} | SOP_Y={sop_y}')\n\n# 2. Extract digital signals & 3. Plot digital timing waveforms\nt = np.arange(8)\narr = np.array(rows)\nfig, axes = plt.subplots(4, 1, figsize=(10, 7), sharex=True)\nlabels = ['Input A', 'Input B', 'Input C', 'Output Y']\ncols = [0, 1, 2, 3 if 'ADDER' in 'NAND_COMBINATIONAL' else 5]\nfor ax, col_idx, lbl in zip(axes, cols, labels):\n    ax.step(t, arr[:, col_idx], where='post', linewidth=2)\n    ax.set_ylabel(lbl)\n    ax.set_ylim(-0.2, 1.2)\n    ax.grid(True)\naxes[0].set_title('Digital Logic Truth-Table Timing Waveforms')\naxes[-1].set_xlabel('Input State Index (0..7)')\nplt.tight_layout()\nplt.savefig('digital_truth_table_waveforms.png', dpi=150)\nplt.show()\n",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (Combinational Circuit Using Minimum NAND Gates (Experiment 10))\n# 1. Run Digital Logic Truth Table Verification\nprint('=== DIGITAL TRUTH TABLE VERIFICATION ===')\nrows = []\nfor idx in range(8):\n    A, B, C = (idx >> 2) & 1, (idx >> 1) & 1, idx & 1\n    sum_bit = A ^ B ^ C\n    carry_bit = (A & B) | (B & C) | (A & C)\n    sop_y = 1 if idx in (1, 3, 6) else 0\n    rows.append((A, B, C, sum_bit, carry_bit, sop_y))\n    print(f'A={A} B={B} C={C} | Sum={sum_bit} Carry={carry_bit} | SOP_Y={sop_y}')\n\n# 2. Extract digital signals & 3. Plot digital timing waveforms\nt = np.arange(8)\narr = np.array(rows)\nfig, axes = plt.subplots(4, 1, figsize=(10, 7), sharex=True)\nlabels = ['Input A', 'Input B', 'Input C', 'Output Y']\ncols = [0, 1, 2, 3 if 'ADDER' in 'NAND_COMBINATIONAL' else 5]\nfor ax, col_idx, lbl in zip(axes, cols, labels):\n    ax.step(t, arr[:, col_idx], where='post', linewidth=2)\n    ax.set_ylabel(lbl)\n    ax.set_ylim(-0.2, 1.2)\n    ax.grid(True)\naxes[0].set_title('Digital Logic Truth-Table Timing Waveforms')\naxes[-1].set_xlabel('Input State Index (0..7)')\nplt.tight_layout()\nplt.savefig('digital_truth_table_waveforms.png', dpi=150)\nplt.show()\n",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Combinational Circuit Using Minimum NAND Gates (Experiment 10)",
+      "circuit_type": "NAND_COMBINATIONAL",
+      "experiment": 10,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "truth_table"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "A",
+          "B",
+          "C",
+          "OUT",
+          "GND"
+        ],
+        "edges": [],
+        "edge_list_lines": [],
+        "resolved_graph_lines": []
+      },
+      "resolved_graph": [],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "A",
+            "B",
+            "C",
+            "OUT",
+            "GND"
+          ],
+          "edges": [],
+          "edge_list_lines": [],
+          "resolved_graph_lines": []
+        },
+        "ascii_diagram": "",
+        "edge_list_lines": [],
+        "resolved_graph_lines": [],
+        "user_connection_clauses": [],
+        "formatted_preview": "\n\n"
+      }
+    },
+    "components": [],
+    "nodes": [
+      "A",
+      "B",
+      "C",
+      "OUT",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "digital_truth_table"
+    }
+  },
+  "circuit_template_id": "exp10_nand_combinational",
+  "viva": [
+    {
+      "q": "Why is NAND-NAND implementation preferred in digital hardware design?",
+      "a": "Because NAND gates have smaller transistor count, faster propagation delay in CMOS/TTL, and allow an entire board to use a single quad-NAND IC type (7400).",
+      "category": "definition",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "Why does a two-level AND-OR circuit convert directly into a two-level NAND-NAND circuit?",
+      "a": "Because the output bubble of the first-level NAND gates cancels with the input bubbles of the negative-OR (which is functionally a NAND gate) by De Morgan's Law: ((X)' · (Y)')' = X + Y.",
+      "category": "why",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How many 2-input NAND gates are needed to implement `F = A'C + ABC'`?",
+      "a": "Using `A'C = ((A'C)')'`, one NAND inverter for `A'`, one NAND for `(A'C)'`, one 3-input NAND for `(ABC')'` (with C' from a NAND inverter), and one final NAND to combine them.",
+      "category": "how",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "Which TTL IC provides triple 3-input NAND gates?",
+      "a": "The 7410 TTL IC provides three independent 3-input NAND gates.",
+      "category": "component",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "What is the first step before converting a Boolean expression to minimum NAND gates?",
+      "a": "Minimize the Boolean expression into minimal Sum-of-Products (SOP) form using Boolean algebra or a Karnaugh map.",
+      "category": "procedure",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How do you write a NAND function in Python?",
+      "a": "`def nand(*inputs): return int(not all(inputs))`.",
+      "category": "code",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How do you implement an OR gate `A + B` using only 2-input NAND gates?",
+      "a": "Use 3 NAND gates: NAND1(A,A) = A', NAND2(B,B) = B', and NAND3(A', B') = (A'·B')' = A + B.",
+      "category": "topology",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "In `F = ((AB)' · (BC)' · (AC)')'`, if A=1, B=1, C=0, what are the outputs of the three first-stage NAND gates and final output F?",
+      "a": "(AB)' = (1·1)' = 0; (BC)' = (1·0)' = 1; (AC)' = (1·0)' = 1. Final NAND(0, 1, 1) = (0·1·1)' = 1.",
+      "category": "calculation",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "If every output bit of your NAND circuit is inverted compared to the target truth table, what is wrong?",
+      "a": "There is either a missing second-level NAND inversion or an extra NAND inverter added at the output.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How many NAND gates are needed to build a single XOR gate `A ⊕ B`?",
+      "a": "Four 2-input NAND gates.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    }
+  ]
+}

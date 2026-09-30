@@ -1,0 +1,116 @@
+{
+  "exp_number": 3,
+  "title": "Simulation of a Voltage-Controlled Voltage Source (VCVS) Circuit Using PySpice",
+  "questions": [
+    {
+      "q": "What is a Voltage-Controlled Voltage Source (VCVS)?",
+      "a": "A VCVS is a dependent voltage source whose output terminal voltage is proportional to the voltage difference across a specified pair of controlling nodes.",
+      "category": "definition",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "Why doesn't Experiment 3 need a 0 V `Vtest` source like Experiment 2?",
+      "a": "Because a VCVS senses voltage directly between two existing nodes (Node 2 and Node 3), whereas a CCCS must sense current flowing through a branch.",
+      "category": "why",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "What is the argument order for `circuit.E(1, 4, 5, 2, 3, 3)` in PySpice?",
+      "a": "Element ID `1`, positive output node `4`, negative output node `5`, positive controlling node `2`, negative controlling node `3`, and voltage gain `3`.",
+      "category": "how",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "Across which resistor is the controlling voltage measured in Experiment 3?",
+      "a": "Across resistor R3, which is connected between Node 2 and Node 3.",
+      "category": "component",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "Which branches appear in `analysis.branches` for Experiment 3?",
+      "a": "The independent voltage source `v1` and the dependent voltage source `e1`, since SPICE computes branch currents directly for voltage-defined elements.",
+      "category": "procedure",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "Why is `V1` connected as `circuit.V(1, 2, 1, 65@u_V)` in Experiment 3?",
+      "a": "In the manual schematic, V1 is a floating 65 V source with its positive terminal at Node 2 and negative terminal at Node 1.",
+      "category": "code",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "How many non-ground nodes exist in the Experiment 3 VCVS circuit?",
+      "a": "Five non-ground nodes (Nodes 1, 2, 3, 4, and 5) plus `GND`.",
+      "category": "topology",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "If V(2) = 39.8624 V, V(3) = 23.1651 V, and gain = 3, what is V(4) - V(5)?",
+      "a": "V(4) - V(5) = 3 * (39.8624 - 23.1651) = 3 * 16.6973 = 50.0918 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "What error occurs if the controlling nodes of E1 are swapped from (2, 3) to (3, 2)?",
+      "a": "The polarity of the dependent voltage source inverts, flipping the sign of V(4) - V(5).",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    },
+    {
+      "q": "Why is Node 1 voltage negative (-25.14 V) in Experiment 3?",
+      "a": "Because V1 (65 V) has its negative terminal at Node 1 and returns current through R2 (6 Ω) to ground.",
+      "category": "expected_output",
+      "key_concepts": [
+        "VCVS (E Element)",
+        "Controlling Nodes",
+        "Differential Control Voltage",
+        "Floating Voltage Source"
+      ]
+    }
+  ]
+}

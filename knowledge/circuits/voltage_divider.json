@@ -1,0 +1,274 @@
+{
+  "template_id": "voltage_divider",
+  "experiment_number": null,
+  "topology_category": "GENERALIZED CIRCUIT",
+  "circuit_type": "CUSTOM_NL_TOPOLOGY",
+  "name": "Custom Natural-Language Reconstructed Circuit",
+  "components": [
+    "V1",
+    "R1",
+    "R2"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 10.0,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 2000.0,
+      "unit": "ohm"
+    },
+    "R2": {
+      "value": 3000.0,
+      "unit": "ohm"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "R1": "resistor",
+    "R2": "resistor"
+  },
+  "nodes": [
+    "1",
+    "2",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,GND",
+    "R1 -> N1,N2",
+    "R2 -> N2,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "op",
+  "simulation_parameters": {
+    "type": "op"
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1": 10.0,
+      "2": 6.0
+    },
+    "branch_currents": {
+      "I(R1)": 0.002,
+      "I(R2)": 0.002,
+      "I(V1)": 0.002
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Custom Natural-Language Reconstructed Circuit",
+      "circuit_type": "CUSTOM_NL_TOPOLOGY",
+      "experiment": null,
+      "topology_source": "user_description_inferred",
+      "topology_classification": "GENERALIZED CIRCUIT",
+      "inferred_topology_lines": [
+        "R1 and R2 in series"
+      ],
+      "user_connection_clauses": [
+        "R1 and R2 are in series"
+      ],
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "R1: N1 → N2",
+        "R2: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "10 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "2 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "3 kΩ",
+              "control_info": null,
+              "edge_line": "R2: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → N2",
+            "R2: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → N2",
+            "R2: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 10 V] (N1 → GND)\n │\nR1 (2 kΩ): N1 → N2\n │\n ● N2\n └── R2 (3 kΩ): N2 → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND"
+        ],
+        "user_connection_clauses": [
+          "R1 and R2 are in series"
+        ],
+        "formatted_preview": "[V1 = 10 V] (N1 → GND)\n │\nR1 (2 kΩ): N1 → N2\n │\n ● N2\n └── R2 (3 kΩ): N2 → GND\n\nV1: N1 → GND\nR1: N1 → N2\nR2: N2 → GND"
+      },
+      "user_confirmed": true,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage"
+      ],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "10 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "2 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "3 kΩ",
+            "control_info": null,
+            "edge_line": "R2: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND"
+        ]
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 10.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 2000.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 3000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  }
+}

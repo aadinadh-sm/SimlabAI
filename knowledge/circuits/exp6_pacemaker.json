@@ -1,0 +1,594 @@
+{
+  "template_id": "exp6_pacemaker",
+  "experiment_number": 6,
+  "topology_category": "EXACT MANUAL TOPOLOGY",
+  "circuit_type": "PACEMAKER",
+  "name": "Pacemaker RC Timing Circuit (Experiment 6)",
+  "components": [
+    "V1",
+    "R1",
+    "C1",
+    "S1",
+    "R2"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 6.0,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 16005.38,
+      "unit": "ohm"
+    },
+    "C1": {
+      "value": 4.7e-05,
+      "unit": "F"
+    },
+    "R2": {
+      "value": 50.0,
+      "unit": "ohm"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "R1": "resistor",
+    "C1": "capacitor",
+    "S1": "vc_switch",
+    "R2": "resistor"
+  },
+  "nodes": [
+    "1",
+    "control",
+    "out",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,GND",
+    "R1 -> N1,control",
+    "C1 -> control,GND",
+    "S1 -> control,out",
+    "R2 -> out,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [
+    "S1 controlled by nodes (control, GND)"
+  ],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "transient",
+  "simulation_parameters": {
+    "type": "transient",
+    "raw_step": 0.001,
+    "raw_stop": 6e-05,
+    "step": 1e-06,
+    "stop": 6e-05,
+    "step_code_expr": "1@u_us",
+    "stop_code_expr": "60@u_us",
+    "step_textual": "1 microseconds",
+    "stop_textual": "60 microseconds",
+    "recommended_cycles": 5,
+    "recommended_step_s": 0.001,
+    "recommended_stop_s": 4.285714,
+    "recommended_step_code_expr": "1@u_ms",
+    "recommended_stop_code_expr": "4.28571@u_time_s",
+    "five_cycle_step_s": 0.001,
+    "five_cycle_stop_s": 4.285714,
+    "five_cycle_step_expr": "1@u_ms",
+    "five_cycle_stop_expr": "4.28571@u_time_s",
+    "five_cycle_step_text": "1 milliseconds",
+    "five_cycle_stop_text": "4.28571 seconds",
+    "target_period_s": 0.857143,
+    "rc_tau_s": 0.752253,
+    "window_sufficient": false,
+    "unit_mismatch_detected": true,
+    "unit_mismatch_detail": "Pre-simulation Step/Stop & Window Audit: Raw manual parameters had `step_time = 1 milliseconds` (`1@u_ms`) and `end_time = 60 microseconds` (`60@u_us`). 1) Step/Stop Inconsistency: `1 milliseconds` > `60 microseconds` violates `step_time <= end_time` (1 ms cannot be used as the timestep for a 60 us simulation); adjusted 60 us diagnostic timestep to `step_time = 1@u_us` (1 microseconds). 2) Insufficient Observation Window: `60 microseconds` << RC tau = 0.7523 s and target period T = 60/70 = 0.8571 s. To observe 5 complete cycles, required duration = 5 * 0.857143 s = `4.28571 seconds` (`end_time = 4.28571@u_time_s` with `step_time = 1@u_ms`).",
+    "step_stop_consistency": {
+      "step_positive": true,
+      "stop_positive": true,
+      "step_le_stop": false,
+      "raw_pair_consistent": false,
+      "was_adjusted": true,
+      "adjustment_reason": "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s). OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`).",
+      "window_sufficient": false,
+      "raw_step_s": 0.001,
+      "raw_stop_s": 6e-05,
+      "raw_step_expr": "1@u_ms",
+      "raw_stop_expr": "60@u_us",
+      "raw_step_text": "1 milliseconds",
+      "raw_stop_text": "60 microseconds",
+      "compat_step_for_raw_stop_s": 1e-06,
+      "compat_raw_step_expr": "1@u_us",
+      "compat_raw_step_text": "1 microseconds",
+      "required_cycles": 5,
+      "required_duration_s": 4.285714,
+      "compat_step_for_req_s": 0.001,
+      "req_step_expr": "1@u_ms",
+      "req_step_text": "1 milliseconds",
+      "req_stop_expr": "4.28571@u_time_s",
+      "req_stop_text": "4.28571 seconds",
+      "req_needs_u_second": true,
+      "changes_reported": [
+        "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s).",
+        "OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`)."
+      ]
+    }
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "window_sufficient": false,
+    "requested_behavior_observed": false,
+    "threshold_reached": false,
+    "pulses_observed": 0,
+    "unit_mismatch_detected": true,
+    "unit_mismatch_detail": "Pre-simulation Step/Stop & Window Audit: Raw manual parameters had `step_time = 1 milliseconds` (`1@u_ms`) and `end_time = 60 microseconds` (`60@u_us`). 1) Step/Stop Inconsistency: `1 milliseconds` > `60 microseconds` violates `step_time <= end_time` (1 ms cannot be used as the timestep for a 60 us simulation); adjusted 60 us diagnostic timestep to `step_time = 1@u_us` (1 microseconds). 2) Insufficient Observation Window: `60 microseconds` << RC tau = 0.7523 s and target period T = 60/70 = 0.8571 s. To observe 5 complete cycles, required duration = 5 * 0.857143 s = `4.28571 seconds` (`end_time = 4.28571@u_time_s` with `step_time = 1@u_ms`).",
+    "step_stop_consistency": {
+      "step_positive": true,
+      "stop_positive": true,
+      "step_le_stop": false,
+      "raw_pair_consistent": false,
+      "was_adjusted": true,
+      "adjustment_reason": "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s). OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`).",
+      "window_sufficient": false,
+      "raw_step_s": 0.001,
+      "raw_stop_s": 6e-05,
+      "raw_step_expr": "1@u_ms",
+      "raw_stop_expr": "60@u_us",
+      "raw_step_text": "1 milliseconds",
+      "raw_stop_text": "60 microseconds",
+      "compat_step_for_raw_stop_s": 1e-06,
+      "compat_raw_step_expr": "1@u_us",
+      "compat_raw_step_text": "1 microseconds",
+      "required_cycles": 5,
+      "required_duration_s": 4.285714,
+      "compat_step_for_req_s": 0.001,
+      "req_step_expr": "1@u_ms",
+      "req_step_text": "1 milliseconds",
+      "req_stop_expr": "4.28571@u_time_s",
+      "req_stop_text": "4.28571 seconds",
+      "req_needs_u_second": true,
+      "changes_reported": [
+        "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s).",
+        "OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`)."
+      ]
+    },
+    "simulation_warning": "Simulation window is insufficient to observe the requested behavior.",
+    "actual_simulation_parameters": {
+      "raw_step_time_s": 0.001,
+      "raw_end_time_s": 6e-05,
+      "step_time_s": 1e-06,
+      "end_time_s": 6e-05,
+      "step_code_expr": "1@u_us",
+      "stop_code_expr": "60@u_us",
+      "step_textual": "1 microseconds",
+      "stop_textual": "60 microseconds",
+      "five_cycle_step_expr": "1@u_ms",
+      "five_cycle_stop_expr": "4.28571@u_time_s",
+      "five_cycle_stop_text": "4.28571 seconds",
+      "target_period_s": 0.857143,
+      "rc_tau_s": 0.752253,
+      "recommended_stop_s": 4.285714
+    },
+    "node_voltages": {
+      "1 (Simulated Supply Voltage)": 6.0,
+      "control (Simulated Max Capacitor Voltage in 60 µs)": 0.000479,
+      "out (Simulated Max Output Voltage in 60 µs)": 0.0
+    },
+    "branch_currents": {},
+    "calculated_load_currents": {
+      "i_load = v_output / R2 (Calculated Load Current in 60 µs window)": 0.0,
+      "I_R1(0+) = Vs / R1 (Calculated Initial Charging Current)": 0.000375
+    },
+    "provenance": {
+      "EXPECTED_THEORETICAL": {
+        "Target Capacitor Threshold Vo (0.68 * Vs)": "4.0800 V",
+        "Expected Peak Output Pulse V(out)": "4.0800 V",
+        "Expected Pacemaker Behavior": "Periodic RC charge to 4.0800 V and discharge pulse every T = 0.8571 s (70 BPM; 5 cycles = 4.28571 s)"
+      },
+      "CALCULATED": {
+        "Target Heartbeat Period (T = 60 / H)": "0.8571 s",
+        "Required Duration for 5 Cycles (5 * T)": "4.28571 seconds (4.28571@u_time_s)",
+        "Calculated Timing Resistor R1": "16.0054 kΩ (16005.38 Ω)",
+        "Charging RC Time Constant (tau = R1 * C1)": "752.253 ms (0.7523 s)",
+        "Calculated Initial Charging Current (Vs / R1)": "0.000375 A",
+        "Calculated Peak Load Current at Expected Vo (Vo / R2)": "0.081600 A (Calculated from Vo / R2; analysis.branches not used)",
+        "Calculated Load Current from Simulated V(out) (v_output / R2)": "0.000000 A (Calculated from v_output / R2; analysis.branches not used)"
+      },
+      "SIMULATED": {
+        "Actual Simulation Window Executed": "0 s to 60 µs (step_time=1@u_us [1 microseconds], end_time=60@u_us [60 microseconds])",
+        "Pre-Simulation Step/Stop Consistency": "Verified step_time > 0, end_time > 0, step_time <= end_time (1e-06 s <= 6e-05 s). STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s).; OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`).",
+        "Simulation Window Sufficiency": "Simulation window is insufficient to observe the requested behavior.",
+        "Simulated Node 1 Voltage V(1)": "6.0000 V",
+        "Simulated Capacitor Voltage V(control) at t=60 µs": "0.000479 V (0.4785 mV)",
+        "Simulated Peak Capacitor Voltage V(control) in 60 µs": "0.000479 V (0.4785 mV)",
+        "Simulated Peak Output Voltage V(out) in 60 µs": "0.000000 V",
+        "Threshold Reached in Simulation": "False",
+        "Pacemaker Pulses Observed in Simulation": "0"
+      },
+      "USER_OBSERVED": {
+        "User-Reported Observation": "None reported in prompt"
+      }
+    },
+    "transient_metrics": {
+      "Simulation Window Status": "Simulation window is insufficient to observe the requested behavior (60 µs << tau = 0.7523 s, T = 0.8571 s). Required duration for 5 cycles: 4.28571 seconds (`end_time=4.28571@u_time_s`, `step_time=1@u_ms`).",
+      "Calculated Target Heartbeat Period (T = 60 / H)": "0.8571 s (70 BPM)",
+      "Required Duration for 5 Cycles (5 * T)": "4.28571 seconds (`4.28571@u_time_s`)",
+      "Calculated Timing Resistor R1": "16.0054 kΩ (16005.38 Ω)",
+      "Calculated Charging Time Constant (tau = R1*C1)": "752.253 ms (0.7523 s)",
+      "Expected / Theoretical Threshold Vo": "4.0800 V (NOT reached in 60 µs simulation)",
+      "Simulated V(control) at t=60 µs": "0.000479 V (0.4785 mV)",
+      "Simulated V(out) at t=60 µs": "0.000000 V (0 pulses)"
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Pacemaker RC Timing Circuit (Experiment 6)",
+      "circuit_type": "PACEMAKER",
+      "experiment": 6,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "parameters": {
+        "heart_rate_bpm": 70.0,
+        "switching_factor": 0.68,
+        "calculated_R_ohm": 16005.38,
+        "target_period_s": 0.857143,
+        "rc_tau_s": 0.752253,
+        "expected_threshold_vo_V": 4.08,
+        "recommended_stop_s": 4.285714,
+        "recommended_5_cycle_duration_s": 4.285714,
+        "five_cycle_duration_s": 4.285714,
+        "five_cycle_stop_expr": "4.28571@u_time_s",
+        "five_cycle_stop_text": "4.28571 seconds",
+        "five_cycle_step_expr": "1@u_ms",
+        "five_cycle_step_text": "1 milliseconds"
+      },
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": false,
+        "REQUESTED_BEHAVIOR_OBSERVED": false,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "INCOMPLETE_INSUFFICIENT_SIMULATION_WINDOW",
+        "TASK_COMPLETED": false
+      },
+      "requested_outputs": [
+        "capacitor_voltage",
+        "waveform",
+        "calculated_load_current",
+        "time_constant"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "control",
+          "out",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "6 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "control",
+            "from_node": "N1",
+            "to_node": "control",
+            "display_value": "16.0054 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → control",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "C1",
+            "type": "capacitor",
+            "raw_from": "control",
+            "raw_to": "GND",
+            "from_node": "control",
+            "to_node": "GND",
+            "display_value": "47 µF",
+            "control_info": null,
+            "edge_line": "C1: control → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "S1",
+            "type": "vc_switch",
+            "raw_from": "control",
+            "raw_to": "out",
+            "from_node": "control",
+            "to_node": "out",
+            "display_value": "vc_switch",
+            "control_info": "ctrl: control → GND",
+            "edge_line": "S1: control → out",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "out",
+            "raw_to": "GND",
+            "from_node": "out",
+            "to_node": "GND",
+            "display_value": "50 Ω",
+            "control_info": null,
+            "edge_line": "R2: out → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "R1: N1 → control",
+        "C1: control → GND",
+        "S1: control → out",
+        "R2: out → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "control",
+            "out",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "6 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "control",
+              "from_node": "N1",
+              "to_node": "control",
+              "display_value": "16.0054 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → control",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "C1",
+              "type": "capacitor",
+              "raw_from": "control",
+              "raw_to": "GND",
+              "from_node": "control",
+              "to_node": "GND",
+              "display_value": "47 µF",
+              "control_info": null,
+              "edge_line": "C1: control → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "S1",
+              "type": "vc_switch",
+              "raw_from": "control",
+              "raw_to": "out",
+              "from_node": "control",
+              "to_node": "out",
+              "display_value": "vc_switch",
+              "control_info": "ctrl: control → GND",
+              "edge_line": "S1: control → out",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "out",
+              "raw_to": "GND",
+              "from_node": "out",
+              "to_node": "GND",
+              "display_value": "50 Ω",
+              "control_info": null,
+              "edge_line": "R2: out → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → control",
+            "C1: control → GND",
+            "S1: control → out",
+            "R2: out → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → control",
+            "C1: control → GND",
+            "S1: control → out",
+            "R2: out → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 6 V] (N1 → GND)\n ├── R1 (16.0054 kΩ): N1 → control\n ├── C1 (47 µF): control → GND\n ├── S1 (vc_switch, ctrl: control → GND): control → out\n └── R2 (50 Ω): out → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → control",
+          "C1: control → GND",
+          "S1: control → out",
+          "R2: out → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 6 V] (N1 → GND)\n ├── R1 (16.0054 kΩ): N1 → control\n ├── C1 (47 µF): control → GND\n ├── S1 (vc_switch, ctrl: control → GND): control → out\n └── R2 (50 Ω): out → GND\n\nV1: N1 → GND\nR1: N1 → control\nC1: control → GND\nS1: control → out\nR2: out → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 6.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 16005.38,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "control"
+        ]
+      },
+      {
+        "id": "C1",
+        "type": "capacitor",
+        "value": 4.7e-05,
+        "unit": "F",
+        "nodes": [
+          "control",
+          "GND"
+        ]
+      },
+      {
+        "id": "S1",
+        "type": "vc_switch",
+        "nodes": [
+          "control",
+          "out"
+        ],
+        "control_nodes": [
+          "control",
+          "GND"
+        ],
+        "vt": 2.05,
+        "vh": 2.03,
+        "ron": 0.001,
+        "roff": 1000000000.0
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 50.0,
+        "unit": "ohm",
+        "nodes": [
+          "out",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "control",
+      "out",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "raw_step": 0.001,
+      "raw_stop": 6e-05,
+      "step": 1e-06,
+      "stop": 6e-05,
+      "step_code_expr": "1@u_us",
+      "stop_code_expr": "60@u_us",
+      "step_textual": "1 microseconds",
+      "stop_textual": "60 microseconds",
+      "recommended_cycles": 5,
+      "recommended_step_s": 0.001,
+      "recommended_stop_s": 4.285714,
+      "recommended_step_code_expr": "1@u_ms",
+      "recommended_stop_code_expr": "4.28571@u_time_s",
+      "five_cycle_step_s": 0.001,
+      "five_cycle_stop_s": 4.285714,
+      "five_cycle_step_expr": "1@u_ms",
+      "five_cycle_stop_expr": "4.28571@u_time_s",
+      "five_cycle_step_text": "1 milliseconds",
+      "five_cycle_stop_text": "4.28571 seconds",
+      "target_period_s": 0.857143,
+      "rc_tau_s": 0.752253,
+      "window_sufficient": false,
+      "unit_mismatch_detected": true,
+      "unit_mismatch_detail": "Pre-simulation Step/Stop & Window Audit: Raw manual parameters had `step_time = 1 milliseconds` (`1@u_ms`) and `end_time = 60 microseconds` (`60@u_us`). 1) Step/Stop Inconsistency: `1 milliseconds` > `60 microseconds` violates `step_time <= end_time` (1 ms cannot be used as the timestep for a 60 us simulation); adjusted 60 us diagnostic timestep to `step_time = 1@u_us` (1 microseconds). 2) Insufficient Observation Window: `60 microseconds` << RC tau = 0.7523 s and target period T = 60/70 = 0.8571 s. To observe 5 complete cycles, required duration = 5 * 0.857143 s = `4.28571 seconds` (`end_time = 4.28571@u_time_s` with `step_time = 1@u_ms`).",
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": false,
+        "raw_pair_consistent": false,
+        "was_adjusted": true,
+        "adjustment_reason": "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s). OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`).",
+        "window_sufficient": false,
+        "raw_step_s": 0.001,
+        "raw_stop_s": 6e-05,
+        "raw_step_expr": "1@u_ms",
+        "raw_stop_expr": "60@u_us",
+        "raw_step_text": "1 milliseconds",
+        "raw_stop_text": "60 microseconds",
+        "compat_step_for_raw_stop_s": 1e-06,
+        "compat_raw_step_expr": "1@u_us",
+        "compat_raw_step_text": "1 microseconds",
+        "required_cycles": 5,
+        "required_duration_s": 4.285714,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "4.28571@u_time_s",
+        "req_stop_text": "4.28571 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": [
+          "STEP/STOP INCONSISTENCY DETECTED (`step_time > end_time`): Raw `step_time = 1 milliseconds` (`1@u_ms`, 0.001 s) exceeds `end_time = 60 microseconds` (`60@u_us`, 6e-05 s). `1 milliseconds` cannot be used as the timestep for a `60 microseconds` simulation. Automatically adjusted raw-window diagnostic timestep to `step_time = 1@u_us` (1 microseconds) so `step_time <= end_time` (1e-06 s <= 6e-05 s).",
+          "OBSERVATION WINDOW CORRECTION (`60 microseconds` -> `4.28571 seconds`): For target period T = 0.8571 s, observing 5 complete cycles requires `end_time = 5 * 0.857143 s = 4.28571 seconds` (`4.28571@u_time_s`, equivalent to `as_s(4.28571)`) with compatible `step_time = 1@u_ms` (1 milliseconds, satisfying `0 < 0.001 s <= 4.28571 s`)."
+        ]
+      }
+    }
+  }
+}

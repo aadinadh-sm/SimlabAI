@@ -1,0 +1,161 @@
+{
+  "template_id": "exp9_boolean_sop_pos",
+  "experiment_number": 9,
+  "topology_category": "EXACT MANUAL TOPOLOGY",
+  "circuit_type": "BOOLEAN_SOP_POS",
+  "name": "Boolean Function in SOP and POS Form (Experiment 9)",
+  "components": [],
+  "component_values": {},
+  "component_types": {},
+  "nodes": [
+    "A",
+    "B",
+    "C",
+    "OUT",
+    "GND"
+  ],
+  "connections": [],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [],
+  "analysis_type": "digital_truth_table",
+  "simulation_parameters": {
+    "type": "digital_truth_table"
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {},
+    "truth_table": [
+      {
+        "Minterm": "m0",
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Output_Y": 0
+      },
+      {
+        "Minterm": "m1",
+        "A": 0,
+        "B": 0,
+        "C": 1,
+        "Output_Y": 1
+      },
+      {
+        "Minterm": "m2",
+        "A": 0,
+        "B": 1,
+        "C": 0,
+        "Output_Y": 0
+      },
+      {
+        "Minterm": "m3",
+        "A": 0,
+        "B": 1,
+        "C": 1,
+        "Output_Y": 1
+      },
+      {
+        "Minterm": "m4",
+        "A": 1,
+        "B": 0,
+        "C": 0,
+        "Output_Y": 0
+      },
+      {
+        "Minterm": "m5",
+        "A": 1,
+        "B": 0,
+        "C": 1,
+        "Output_Y": 0
+      },
+      {
+        "Minterm": "m6",
+        "A": 1,
+        "B": 1,
+        "C": 0,
+        "Output_Y": 1
+      },
+      {
+        "Minterm": "m7",
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Output_Y": 0
+      }
+    ],
+    "transient_metrics": {
+      "Digital Verification": "Verified 8 truth-table states"
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Boolean Function in SOP and POS Form (Experiment 9)",
+      "circuit_type": "BOOLEAN_SOP_POS",
+      "experiment": 9,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "truth_table"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "A",
+          "B",
+          "C",
+          "OUT",
+          "GND"
+        ],
+        "edges": [],
+        "edge_list_lines": [],
+        "resolved_graph_lines": []
+      },
+      "resolved_graph": [],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "A",
+            "B",
+            "C",
+            "OUT",
+            "GND"
+          ],
+          "edges": [],
+          "edge_list_lines": [],
+          "resolved_graph_lines": []
+        },
+        "ascii_diagram": "",
+        "edge_list_lines": [],
+        "resolved_graph_lines": [],
+        "user_connection_clauses": [],
+        "formatted_preview": "\n\n"
+      }
+    },
+    "components": [],
+    "nodes": [
+      "A",
+      "B",
+      "C",
+      "OUT",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "digital_truth_table"
+    }
+  }
+}

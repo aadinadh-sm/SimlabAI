@@ -1,0 +1,385 @@
+{
+  "template_id": "rc_lowpass_filter",
+  "experiment_number": null,
+  "topology_category": "GENERALIZED CIRCUIT",
+  "circuit_type": "CUSTOM_NL_TOPOLOGY",
+  "name": "Custom Natural-Language Reconstructed Circuit",
+  "components": [
+    "V1",
+    "R1",
+    "R2",
+    "C1"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 10.0,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 1000.0,
+      "unit": "ohm"
+    },
+    "R2": {
+      "value": 10000.0,
+      "unit": "ohm"
+    },
+    "C1": {
+      "value": 1e-06,
+      "unit": "F"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "R1": "resistor",
+    "R2": "resistor",
+    "C1": "capacitor"
+  },
+  "nodes": [
+    "1",
+    "2",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,GND",
+    "R1 -> N1,N2",
+    "R2 -> N2,GND",
+    "C1 -> N2,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "transient",
+  "simulation_parameters": {
+    "type": "transient",
+    "step": 1e-05,
+    "stop": 0.05,
+    "step_stop_consistency": {
+      "step_positive": true,
+      "stop_positive": true,
+      "step_le_stop": true,
+      "raw_pair_consistent": true,
+      "was_adjusted": false,
+      "adjustment_reason": "",
+      "window_sufficient": true,
+      "raw_step_s": 1e-05,
+      "raw_stop_s": 0.05,
+      "raw_step_expr": "10@u_us",
+      "raw_stop_expr": "50@u_ms",
+      "raw_step_text": "10 microseconds",
+      "raw_stop_text": "50 milliseconds",
+      "compat_step_for_raw_stop_s": 1e-05,
+      "compat_raw_step_expr": "10@u_us",
+      "compat_raw_step_text": "10 microseconds",
+      "required_cycles": 5,
+      "required_duration_s": 1.0,
+      "compat_step_for_req_s": 0.001,
+      "req_step_expr": "1@u_ms",
+      "req_step_text": "1 milliseconds",
+      "req_stop_expr": "1@u_time_s",
+      "req_stop_text": "1 seconds",
+      "req_needs_u_second": true,
+      "changes_reported": []
+    }
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1": 10.0,
+      "2": 9.0909
+    },
+    "branch_currents": {
+      "I(R1)": 0.000909,
+      "I(R2)": 0.000909,
+      "I(V1)": 0.000909
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Custom Natural-Language Reconstructed Circuit",
+      "circuit_type": "CUSTOM_NL_TOPOLOGY",
+      "experiment": null,
+      "topology_source": "user_description_inferred",
+      "topology_classification": "GENERALIZED CIRCUIT",
+      "inferred_topology_lines": [
+        "R1 and C1 in series",
+        "R2 connected across C1"
+      ],
+      "user_connection_clauses": [
+        "R1 and C1 are in series",
+        "R2 connects across C1"
+      ],
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "R1: N1 → N2",
+        "R2: N2 → GND",
+        "C1: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "10 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "10 kΩ",
+              "control_info": null,
+              "edge_line": "R2: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "C1",
+              "type": "capacitor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "1 µF",
+              "control_info": null,
+              "edge_line": "C1: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → N2",
+            "R2: N2 → GND",
+            "C1: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → N2",
+            "R2: N2 → GND",
+            "C1: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 10 V] (N1 → GND)\n │\nR1 (1 kΩ): N1 → N2\n │\n ● N2\n ├── R2 (10 kΩ): N2 → GND\n └── C1 (1 µF): N2 → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND",
+          "C1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND",
+          "C1: N2 → GND"
+        ],
+        "user_connection_clauses": [
+          "R1 and C1 are in series",
+          "R2 connects across C1"
+        ],
+        "formatted_preview": "[V1 = 10 V] (N1 → GND)\n │\nR1 (1 kΩ): N1 → N2\n │\n ● N2\n ├── R2 (10 kΩ): N2 → GND\n └── C1 (1 µF): N2 → GND\n\nV1: N1 → GND\nR1: N1 → N2\nR2: N2 → GND\nC1: N2 → GND"
+      },
+      "user_confirmed": true,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "dc_operating_point",
+        "node_voltage"
+      ],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "10 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "10 kΩ",
+            "control_info": null,
+            "edge_line": "R2: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "C1",
+            "type": "capacitor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "1 µF",
+            "control_info": null,
+            "edge_line": "C1: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND",
+          "C1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → N2",
+          "R2: N2 → GND",
+          "C1: N2 → GND"
+        ]
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 10.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 10000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      },
+      {
+        "id": "C1",
+        "type": "capacitor",
+        "value": 1e-06,
+        "unit": "F",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step": 1e-05,
+      "stop": 0.05,
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 1e-05,
+        "raw_stop_s": 0.05,
+        "raw_step_expr": "10@u_us",
+        "raw_stop_expr": "50@u_ms",
+        "raw_step_text": "10 microseconds",
+        "raw_stop_text": "50 milliseconds",
+        "compat_step_for_raw_stop_s": 1e-05,
+        "compat_raw_step_expr": "10@u_us",
+        "compat_raw_step_text": "10 microseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  }
+}

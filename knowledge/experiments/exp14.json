@@ -1,0 +1,591 @@
+{
+  "exp_number": 14,
+  "title": "Simulation of Full-Wave Rectifier in MATLAB/Simulink",
+  "category": "Power Electronics",
+  "family": "SIMULINK_SEMICONDUCTOR",
+  "pages": [
+    42
+  ],
+  "aim": "To simulate a Full-Wave Bridge Rectifier using four diodes and observe full-cycle AC-to-DC rectification.",
+  "apparatus_components": [
+    "AC Sinusoidal Source V1 (Vm = 10 V peak, f = 50 Hz, connected between AC input nodes)",
+    "Four Bridge Diodes D1, D2, D3, D4 (1N4007)",
+    "Load Resistor R1 = 1 kΩ (across DC output terminals)",
+    "Optional Shunt Filter Capacitor C1 (across load R1)"
+  ],
+  "theory": "A Full-Wave Bridge Rectifier uses four diodes arranged in a bridge configuration so that current flows through load resistor R1 in the same direction during both half-cycles of the AC input. During the positive half-cycle, one diagonal pair of diodes conducts in series with R1; during the negative half-cycle, the other diagonal pair conducts. Because two silicon diodes conduct in series at any time, the peak output voltage is V_peak_out = V_m - 2 * 0.7 V = V_m - 1.4 V, the ripple frequency is doubled (2*f = 100 Hz), and maximum efficiency reaches 81.2%.",
+  "equations": [
+    "Peak Rectified Load Voltage: V_peak_out = V_m - 1.4 V (two series diode drops)",
+    "Average (DC) Output Voltage (unfiltered): V_dc = 2 * V_peak_out / pi ≈ 0.636 * V_peak_out",
+    "RMS Output Voltage (unfiltered): V_rms = V_peak_out / sqrt(2)",
+    "Output Ripple Frequency: f_ripple = 2 * f_in (100 Hz for 50 Hz input)",
+    "Ripple Factor (unfiltered): gamma = 0.482; Maximum Efficiency: eta_max = 81.2%"
+  ],
+  "circuit_topology": "Four-diode bridge (D1..D4) driven by AC source V1, delivering full-wave rectified current to load resistor R1 (and optional parallel filter capacitor C1).",
+  "component_relationships": [
+    "V1: AC source driving the bridge input nodes",
+    "D1, D2, D3, D4: Four-diode full-wave bridge network",
+    "R1: Load resistor connected from rectified output node 'out' to GND",
+    "C1 (optional): Shunt filter capacitor connected in parallel across R1 ('out' to GND)"
+  ],
+  "simulation_type": "Transient Analysis over 2–3 AC cycles (40 ms at 50 Hz)",
+  "procedure": "1. Connect four diodes D1..D4 in a bridge configuration driven by AC source V1 (10 V peak, 50 Hz).\n2. Connect load resistor R1 (1 kΩ) across the bridge DC output terminals.\n3. Run transient simulation and plot the full-wave rectified output voltage across R1.",
+  "expected_observations": "Both positive and negative half-cycles of the 10 V AC input are rectified into positive pulses with peak V_out = 10 V - 1.4 V = 8.6 V at 100 Hz pulse frequency.",
+  "result": "The Full-Wave Bridge Rectifier was simulated and full-wave rectified output waveforms were verified.",
+  "common_mistakes": [
+    "Subtracting only 0.7 V instead of 1.4 V (two diode drops) when calculating peak load voltage of a bridge rectifier",
+    "Shorting one of the AC input nodes directly to the DC load ground in a standard 4-diode bridge"
+  ],
+  "important_terminology": [
+    "Full-Wave Bridge Rectifier",
+    "Diagonal Diode Pair",
+    "Two-Diode Voltage Drop (1.4 V)",
+    "Ripple Frequency (2f)",
+    "Rectification Efficiency (81.2%)"
+  ],
+  "related_experiments": [
+    11,
+    12,
+    13
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is the main advantage of a Full-Wave Bridge Rectifier over a Half-Wave Rectifier?",
+      "a": "It utilizes both half-cycles of the AC input, doubling the DC output voltage and efficiency (81.2% vs 40.6%) and lowering the ripple factor (0.482 vs 1.21) without requiring a center-tapped transformer."
+    },
+    {
+      "category": "why",
+      "q": "Why is the peak output voltage of a silicon bridge rectifier `Vm - 1.4 V` instead of `Vm - 0.7 V`?",
+      "a": "Because in every half-cycle, current flows through two silicon diodes in series with the load resistor, dropping 2 * 0.7 V = 1.4 V."
+    },
+    {
+      "category": "how",
+      "q": "Which diodes conduct during the positive and negative half-cycles in a 4-diode bridge?",
+      "a": "Two diagonally opposite diodes conduct during the positive half-cycle, and the other two diagonally opposite diodes conduct during the negative half-cycle."
+    },
+    {
+      "category": "component",
+      "q": "What is the Peak Inverse Voltage (PIV) of each diode in a Full-Wave Bridge Rectifier?",
+      "a": "PIV = V_m (compared to 2*V_m for a center-tapped full-wave rectifier)."
+    },
+    {
+      "category": "procedure",
+      "q": "Why is the output ripple frequency 100 Hz when the input AC frequency is 50 Hz?",
+      "a": "Because the negative half-cycle is inverted into a second positive pulse every period, producing two pulses per 20 ms input cycle (period = 10 ms -> 100 Hz)."
+    },
+    {
+      "category": "code",
+      "q": "In a SPICE simulation of a bridge rectifier, why can't both V1's negative terminal and the load resistor's negative terminal be tied to `GND` simultaneously?",
+      "a": "Tying both to `GND` would short-circuit one of the lower bridge diodes. Either V1 must float between two non-ground AC nodes or the load voltage must be measured differentially."
+    },
+    {
+      "category": "topology",
+      "q": "How many diodes are required in a bridge rectifier versus a center-tapped full-wave rectifier?",
+      "a": "A bridge rectifier requires 4 diodes (no center tap needed), whereas a center-tapped rectifier uses 2 diodes but requires a center-tapped transformer."
+    },
+    {
+      "category": "calculation",
+      "q": "For a 20 V peak AC source and a silicon bridge rectifier, calculate V_peak_out and V_dc (unfiltered).",
+      "a": "V_peak_out = 20 - 1.4 = 18.6 V; V_dc = (2 * 18.6) / pi ≈ 11.84 V."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "If one diode in a 4-diode bridge rectifier fails open-circuit, what does the output waveform look like?",
+      "a": "One half-cycle stops conducting, so the bridge rectifier degrades into a half-wave rectifier."
+    },
+    {
+      "category": "expected_output",
+      "q": "Why is a capacitor filter more effective on a full-wave rectifier than on a half-wave rectifier?",
+      "a": "Because the ripple frequency is twice as high (100 Hz vs 50 Hz), giving the capacitor only half as much time (10 ms vs 20 ms) to discharge between peaks."
+    }
+  ],
+  "raw_text": "•\n\nAC Voltage Source,\n\n•\n\n4 Diodes (for bridge rectification),\n\n•\n\nResistive Load (R),\n\n•\n\nScope block,\n\nStep 3: Connect the components as per the bridge rectifier circuit:\n•\n\nConnect the AC source to the diagonal input of the diode bridge (2 opposite corners).\n\n•\n\nConnect the load resistor across the other diagonal of the bridge (diodes’ cathode and\nanode junction).\n\n•\n\nAttach the Scope block at the output (across the load) to visualize the rectified output.\n\nStep 4: Run the simulation for 2 to 3 cycles and observe the output waveform.\n•\n\nYou will observe a pulsating DC output but with both positive and negative halves of\nthe AC cycle being rectified, reducing ripple compared to the half-wave rectifier.\n2.Simulation of Full-Wave Rectifier (With Filter):\n\nStep 1: In the previous full-wave rectifier circuit, add a Capacitor across the load resistor.\nStep 2: Set an appropriate capacitance value for smoothing the ripple.\nStep 3: Run the simulation and observe the output waveform.\n•\n\nThe output should now be a smoother DC with even less ripple compared to the\nunfiltered full-wave rectified output.\n\nResult\n\n42 | P a g e",
+  "page_start": 42,
+  "page_end": 42,
+  "software": "MATLAB Simulink / SIMLAB Numerical Engine",
+  "tags": "Full-Wave Bridge Rectifier, Diagonal Diode Pair, Two-Diode Voltage Drop (1.4 V), Ripple Frequency (2f), Rectification Efficiency (81.2%)",
+  "diagram_images": [
+    "Manual complete_page-0042-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\ncircuit = Circuit('Full-Wave Bridge Rectifier (Experiment 14)')\ncircuit.model('1N4007', 'D', IS=7.027e-9@u_A, RS=0.034@u_Ohm, N=1.77, BV=1000@u_V)\ncircuit.SinusoidalVoltageSource(1, 1, 2, amplitude=12@u_V, frequency=50@u_Hz)\ncircuit.Diode(1, 1, 'out', model='1N4007')\ncircuit.Diode(2, circuit.gnd, 2, model='1N4007')\ncircuit.Diode(3, 2, 'out', model='1N4007')\ncircuit.Diode(4, circuit.gnd, 1, model='1N4007')\ncircuit.R(1, 'out', circuit.gnd, 1@u_kOhm)\n\n# 1. Run the transient simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.transient(step_time=100@u_us, end_time=60@u_ms)\n\n# 2. Extract input and rectified output voltage waveforms\ntime_axis = np.array(analysis.time)\nv_output = np.array(analysis['out'])\nv_input = np.array(analysis['1'])\ni_load = v_output / float(circuit.R1.resistance)\n\n# 3. Create the waveform plot and 4. Label axes appropriately\nplt.figure(figsize=(10, 6))\nplt.plot(time_axis, v_input, '--', color='gray', label='AC Input Voltage V(1)')\nplt.plot(time_axis, v_output, color='black', linewidth=2, label='Rectified Output Voltage V(out)')\nplt.title('Full-Wave Bridge Rectifier (Experiment 14): Input vs Rectified Output Waveform')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(loc='upper right')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('rectifier_waveform.png', dpi=150)\nplt.show()",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\ncircuit = Circuit('Full-Wave Bridge Rectifier (Experiment 14)')\ncircuit.model('1N4007', 'D', IS=7.027e-9@u_A, RS=0.034@u_Ohm, N=1.77, BV=1000@u_V)\ncircuit.SinusoidalVoltageSource(1, 1, 2, amplitude=12@u_V, frequency=50@u_Hz)\ncircuit.Diode(1, 1, 'out', model='1N4007')\ncircuit.Diode(2, circuit.gnd, 2, model='1N4007')\ncircuit.Diode(3, 2, 'out', model='1N4007')\ncircuit.Diode(4, circuit.gnd, 1, model='1N4007')\ncircuit.R(1, 'out', circuit.gnd, 1@u_kOhm)\n\n# 1. Run the transient simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.transient(step_time=100@u_us, end_time=60@u_ms)\n\n# 2. Extract input and rectified output voltage waveforms\ntime_axis = np.array(analysis.time)\nv_output = np.array(analysis['out'])\nv_input = np.array(analysis['1'])\ni_load = v_output / float(circuit.R1.resistance)\n\n# 3. Create the waveform plot and 4. Label axes appropriately\nplt.figure(figsize=(10, 6))\nplt.plot(time_axis, v_input, '--', color='gray', label='AC Input Voltage V(1)')\nplt.plot(time_axis, v_output, color='black', linewidth=2, label='Rectified Output Voltage V(out)')\nplt.title('Full-Wave Bridge Rectifier (Experiment 14): Input vs Rectified Output Waveform')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(loc='upper right')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('rectifier_waveform.png', dpi=150)\nplt.show()",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Full-Wave Bridge Rectifier (Experiment 14)",
+      "circuit_type": "FULL_WAVE_RECTIFIER",
+      "experiment": 14,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "waveform",
+        "node_voltage",
+        "branch_current"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "out",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "ac_voltage_source",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → N2",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "D1",
+            "type": "diode",
+            "raw_from": "1",
+            "raw_to": "out",
+            "from_node": "N1",
+            "to_node": "out",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D1: N1 → out",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "D2",
+            "type": "diode",
+            "raw_from": "GND",
+            "raw_to": "2",
+            "from_node": "GND",
+            "to_node": "N2",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D2: GND → N2",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "D3",
+            "type": "diode",
+            "raw_from": "2",
+            "raw_to": "out",
+            "from_node": "N2",
+            "to_node": "out",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D3: N2 → out",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "D4",
+            "type": "diode",
+            "raw_from": "GND",
+            "raw_to": "1",
+            "from_node": "GND",
+            "to_node": "N1",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D4: GND → N1",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "out",
+            "raw_to": "GND",
+            "from_node": "out",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R1: out → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → N2",
+        "D1: N1 → out",
+        "D2: GND → N2",
+        "D3: N2 → out",
+        "D4: GND → N1",
+        "R1: out → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "out",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "ac_voltage_source",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → N2",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "D1",
+              "type": "diode",
+              "raw_from": "1",
+              "raw_to": "out",
+              "from_node": "N1",
+              "to_node": "out",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D1: N1 → out",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "D2",
+              "type": "diode",
+              "raw_from": "GND",
+              "raw_to": "2",
+              "from_node": "GND",
+              "to_node": "N2",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D2: GND → N2",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "D3",
+              "type": "diode",
+              "raw_from": "2",
+              "raw_to": "out",
+              "from_node": "N2",
+              "to_node": "out",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D3: N2 → out",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "D4",
+              "type": "diode",
+              "raw_from": "GND",
+              "raw_to": "1",
+              "from_node": "GND",
+              "to_node": "N1",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D4: GND → N1",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "out",
+              "raw_to": "GND",
+              "from_node": "out",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R1: out → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → N2",
+            "D1: N1 → out",
+            "D2: GND → N2",
+            "D3: N2 → out",
+            "D4: GND → N1",
+            "R1: out → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → N2",
+            "D1: N1 → out",
+            "D2: GND → N2",
+            "D3: N2 → out",
+            "D4: GND → N1",
+            "R1: out → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → N2)\n ├── D1 (0.7 V): N1 → out\n ├── D2 (0.7 V): GND → N2\n ├── D3 (0.7 V): N2 → out\n ├── D4 (0.7 V): GND → N1\n └── R1 (1 kΩ): out → GND",
+        "edge_list_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → N2",
+          "D1: N1 → out",
+          "D2: GND → N2",
+          "D3: N2 → out",
+          "D4: GND → N1",
+          "R1: out → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → N2)\n ├── D1 (0.7 V): N1 → out\n ├── D2 (0.7 V): GND → N2\n ├── D3 (0.7 V): N2 → out\n ├── D4 (0.7 V): GND → N1\n └── R1 (1 kΩ): out → GND\n\nV1: N1 → N2\nD1: N1 → out\nD2: GND → N2\nD3: N2 → out\nD4: GND → N1\nR1: out → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "ac_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "D1",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "out"
+        ]
+      },
+      {
+        "id": "D2",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "GND",
+          "2"
+        ]
+      },
+      {
+        "id": "D3",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "2",
+          "out"
+        ]
+      },
+      {
+        "id": "D4",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "GND",
+          "1"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "out",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "out",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 0.001,
+        "raw_stop_s": 0.05,
+        "raw_step_expr": "1@u_ms",
+        "raw_stop_expr": "50@u_ms",
+        "raw_step_text": "1 milliseconds",
+        "raw_stop_text": "50 milliseconds",
+        "compat_step_for_raw_stop_s": 0.001,
+        "compat_raw_step_expr": "1@u_ms",
+        "compat_raw_step_text": "1 milliseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  },
+  "circuit_template_id": "exp14_full_wave_rectifier",
+  "viva": [
+    {
+      "q": "What is the main advantage of a Full-Wave Bridge Rectifier over a Half-Wave Rectifier?",
+      "a": "It utilizes both half-cycles of the AC input, doubling the DC output voltage and efficiency (81.2% vs 40.6%) and lowering the ripple factor (0.482 vs 1.21) without requiring a center-tapped transformer.",
+      "category": "definition",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Why is the peak output voltage of a silicon bridge rectifier `Vm - 1.4 V` instead of `Vm - 0.7 V`?",
+      "a": "Because in every half-cycle, current flows through two silicon diodes in series with the load resistor, dropping 2 * 0.7 V = 1.4 V.",
+      "category": "why",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Which diodes conduct during the positive and negative half-cycles in a 4-diode bridge?",
+      "a": "Two diagonally opposite diodes conduct during the positive half-cycle, and the other two diagonally opposite diodes conduct during the negative half-cycle.",
+      "category": "how",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "What is the Peak Inverse Voltage (PIV) of each diode in a Full-Wave Bridge Rectifier?",
+      "a": "PIV = V_m (compared to 2*V_m for a center-tapped full-wave rectifier).",
+      "category": "component",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Why is the output ripple frequency 100 Hz when the input AC frequency is 50 Hz?",
+      "a": "Because the negative half-cycle is inverted into a second positive pulse every period, producing two pulses per 20 ms input cycle (period = 10 ms -> 100 Hz).",
+      "category": "procedure",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "In a SPICE simulation of a bridge rectifier, why can't both V1's negative terminal and the load resistor's negative terminal be tied to `GND` simultaneously?",
+      "a": "Tying both to `GND` would short-circuit one of the lower bridge diodes. Either V1 must float between two non-ground AC nodes or the load voltage must be measured differentially.",
+      "category": "code",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "How many diodes are required in a bridge rectifier versus a center-tapped full-wave rectifier?",
+      "a": "A bridge rectifier requires 4 diodes (no center tap needed), whereas a center-tapped rectifier uses 2 diodes but requires a center-tapped transformer.",
+      "category": "topology",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "For a 20 V peak AC source and a silicon bridge rectifier, calculate V_peak_out and V_dc (unfiltered).",
+      "a": "V_peak_out = 20 - 1.4 = 18.6 V; V_dc = (2 * 18.6) / pi ≈ 11.84 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "If one diode in a 4-diode bridge rectifier fails open-circuit, what does the output waveform look like?",
+      "a": "One half-cycle stops conducting, so the bridge rectifier degrades into a half-wave rectifier.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Why is a capacitor filter more effective on a full-wave rectifier than on a half-wave rectifier?",
+      "a": "Because the ripple frequency is twice as high (100 Hz vs 50 Hz), giving the capacitor only half as much time (10 ms vs 20 ms) to discharge between peaks.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    }
+  ]
+}

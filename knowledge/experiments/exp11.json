@@ -1,0 +1,432 @@
+{
+  "exp_number": 11,
+  "title": "Characteristics of PN-Junction Diode in MATLAB/Simulink",
+  "category": "Semiconductor / Analog",
+  "family": "SIMULINK_SEMICONDUCTOR",
+  "pages": [
+    37,
+    38
+  ],
+  "aim": "To simulate and plot the forward and reverse I-V (Current-Voltage) characteristics of a silicon PN-junction diode.",
+  "apparatus_components": [
+    "Variable / Ramp DC Voltage Source V1 (0 V to 10 V sweep, Node 1 to GND)",
+    "Silicon PN-Junction Diode D1 (1N4007, Vf ≈ 0.7 V, Anode at Node 1, Cathode at Node 2)",
+    "Current-Limiting Load Resistor R1 = 1 kΩ (Node 2 to GND)",
+    "Voltage Sensor (across D1) and Current Sensor (in series with D1) feeding X-Y Graph"
+  ],
+  "theory": "A PN-junction diode conducts current primarily in one direction (from anode to cathode). According to the Shockley diode equation, I_D = I_S * (exp(V_D / (n * V_T)) - 1). In forward bias, current is negligible until the diode voltage exceeds the silicon barrier potential (knee/cut-in voltage V_f ≈ 0.7 V), after which current rises rapidly and is limited externally by series resistor R1.",
+  "equations": [
+    "Shockley Diode Equation: I_D = I_S * (exp(V_D / (n * V_T)) - 1)",
+    "KVL Loop Equation: V_source = V_D + I_D * R1",
+    "Forward Current (V_source > 0.7 V): I_D ≈ (V_source - 0.7 V) / R1",
+    "Dynamic Resistance: r_d = dV_D / dI_D ≈ (n * V_T) / I_D"
+  ],
+  "circuit_topology": "Series loop with swept DC voltage source V1 (N1 -> GND), forward-biased PN diode D1 (N1 -> N2), and current-limiting resistor R1 (N2 -> GND).",
+  "component_relationships": [
+    "V1: N1 -> GND (Swept DC / Ramp voltage source)",
+    "D1: N1 (Anode) -> N2 (Cathode) (Silicon PN diode, Vf ≈ 0.7 V)",
+    "R1: N2 -> GND (1 kΩ current-limiting resistor)"
+  ],
+  "simulation_type": "DC Sweep / Ramp Transient Simulation plotting I_D vs V_D (I-V Curve)",
+  "procedure": "1. Connect the swept voltage source V1, silicon diode D1, and series resistor R1 (1 kΩ) in a single loop.\n2. Measure diode voltage V_D = V(1) - V(2) and diode current I_D = V(2) / R1.\n3. Sweep V1 from -5 V to +10 V and plot I_D on the Y-axis versus V_D on the X-axis.",
+  "expected_observations": "For V_D < 0.6 V, I_D ≈ 0 mA. Near the knee voltage V_D ≈ 0.7 V, current turns on sharply and rises exponentially. At V1 = 10 V and R1 = 1 kΩ, V_D ≈ 0.7 V and I_D ≈ 9.3 mA.",
+  "result": "The V-I characteristics of the PN-junction diode were simulated and the cut-in voltage (~0.7 V) was verified.",
+  "common_mistakes": [
+    "Plotting diode current against source voltage V1 instead of diode terminal voltage V_D = V(1) - V(2)",
+    "Omitting the current-limiting resistor R1, which causes excessive forward diode current"
+  ],
+  "important_terminology": [
+    "Cut-in / Knee Voltage (0.7 V)",
+    "Shockley Equation",
+    "Forward Bias",
+    "Reverse Saturation Current (I_S)",
+    "Dynamic Resistance (r_d)"
+  ],
+  "related_experiments": [
+    12,
+    13,
+    14
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is the cut-in (knee) voltage of a silicon PN-junction diode?",
+      "a": "Approximately 0.7 V for silicon (and 0.3 V for germanium), which is the forward voltage threshold above which the diode conducts significant forward current."
+    },
+    {
+      "category": "why",
+      "q": "Why is a series resistor R1 always included when testing a diode's forward I-V curve?",
+      "a": "Because once V_D exceeds 0.7 V, the diode's impedance becomes very small; without R1 to limit current, the current would spike exponentially and destroy the diode."
+    },
+    {
+      "category": "how",
+      "q": "How do you extract the diode voltage V_D and diode current I_D in a PySpice DC sweep of Experiment 11?",
+      "a": "`v_diode = np.array(analysis['1']) - np.array(analysis['2'])` and `i_diode = np.array(analysis['2']) / R1`."
+    },
+    {
+      "category": "component",
+      "q": "How is the X-Y Graph block used in the Simulink model of Experiment 11?",
+      "a": "The Voltage Sensor across the diode feeds the X-input and the Current Sensor in series with the diode feeds the Y-input to plot I_D vs V_D directly."
+    },
+    {
+      "category": "procedure",
+      "q": "How do you simulate reverse bias characteristics in Experiment 11?",
+      "a": "Reverse the diode polarity (or sweep V1 across negative voltages), observing near-zero leakage current until reverse breakdown."
+    },
+    {
+      "category": "code",
+      "q": "How is a 1N4007 silicon diode model defined in PySpice?",
+      "a": "`circuit.model('D1N4007', 'D', IS=1e-14@u_A, N=1.0, BV=1000@u_V)` and instantiated via `circuit.Diode(1, 1, 2, model='D1N4007')`."
+    },
+    {
+      "category": "topology",
+      "q": "In Experiment 11, which node is connected to the diode's anode and which to its cathode?",
+      "a": "Node 1 (source positive terminal) connects to the Anode, and Node 2 (resistor R1) connects to the Cathode."
+    },
+    {
+      "category": "calculation",
+      "q": "If the source voltage is 10 V, R1 = 1 kΩ, and the silicon diode drop is 0.7 V, what is the diode current?",
+      "a": "I_D = (10 V - 0.7 V) / 1 kΩ = 9.3 mA."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "If the plotted I-V curve is a straight line starting from 0.7 V up to 10 V on the X-axis, what mistake was made?",
+      "a": "The X-axis was plotted using the total source voltage V(1) instead of the voltage across the diode alone, V(1) - V(2)."
+    },
+    {
+      "category": "expected_output",
+      "q": "How does temperature affect the forward I-V curve of a silicon diode?",
+      "a": "The knee voltage decreases by about 2 mV per °C increase in temperature, shifting the forward I-V curve slightly to the left."
+    }
+  ],
+  "raw_text": "EXPERIMENT-12\n\nDate:\n\nDESIGN A VOLTAGE REGULATOR USING ZENER DIODE IN\nMATLAB/SIMULINK\nAim\nTo demonstrate and analyse the behaviour of a Zener diode as a voltage regulator and to\nobserve how the Zener diode maintains a constant output voltage across a load despite\nvariations in the input voltage.\nApparatus Required\n1. MATLAB with Simulink installed.\n2. Components in Simulink:\no\n\nDC Voltage Source\n\no\n\nZener Diode\n\no\n\nResistor (Current-limiting)\n\no\n\nGround\n\no\n\nVoltage Sensor\n\no\n\nScope for waveform observation\n\nProcedure\n1. Setup the Circuit in Simulink:\no\n\nOpen MATLAB and launch Simulink.\n\no\n\nCreate a new blank model and name it.\n\n2. Add Components:\n\n37 | P a g e\n\no\n\nGo to Simscape > Foundation Library > Electrical > Electrical Sources and\ndrag a DC Voltage Source to the model.\n\no\n\nFrom Simscape > Foundation Library > Electrical > Electrical Elements,\ndrag a Resistor to represent the current-limiting resistor.\n\no\n\nFrom the same library, drag a Diode and set its parameters to represent a\nZener diode (set breakdown voltage).\n\no\n\nAdd a Voltage Sensor from Simscape > Foundation Library > Electrical >\nSensors.\n\no\n\nDrag a Scope to observe the output voltage.\n\no\n\nDon’t forget to add Ground from Simscape > Foundation Library >\nElectrical > Electrical Elements.\n\n3. Connect Components:\no\n\nConnect the DC Voltage Source in series with the Current-limiting Resistor\nand the Zener Diode.\n\no\n\nConnect the Voltage Sensor across the load resistor to measure the output\nvoltage.\n\no\n\nAttach the Scope to the output of the Voltage Sensor to observe the\nwaveforms.\n\n4. Set Parameters:\no\n\nSet the DC Voltage Source to a value higher than the Zener breakdown\nvoltage (e.g., 15V for a Zener diode with a breakdown voltage of 5V).\n\no\n\nSet appropriate value for the current-limiting resistor (e.g., 1kΩ)\n\no\n\nSet the Zener diode breakdown voltage to a typical value (e.g., 5.1V).\n\n5. Circuit Diagram\n\n6. Run the Simulation:\no\n\nSet the simulation time (e.g., 1 seconds).\n\no\n\nRun the simulation to observe the output voltage across the load.\n\n7. Observation:\no\n\n8. Result\n\n38 | P a g e\n\nObserve the waveform in the Scope block. You should see that the voltage\nacross the load remains steady (close to the Zener diode breakdown voltage),\neven if the input voltage is varied.",
+  "page_start": 37,
+  "page_end": 38,
+  "software": "MATLAB Simulink / SIMLAB Numerical Engine",
+  "tags": "Cut-in / Knee Voltage (0.7 V), Shockley Equation, Forward Bias, Reverse Saturation Current (I_S), Dynamic Resistance (r_d)",
+  "diagram_images": [
+    "Manual complete_page-0037-compressed.jpg",
+    "Manual complete_page-0038-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\ncircuit = Circuit('PN-Junction Diode I-V Characteristics (Experiment 11)')\ncircuit.model('1N4007', 'D', IS=7.027e-9@u_A, RS=0.034@u_Ohm, N=1.77, BV=1000@u_V)\ncircuit.V(1, 1, circuit.gnd, 12@u_V)\ncircuit.Diode(1, 1, 2, model='1N4007')\ncircuit.R(1, 2, circuit.gnd, 1@u_kOhm)\n\n# 1. Run DC sweep simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.dc(V1=slice(0, 12, 0.05))\n\n# 2. Extract Diode Voltage V_D and Diode Current I_D\nv_source = np.array(analysis['1'])\nv_load = np.array(analysis['2'])\nv_diode = v_source - v_load\ni_diode = v_load / float(circuit.R1.resistance)\n\n# 3. Create the I-V Curve plot and 4. Label axes appropriately\nplt.figure(figsize=(10, 6))\nplt.plot(v_diode, i_diode * 1e3, color='crimson', linewidth=2, label='Diode Forward I-V Curve')\nplt.title('PN-Junction Diode I-V Characteristics')\nplt.xlabel('Voltage across Diode V_D [V]')\nplt.ylabel('Diode Forward Current I_D [mA]')\nplt.grid(True)\nplt.legend(loc='upper left')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('diode_iv_characteristics.png', dpi=150)\nplt.show()\n",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\ncircuit = Circuit('PN-Junction Diode I-V Characteristics (Experiment 11)')\ncircuit.model('1N4007', 'D', IS=7.027e-9@u_A, RS=0.034@u_Ohm, N=1.77, BV=1000@u_V)\ncircuit.V(1, 1, circuit.gnd, 12@u_V)\ncircuit.Diode(1, 1, 2, model='1N4007')\ncircuit.R(1, 2, circuit.gnd, 1@u_kOhm)\n\n# 1. Run DC sweep simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.dc(V1=slice(0, 12, 0.05))\n\n# 2. Extract Diode Voltage V_D and Diode Current I_D\nv_source = np.array(analysis['1'])\nv_load = np.array(analysis['2'])\nv_diode = v_source - v_load\ni_diode = v_load / float(circuit.R1.resistance)\n\n# 3. Create the I-V Curve plot and 4. Label axes appropriately\nplt.figure(figsize=(10, 6))\nplt.plot(v_diode, i_diode * 1e3, color='crimson', linewidth=2, label='Diode Forward I-V Curve')\nplt.title('PN-Junction Diode I-V Characteristics')\nplt.xlabel('Voltage across Diode V_D [V]')\nplt.ylabel('Diode Forward Current I_D [mA]')\nplt.grid(True)\nplt.legend(loc='upper left')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('diode_iv_characteristics.png', dpi=150)\nplt.show()\n",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "PN-Junction Diode I-V Characteristics (Experiment 11)",
+      "circuit_type": "DIODE_IV_CHARACTERISTICS",
+      "experiment": 11,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "iv_curve",
+        "waveform",
+        "dc_operating_point"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "D1",
+            "type": "diode",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D1: N1 → N2",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "D1: N1 → N2",
+        "R1: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "D1",
+              "type": "diode",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D1: N1 → N2",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "D1: N1 → N2",
+            "R1: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "D1: N1 → N2",
+            "R1: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → GND)\n ├── D1 (0.7 V): N1 → N2\n └── R1 (1 kΩ): N2 → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → GND)\n ├── D1 (0.7 V): N1 → N2\n └── R1 (1 kΩ): N2 → GND\n\nV1: N1 → GND\nD1: N1 → N2\nR1: N2 → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "D1",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "op"
+    }
+  },
+  "circuit_template_id": "exp11_diode_iv",
+  "viva": [
+    {
+      "q": "What is the cut-in (knee) voltage of a silicon PN-junction diode?",
+      "a": "Approximately 0.7 V for silicon (and 0.3 V for germanium), which is the forward voltage threshold above which the diode conducts significant forward current.",
+      "category": "definition",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "Why is a series resistor R1 always included when testing a diode's forward I-V curve?",
+      "a": "Because once V_D exceeds 0.7 V, the diode's impedance becomes very small; without R1 to limit current, the current would spike exponentially and destroy the diode.",
+      "category": "why",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How do you extract the diode voltage V_D and diode current I_D in a PySpice DC sweep of Experiment 11?",
+      "a": "`v_diode = np.array(analysis['1']) - np.array(analysis['2'])` and `i_diode = np.array(analysis['2']) / R1`.",
+      "category": "how",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How is the X-Y Graph block used in the Simulink model of Experiment 11?",
+      "a": "The Voltage Sensor across the diode feeds the X-input and the Current Sensor in series with the diode feeds the Y-input to plot I_D vs V_D directly.",
+      "category": "component",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How do you simulate reverse bias characteristics in Experiment 11?",
+      "a": "Reverse the diode polarity (or sweep V1 across negative voltages), observing near-zero leakage current until reverse breakdown.",
+      "category": "procedure",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How is a 1N4007 silicon diode model defined in PySpice?",
+      "a": "`circuit.model('D1N4007', 'D', IS=1e-14@u_A, N=1.0, BV=1000@u_V)` and instantiated via `circuit.Diode(1, 1, 2, model='D1N4007')`.",
+      "category": "code",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "In Experiment 11, which node is connected to the diode's anode and which to its cathode?",
+      "a": "Node 1 (source positive terminal) connects to the Anode, and Node 2 (resistor R1) connects to the Cathode.",
+      "category": "topology",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "If the source voltage is 10 V, R1 = 1 kΩ, and the silicon diode drop is 0.7 V, what is the diode current?",
+      "a": "I_D = (10 V - 0.7 V) / 1 kΩ = 9.3 mA.",
+      "category": "calculation",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "If the plotted I-V curve is a straight line starting from 0.7 V up to 10 V on the X-axis, what mistake was made?",
+      "a": "The X-axis was plotted using the total source voltage V(1) instead of the voltage across the diode alone, V(1) - V(2).",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    },
+    {
+      "q": "How does temperature affect the forward I-V curve of a silicon diode?",
+      "a": "The knee voltage decreases by about 2 mV per °C increase in temperature, shifting the forward I-V curve slightly to the left.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Cut-in / Knee Voltage (0.7 V)",
+        "Shockley Equation",
+        "Forward Bias",
+        "Reverse Saturation Current (I_S)"
+      ]
+    }
+  ]
+}

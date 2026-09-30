@@ -1,0 +1,116 @@
+{
+  "exp_number": 14,
+  "title": "Simulation of Full-Wave Rectifier in MATLAB/Simulink",
+  "questions": [
+    {
+      "q": "What is the main advantage of a Full-Wave Bridge Rectifier over a Half-Wave Rectifier?",
+      "a": "It utilizes both half-cycles of the AC input, doubling the DC output voltage and efficiency (81.2% vs 40.6%) and lowering the ripple factor (0.482 vs 1.21) without requiring a center-tapped transformer.",
+      "category": "definition",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Why is the peak output voltage of a silicon bridge rectifier `Vm - 1.4 V` instead of `Vm - 0.7 V`?",
+      "a": "Because in every half-cycle, current flows through two silicon diodes in series with the load resistor, dropping 2 * 0.7 V = 1.4 V.",
+      "category": "why",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Which diodes conduct during the positive and negative half-cycles in a 4-diode bridge?",
+      "a": "Two diagonally opposite diodes conduct during the positive half-cycle, and the other two diagonally opposite diodes conduct during the negative half-cycle.",
+      "category": "how",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "What is the Peak Inverse Voltage (PIV) of each diode in a Full-Wave Bridge Rectifier?",
+      "a": "PIV = V_m (compared to 2*V_m for a center-tapped full-wave rectifier).",
+      "category": "component",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Why is the output ripple frequency 100 Hz when the input AC frequency is 50 Hz?",
+      "a": "Because the negative half-cycle is inverted into a second positive pulse every period, producing two pulses per 20 ms input cycle (period = 10 ms -> 100 Hz).",
+      "category": "procedure",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "In a SPICE simulation of a bridge rectifier, why can't both V1's negative terminal and the load resistor's negative terminal be tied to `GND` simultaneously?",
+      "a": "Tying both to `GND` would short-circuit one of the lower bridge diodes. Either V1 must float between two non-ground AC nodes or the load voltage must be measured differentially.",
+      "category": "code",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "How many diodes are required in a bridge rectifier versus a center-tapped full-wave rectifier?",
+      "a": "A bridge rectifier requires 4 diodes (no center tap needed), whereas a center-tapped rectifier uses 2 diodes but requires a center-tapped transformer.",
+      "category": "topology",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "For a 20 V peak AC source and a silicon bridge rectifier, calculate V_peak_out and V_dc (unfiltered).",
+      "a": "V_peak_out = 20 - 1.4 = 18.6 V; V_dc = (2 * 18.6) / pi ≈ 11.84 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "If one diode in a 4-diode bridge rectifier fails open-circuit, what does the output waveform look like?",
+      "a": "One half-cycle stops conducting, so the bridge rectifier degrades into a half-wave rectifier.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    },
+    {
+      "q": "Why is a capacitor filter more effective on a full-wave rectifier than on a half-wave rectifier?",
+      "a": "Because the ripple frequency is twice as high (100 Hz vs 50 Hz), giving the capacitor only half as much time (10 ms vs 20 ms) to discharge between peaks.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Full-Wave Bridge Rectifier",
+        "Diagonal Diode Pair",
+        "Two-Diode Voltage Drop (1.4 V)",
+        "Ripple Frequency (2f)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,459 @@
+{
+  "exp_number": 13,
+  "title": "Simulation of Half-Wave Rectifier in MATLAB/Simulink",
+  "category": "Power Electronics",
+  "family": "SIMULINK_SEMICONDUCTOR",
+  "pages": [
+    41
+  ],
+  "aim": "To simulate a Half-Wave Rectifier circuit with and without a shunt capacitor filter and observe the rectified pulsating DC output waveform.",
+  "apparatus_components": [
+    "AC Sinusoidal Voltage Source V1 (Vm = 10 V peak, f = 50 Hz, Node 1 to GND)",
+    "Rectifier Diode D1 (1N4007, Anode at Node 1, Cathode at Node 2)",
+    "Load Resistor R1 = 1 kΩ (Node 2 to GND)",
+    "Optional Shunt Filter Capacitor C1 = 100 µF (Node 2 to GND)"
+  ],
+  "theory": "A Half-Wave Rectifier converts alternating current (AC) into unidirectional pulsating DC using a single PN-junction diode. During the positive half-cycle (V_in > 0.7 V), D1 is forward-biased and conducts current to load resistor R1, producing V_out_peak = V_m - 0.7 V. During the negative half-cycle, D1 is reverse-biased (blocking) and V_out = 0 V. Adding a shunt filter capacitor C1 in parallel with R1 smooths the output by charging to V_out_peak and discharging slowly with time constant R1*C1 during the non-conducting interval.",
+  "equations": [
+    "Peak Rectified Load Voltage: V_peak_out = V_m - 0.7 V",
+    "Average (DC) Output Voltage (unfiltered): V_dc = V_peak_out / pi ≈ 0.318 * V_peak_out",
+    "RMS Output Voltage (unfiltered): V_rms = V_peak_out / 2",
+    "Ripple Factor (unfiltered): gamma = 1.21; (with filter C): gamma ≈ 1 / (2 * sqrt(3) * f * R1 * C1)",
+    "Maximum Rectification Efficiency: eta_max = 40.6%"
+  ],
+  "circuit_topology": "AC source V1 (N1 -> GND) feeding series diode D1 (N1 -> N2) and load resistor R1 (N2 -> GND), with optional filter capacitor C1 across R1.",
+  "component_relationships": [
+    "V1: N1 -> GND (AC Sine Source, 10 V peak, 50 Hz)",
+    "D1: N1 (Anode) -> N2 (Cathode) (Series rectifier diode)",
+    "R1: N2 -> GND (1 kΩ load resistor)",
+    "C1 (optional): N2 -> GND (Shunt filter capacitor in parallel with R1)"
+  ],
+  "simulation_type": "Transient Analysis over 2–3 AC cycles (40 ms at 50 Hz)",
+  "procedure": "1. Connect AC sinusoidal voltage source V1 (10 V peak, 50 Hz) between Node 1 and GND.\n2. Connect diode D1 from Node 1 to Node 2 and load resistor R1 (1 kΩ) from Node 2 to GND.\n3. Run transient simulation for 40 ms and plot both input AC voltage V(1) and rectified output voltage V(2).\n4. Optionally connect filter capacitor C1 across R1 to observe ripple smoothing.",
+  "expected_observations": "Positive half-cycles appear at Node 2 with peak 9.3 V (10 V - 0.7 V), while negative half-cycles are clipped to 0 V.",
+  "result": "The Half-Wave Rectifier was simulated and its input/output waveforms were verified.",
+  "common_mistakes": [
+    "Using a DC source instead of a sinusoidal source when trying to plot rectified waveforms",
+    "Connecting the filter capacitor in series with the load instead of in parallel across the load"
+  ],
+  "important_terminology": [
+    "Half-Wave Rectifier",
+    "Pulsating DC",
+    "Ripple Factor (1.21)",
+    "Peak Inverse Voltage (PIV = Vm)",
+    "Filter Capacitor"
+  ],
+  "related_experiments": [
+    11,
+    12,
+    14
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is rectification?",
+      "a": "Rectification is the conversion of bidirectional alternating current (AC) into unidirectional pulsating direct current (DC)."
+    },
+    {
+      "category": "why",
+      "q": "Why is the efficiency of a half-wave rectifier limited to 40.6%?",
+      "a": "Because the entire negative half-cycle of the AC input wave is blocked and wasted, and power is only delivered during the positive half-cycle."
+    },
+    {
+      "category": "how",
+      "q": "How does a capacitor connected across the load reduce ripple in a half-wave rectifier?",
+      "a": "The capacitor charges to V_peak during the positive peak and discharges slowly through the load resistor R1 with time constant R1*C1 when the diode is off, keeping V_out near V_peak."
+    },
+    {
+      "category": "component",
+      "q": "What is the Peak Inverse Voltage (PIV) rating required for the diode in a half-wave rectifier?",
+      "a": "Without filter, PIV = V_m. With a capacitor filter, PIV = 2 * V_m because the cathode stays charged near +V_m while the anode swings to -V_m."
+    },
+    {
+      "category": "procedure",
+      "q": "What is the output ripple frequency of a half-wave rectifier driven by a 50 Hz AC supply?",
+      "a": "50 Hz (equal to the input AC frequency f), because there is one output pulse per full AC cycle."
+    },
+    {
+      "category": "code",
+      "q": "How do you declare a 10 V, 50 Hz sinusoidal source in PySpice?",
+      "a": "`circuit.SinusoidalVoltageSource(1, 1, circuit.gnd, amplitude=10@u_V, frequency=50@u_Hz)`."
+    },
+    {
+      "category": "topology",
+      "q": "How is the filter capacitor C1 connected relative to the load resistor R1?",
+      "a": "In parallel (across) the load resistor R1, between Node 2 and GND."
+    },
+    {
+      "category": "calculation",
+      "q": "For a 15 V peak AC input and a silicon diode (0.7 V drop), what are V_peak_out and V_dc (unfiltered)?",
+      "a": "V_peak_out = 15 - 0.7 = 14.3 V, and V_dc = 14.3 / pi ≈ 4.55 V."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "What happens to the output waveform if diode D1 is reversed in a half-wave rectifier?",
+      "a": "The positive half-cycles are blocked and the negative half-cycles pass through, producing a negative half-wave rectified output."
+    },
+    {
+      "category": "expected_output",
+      "q": "What happens to the ripple voltage if the filter capacitance C1 is increased?",
+      "a": "The time constant R1*C1 increases, so the capacitor discharges less between peaks and the peak-to-peak ripple voltage decreases."
+    }
+  ],
+  "raw_text": "EXPERIMENT-14\n\nDate:\n\nSIMULATION OF FULLWAVE RECTIFIER IN MATLAB/SIMULINK\nAim: To simulate the operation of full-wave rectifier with and without filter circuits in\nMATLAB/Simulink and analyse their output waveforms.\nApparatus Required:\n•\n\nMATLAB/Simulink software installed on a computer.\n\n•\n\nDiode – for rectification.\n\n•\n\nAC Voltage Source – to supply the input signal.\n\n•\n\nResistive Load (R) – to represent the load for the rectifier.\n\n•\n\nCapacitor (optional) – for filtering the output (to smooth the ripple).\n\n•\n\nScope block – to observe the waveforms.\n\n•\n\nVoltage Measurement Blocks – to measure input and output voltages.\n\n•\n\nCurrent Measurement Blocks – to measure load current.\n\n•\n\nPower GUI block – for simulation control.\nCircuit Diagram\n\nProcedure:\n1. Simulation of Full-Wave Rectifier (Without Filter):\nStep 1: Create a new Simulink model for the Full-Wave Rectifier (Bridge Configuration).\nStep 2: Drag and drop the following components:\n41 | P a g e",
+  "page_start": 41,
+  "page_end": 41,
+  "software": "MATLAB Simulink / SIMLAB Numerical Engine",
+  "tags": "Half-Wave Rectifier, Pulsating DC, Ripple Factor (1.21), Peak Inverse Voltage (PIV = Vm), Filter Capacitor",
+  "diagram_images": [
+    "Manual complete_page-0041-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\ncircuit = Circuit('Half-Wave Rectifier (Experiment 13)')\ncircuit.model('1N4007', 'D', IS=7.027e-9@u_A, RS=0.034@u_Ohm, N=1.77, BV=1000@u_V)\ncircuit.SinusoidalVoltageSource(1, 1, circuit.gnd, amplitude=12@u_V, frequency=50@u_Hz)\ncircuit.Diode(1, 1, 2, model='1N4007')\ncircuit.R(1, 2, circuit.gnd, 1@u_kOhm)\n\n# 1. Run the transient simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.transient(step_time=100@u_us, end_time=60@u_ms)\n\n# 2. Extract input and rectified output voltage waveforms\ntime_axis = np.array(analysis.time)\nv_output = np.array(analysis['2'])\nv_input = np.array(analysis['1'])\ni_load = v_output / float(circuit.R1.resistance)\n\n# 3. Create the waveform plot and 4. Label axes appropriately\nplt.figure(figsize=(10, 6))\nplt.plot(time_axis, v_input, '--', color='gray', label='AC Input Voltage V(1)')\nplt.plot(time_axis, v_output, color='black', linewidth=2, label='Rectified Output Voltage V(2)')\nplt.title('Half-Wave Rectifier (Experiment 13): Input vs Rectified Output Waveform')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(loc='upper right')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('rectifier_waveform.png', dpi=150)\nplt.show()",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\ncircuit = Circuit('Half-Wave Rectifier (Experiment 13)')\ncircuit.model('1N4007', 'D', IS=7.027e-9@u_A, RS=0.034@u_Ohm, N=1.77, BV=1000@u_V)\ncircuit.SinusoidalVoltageSource(1, 1, circuit.gnd, amplitude=12@u_V, frequency=50@u_Hz)\ncircuit.Diode(1, 1, 2, model='1N4007')\ncircuit.R(1, 2, circuit.gnd, 1@u_kOhm)\n\n# 1. Run the transient simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nanalysis = simulator.transient(step_time=100@u_us, end_time=60@u_ms)\n\n# 2. Extract input and rectified output voltage waveforms\ntime_axis = np.array(analysis.time)\nv_output = np.array(analysis['2'])\nv_input = np.array(analysis['1'])\ni_load = v_output / float(circuit.R1.resistance)\n\n# 3. Create the waveform plot and 4. Label axes appropriately\nplt.figure(figsize=(10, 6))\nplt.plot(time_axis, v_input, '--', color='gray', label='AC Input Voltage V(1)')\nplt.plot(time_axis, v_output, color='black', linewidth=2, label='Rectified Output Voltage V(2)')\nplt.title('Half-Wave Rectifier (Experiment 13): Input vs Rectified Output Waveform')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(loc='upper right')\n\n# 5. Save and display the result\nplt.tight_layout()\nplt.savefig('rectifier_waveform.png', dpi=150)\nplt.show()",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Half-Wave Rectifier (Experiment 13)",
+      "circuit_type": "HALF_WAVE_RECTIFIER",
+      "experiment": 13,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "waveform",
+        "node_voltage",
+        "branch_current"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "N2",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "ac_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "D1",
+            "type": "diode",
+            "raw_from": "1",
+            "raw_to": "2",
+            "from_node": "N1",
+            "to_node": "N2",
+            "display_value": "0.7 V",
+            "control_info": null,
+            "edge_line": "D1: N1 → N2",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "D1: N1 → N2",
+        "R1: N2 → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "N2",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "ac_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "D1",
+              "type": "diode",
+              "raw_from": "1",
+              "raw_to": "2",
+              "from_node": "N1",
+              "to_node": "N2",
+              "display_value": "0.7 V",
+              "control_info": null,
+              "edge_line": "D1: N1 → N2",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "D1: N1 → N2",
+            "R1: N2 → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "D1: N1 → N2",
+            "R1: N2 → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → GND)\n ├── D1 (0.7 V): N1 → N2\n └── R1 (1 kΩ): N2 → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "D1: N1 → N2",
+          "R1: N2 → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → GND)\n ├── D1 (0.7 V): N1 → N2\n └── R1 (1 kΩ): N2 → GND\n\nV1: N1 → GND\nD1: N1 → N2\nR1: N2 → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "ac_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "D1",
+        "type": "diode",
+        "value": 0.7,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "2",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 0.001,
+        "raw_stop_s": 0.05,
+        "raw_step_expr": "1@u_ms",
+        "raw_stop_expr": "50@u_ms",
+        "raw_step_text": "1 milliseconds",
+        "raw_stop_text": "50 milliseconds",
+        "compat_step_for_raw_stop_s": 0.001,
+        "compat_raw_step_expr": "1@u_ms",
+        "compat_raw_step_text": "1 milliseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  },
+  "circuit_template_id": "exp13_half_wave_rectifier",
+  "viva": [
+    {
+      "q": "What is rectification?",
+      "a": "Rectification is the conversion of bidirectional alternating current (AC) into unidirectional pulsating direct current (DC).",
+      "category": "definition",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "Why is the efficiency of a half-wave rectifier limited to 40.6%?",
+      "a": "Because the entire negative half-cycle of the AC input wave is blocked and wasted, and power is only delivered during the positive half-cycle.",
+      "category": "why",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "How does a capacitor connected across the load reduce ripple in a half-wave rectifier?",
+      "a": "The capacitor charges to V_peak during the positive peak and discharges slowly through the load resistor R1 with time constant R1*C1 when the diode is off, keeping V_out near V_peak.",
+      "category": "how",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What is the Peak Inverse Voltage (PIV) rating required for the diode in a half-wave rectifier?",
+      "a": "Without filter, PIV = V_m. With a capacitor filter, PIV = 2 * V_m because the cathode stays charged near +V_m while the anode swings to -V_m.",
+      "category": "component",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What is the output ripple frequency of a half-wave rectifier driven by a 50 Hz AC supply?",
+      "a": "50 Hz (equal to the input AC frequency f), because there is one output pulse per full AC cycle.",
+      "category": "procedure",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "How do you declare a 10 V, 50 Hz sinusoidal source in PySpice?",
+      "a": "`circuit.SinusoidalVoltageSource(1, 1, circuit.gnd, amplitude=10@u_V, frequency=50@u_Hz)`.",
+      "category": "code",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "How is the filter capacitor C1 connected relative to the load resistor R1?",
+      "a": "In parallel (across) the load resistor R1, between Node 2 and GND.",
+      "category": "topology",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "For a 15 V peak AC input and a silicon diode (0.7 V drop), what are V_peak_out and V_dc (unfiltered)?",
+      "a": "V_peak_out = 15 - 0.7 = 14.3 V, and V_dc = 14.3 / pi ≈ 4.55 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What happens to the output waveform if diode D1 is reversed in a half-wave rectifier?",
+      "a": "The positive half-cycles are blocked and the negative half-cycles pass through, producing a negative half-wave rectified output.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What happens to the ripple voltage if the filter capacitance C1 is increased?",
+      "a": "The time constant R1*C1 increases, so the capacitor discharges less between peaks and the peak-to-peak ripple voltage decreases.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    }
+  ]
+}

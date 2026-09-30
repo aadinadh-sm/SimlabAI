@@ -1,0 +1,116 @@
+{
+  "exp_number": 13,
+  "title": "Simulation of Half-Wave Rectifier in MATLAB/Simulink",
+  "questions": [
+    {
+      "q": "What is rectification?",
+      "a": "Rectification is the conversion of bidirectional alternating current (AC) into unidirectional pulsating direct current (DC).",
+      "category": "definition",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "Why is the efficiency of a half-wave rectifier limited to 40.6%?",
+      "a": "Because the entire negative half-cycle of the AC input wave is blocked and wasted, and power is only delivered during the positive half-cycle.",
+      "category": "why",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "How does a capacitor connected across the load reduce ripple in a half-wave rectifier?",
+      "a": "The capacitor charges to V_peak during the positive peak and discharges slowly through the load resistor R1 with time constant R1*C1 when the diode is off, keeping V_out near V_peak.",
+      "category": "how",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What is the Peak Inverse Voltage (PIV) rating required for the diode in a half-wave rectifier?",
+      "a": "Without filter, PIV = V_m. With a capacitor filter, PIV = 2 * V_m because the cathode stays charged near +V_m while the anode swings to -V_m.",
+      "category": "component",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What is the output ripple frequency of a half-wave rectifier driven by a 50 Hz AC supply?",
+      "a": "50 Hz (equal to the input AC frequency f), because there is one output pulse per full AC cycle.",
+      "category": "procedure",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "How do you declare a 10 V, 50 Hz sinusoidal source in PySpice?",
+      "a": "`circuit.SinusoidalVoltageSource(1, 1, circuit.gnd, amplitude=10@u_V, frequency=50@u_Hz)`.",
+      "category": "code",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "How is the filter capacitor C1 connected relative to the load resistor R1?",
+      "a": "In parallel (across) the load resistor R1, between Node 2 and GND.",
+      "category": "topology",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "For a 15 V peak AC input and a silicon diode (0.7 V drop), what are V_peak_out and V_dc (unfiltered)?",
+      "a": "V_peak_out = 15 - 0.7 = 14.3 V, and V_dc = 14.3 / pi ≈ 4.55 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What happens to the output waveform if diode D1 is reversed in a half-wave rectifier?",
+      "a": "The positive half-cycles are blocked and the negative half-cycles pass through, producing a negative half-wave rectified output.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    },
+    {
+      "q": "What happens to the ripple voltage if the filter capacitance C1 is increased?",
+      "a": "The time constant R1*C1 increases, so the capacitor discharges less between peaks and the peak-to-peak ripple voltage decreases.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Half-Wave Rectifier",
+        "Pulsating DC",
+        "Ripple Factor (1.21)",
+        "Peak Inverse Voltage (PIV = Vm)"
+      ]
+    }
+  ]
+}

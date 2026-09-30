@@ -1,0 +1,990 @@
+{
+  "exp_number": 5,
+  "title": "Simulating Step Response of RC Circuits Using PySpice",
+  "category": "Transient / RC",
+  "family": "PYSPICE_TRANSIENT",
+  "pages": [
+    12,
+    13,
+    14
+  ],
+  "aim": "To simulate the step response of an RC circuit under switched DC excitation in PySpice and plot the capacitor voltage transition.",
+  "apparatus_components": [
+    "Pre-Switching DC Source V1 = 40 V (Node 1 to GND)",
+    "Pre-Switching Divider Resistors R1 = 10 kΩ (Node 1 to 2), R2 = 10 kΩ (Node 2 to GND)",
+    "Voltage-Controlled Switch S1 (Node 2 to 'output', controlled by 'posa')",
+    "Capacitor C1 = 0.25 µF (Node 'output' to GND)",
+    "Voltage-Controlled Switch S2 (Node 'output' to 'b', controlled by 'posb')",
+    "Post-Switching Series Resistor R3 = 160 kΩ (Node 'b' to Node 4)",
+    "Post-Switching Resistors R4 = 200 kΩ (Node 4 to GND), R5 = 50 kΩ (Node 3 to Node 4)",
+    "Post-Switching Forcing DC Source V2 = 75 V (GND to Node 3, so V(3) = -75 V)",
+    "Control Pulse Sources Vpulse2 ('posa') and Vpulse3 ('posb') switching at 20 ms"
+  ],
+  "theory": "The step response of an RC circuit occurs when a capacitor with initial voltage V_0 is switched to a new Thevenin forcing network with steady-state voltage V_inf and equivalent resistance R_eq. In Experiment 5, before t_sw = 20 ms, S1 is closed and C1 charges to the Thevenin voltage of (V1, R1, R2): V_0 = 40 V * (10k / (10k + 10k)) = 20 V. At t_sw = 20 ms, S1 opens and S2 closes, connecting C1 through R3 (160 kΩ) to the divider formed by R4 (200 kΩ), R5 (50 kΩ), and V2 (-75 V at Node 3). The post-switching Thevenin voltage is V_inf = -75 V * (200k / (200k + 50k)) = -60 V, and R_eq = R3 + (R4 || R5) = 160 kΩ + 40 kΩ = 200 kΩ, giving tau_post = R_eq * C1 = 200 kΩ * 0.25 µF = 50 ms.",
+  "equations": [
+    "Pre-Switch Steady-State Voltage: V_0 = V1 * R2 / (R1 + R2) = 40 * (10k / 20k) = 20 V",
+    "Post-Switch Final Steady-State Voltage: V_inf = -V2 * R4 / (R4 + R5) = -75 * (200k / 250k) = -60 V",
+    "Post-Switch Equivalent Resistance: R_eq = R3 + (R4 * R5) / (R4 + R5) = 160 kΩ + 40 kΩ = 200 kΩ",
+    "Post-Switch Time Constant: tau = R_eq * C1 = 200 kΩ * 0.25 µF = 50 ms",
+    "Step Response Equation (t >= 20 ms): V_C(t) = V_inf + (V_0 - V_inf) * exp(-(t - 0.02) / 0.05) = -60 + 80 * exp(-(t - 0.02) / 0.05) V"
+  ],
+  "circuit_topology": "Two-stage Thevenin-equivalent switched RC circuit with pre-switch divider (V1, R1, R2) and post-switch forcing network (V2, R3, R4, R5).",
+  "component_relationships": [
+    "V1: N1 -> GND (40 V)",
+    "R1: N1 -> N2 (10 kΩ), R2: N2 -> GND (10 kΩ)",
+    "S1: N2 -> output (closed for t < 20 ms)",
+    "C1: output -> GND (0.25 µF)",
+    "S2: output -> Nb (closed for t >= 20 ms)",
+    "R3: Nb -> N4 (160 kΩ)",
+    "R4: N4 -> GND (200 kΩ)",
+    "R5: N3 -> N4 (50 kΩ)",
+    "V2: GND -> N3 (75 V, making Node 3 = -75 V)"
+  ],
+  "simulation_type": "Transient Analysis (step_time=1@u_us, end_time=250@u_ms)",
+  "procedure": "1. Set `steptime=1@u_us`, `switchingtime=20@u_ms`, `finaltime=250@u_ms`.\n2. Add control pulse sources `Vpulse2` and `Vpulse3` and switch model `'SW'`.\n3. Add pre-switching network (V1, R1, R2, S1), capacitor C1, and post-switching network (S2, R3, R4, R5, V2).\n4. Run `simulator.transient(step_time=steptime, end_time=finaltime)`.\n5. Plot `analysis['output']` vs time.",
+  "expected_observations": "Capacitor charges rapidly to +20 V before t = 20 ms, then transitions exponentially from +20 V toward -60 V with time constant tau = 50 ms.",
+  "result": "The step response of the RC circuit was simulated in PySpice and the transition from V_0 = 20 V to V_inf = -60 V was verified.",
+  "common_mistakes": [
+    "Connecting V2 as (3, gnd) instead of (gnd, 3), which changes V_inf from -60 V to +60 V",
+    "Replacing the 5-resistor dual-switch Experiment 5 circuit with a 1-resistor circuit without asking the user"
+  ],
+  "important_terminology": [
+    "Step Response",
+    "Initial Voltage V(0+)",
+    "Final Steady-State Voltage V(inf)",
+    "Thevenin Equivalent Resistance",
+    "Forced Response"
+  ],
+  "related_experiments": [
+    4,
+    6
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is the complete step response of an RC circuit?",
+      "a": "It is the sum of the natural response and forced response when an RC circuit with initial capacitor voltage V_0 is subjected to a sudden DC source change: V_C(t) = V_inf + (V_0 - V_inf) * e^(-t/tau)."
+    },
+    {
+      "category": "why",
+      "q": "Why does the capacitor voltage settle at 20 V instead of 40 V before switching in Experiment 5?",
+      "a": "Because R1 (10 kΩ) and R2 (10 kΩ) form an equal voltage divider across V1 (40 V), so the Thevenin voltage seen by C1 is 40 V * (10k / 20k) = 20 V."
+    },
+    {
+      "category": "how",
+      "q": "How is the final steady-state voltage V_inf = -60 V obtained in Experiment 5?",
+      "a": "V2 (75 V) has its positive terminal at GND and negative at Node 3, so V(3) = -75 V. With C1 open-circuited in steady state, R4 (200 kΩ) and R5 (50 kΩ) divide -75 V to give V(4) = -75 * (200k / 250k) = -60 V."
+    },
+    {
+      "category": "component",
+      "q": "What is the post-switching equivalent resistance R_eq in Experiment 5?",
+      "a": "Looking from C1 into S2 after switching, R_eq = R3 + (R4 || R5) = 160 kΩ + (200k * 50k)/(200k + 50k) = 160 kΩ + 40 kΩ = 200 kΩ."
+    },
+    {
+      "category": "procedure",
+      "q": "At what time does the switch transition occur in Experiment 5?",
+      "a": "At `switchingtime = 20@u_ms` (20 milliseconds)."
+    },
+    {
+      "category": "code",
+      "q": "How is V2's inverted polarity written in PySpice for Experiment 5?",
+      "a": "`circuit.V(2, circuit.gnd, 3, 75@u_V)` — placing `circuit.gnd` as the positive node and `3` as the negative node."
+    },
+    {
+      "category": "topology",
+      "q": "What is the pre-switching Thevenin resistance and time constant in Experiment 5?",
+      "a": "R_th_pre = R1 || R2 = 10 kΩ || 10 kΩ = 5 kΩ, so tau_pre = 5 kΩ * 0.25 µF = 1.25 ms."
+    },
+    {
+      "category": "calculation",
+      "q": "What is the capacitor voltage at t = 20 ms + 50 ms = 70 ms in Experiment 5?",
+      "a": "V_C(70 ms) = -60 + (20 - (-60)) * e^(-1) = -60 + 80 * 0.3679 = -30.57 V."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "Why must we always include `plt.plot(analysis.time, analysis['output'])` when the user asks to show capacitor voltage?",
+      "a": "Because requested outputs are explicit requirements; running `.transient()` without extracting and plotting `analysis['output']` leaves the task incomplete."
+    },
+    {
+      "category": "expected_output",
+      "q": "How long after switching (t = 20 ms) does the capacitor take to reach within 1% of -60 V?",
+      "a": "About 5 time constants: 5 * 50 ms = 250 ms after switching."
+    }
+  ],
+  "raw_text": "Result:\n\n12 | P a g e\n\nEXPERIMENT-5\n\nDate:\n\nSIMULATION OF STEP RESPONSE ANALYSIS OF AN RC CIRCUIT USING\nPYSPICE\nAim:\nTo analyze the step response of an RC circuit with voltage-controlled switches by observing\nthe voltage across a capacitor and the current through the circuit after switching.\nApparatus Required:\n1. Python programming environment with PySpice and Matplotlib libraries installed\n2. Computer with an internet connection to set up the Python environment\nCircuit diagram:\n\nProcedure:\n1. Setup the Python Environment:\no Ensure that Python, PySpice, and Matplotlib libraries are installed on your\ncomputer. If not, install them using the following commands:\npip install PySpice matplotlib\n2. Write the Circuit Code:\no Open a text document and write the following code to define the RC circuit\nwith voltage-controlled switches and simulate its step response:\nimport matplotlib.pyplot as plt\nfrom matplotlib.widgets import Cursor\nimport numpy as np\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Doc.ExampleTools import find_libraries\nfrom PySpice.Probe.Plot import plot\nfrom PySpice.Spice.Library import SpiceLibrary\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\n\n13 | P a g e\n\nimport math\nfrom engineering_notation import EngNumber\n###############################################################\n######\n# CIRCUIT NETLIST\ncircuit = Circuit('Step Response of RC Circuit')\nsteptime = 1@u_us\nswitchingtime = 20@u_ms\nfinaltime = 80@u_ms\ncircuit.model('switch', 'SW', Ron=1@u_mΩ, Roff=1@u_GΩ)\ncircuit.PulseVoltageSource(3, 'posa', circuit.gnd, initial_value=1,\npulsed_value=-1,pulse_width=finaltime, period=finaltime,\ndelay_time=switchingtime)\ncircuit.R('testa', 'posa', circuit.gnd, 1@u_kΩ)\ncircuit.PulseVoltageSource(4, 'posb', circuit.gnd, initial_value=-1,\npulsed_value=1, pulse_width=finaltime, period=finaltime,\ndelay_time=switchingtime)\ncircuit.R('testb', 'posb', circuit.gnd, 1@u_kΩ)\ncircuit.V(1, 1, circuit.gnd, 40@u_V)\ncircuit.R(1, 1, 'a', 20@u_kΩ)\ncircuit.R(2, 'a', circuit.gnd, 60@u_kΩ)\ncircuit.VoltageControlledSwitch(1, 'a', 'output', 'posa', circuit.gnd,\nmodel='switch')\ncircuit.C(1, 'output', circuit.gnd, 0.25@u_uF)\ncircuit.VoltageControlledSwitch(2, 'output', 'b', 'posb', circuit.gnd,\nmodel='switch')\ncircuit.R(3, 'b', 2, 8@u_kΩ)\ncircuit.R(4, 2, circuit.gnd, 160@u_kΩ)\ncircuit.R(5, 2, 3, 40@u_kΩ)\ncircuit.V(2, circuit.gnd, 3, 75@u_V)\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nic = 0@u_V\nsimulator.initial_condition(output=ic)\nanalysis = simulator.transient(step_time=steptime, end_time=finaltime)\n# THEORETICAL CALCULATIONS\n# Time constant after switching\ntau = (circuit.C1.capacitance) * (circuit.R3.resistance +\n(circuit.R4.resistance) * (circuit.R5.resistance)\n/ (circuit.R4.resistance + circuit.R5.resistance))\nprint('tau={0}'.format(EngNumber(tau.value)))\n# PLOTTING COMMANDS\nfigure = plt.subplots(figsize=(11, 6))\naxe = plt.subplot(211)\nplt.title('Switch activations')\nplt.ylabel('Voltage [V]')\nplt.grid()\nplot(analysis['posa'], axis=axe)\nplot(analysis['posb'], axis=axe)\n14 | P a g e",
+  "page_start": 12,
+  "page_end": 14,
+  "software": "PySpice, Python 3.x, Ngspice",
+  "tags": "Step Response, Initial Voltage V(0+), Final Steady-State Voltage V(inf), Thevenin Equivalent Resistance, Forced Response",
+  "diagram_images": [
+    "Manual complete_page-0012-compressed.jpg",
+    "Manual complete_page-0013-compressed.jpg",
+    "Manual complete_page-0014-compressed.jpg"
+  ],
+  "code": "import math\nimport matplotlib.pyplot as plt\nfrom matplotlib.widgets import Cursor\nimport numpy as np\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Probe.Plot import plot\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\nfrom engineering_notation import EngNumber\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\n# Experiment 5: Step Response of RC Circuit (Complete Manual Multi-Switch Topology)\ncircuit = Circuit('Step Response of RC Circuit')\nsteptime = 1@u_us\nswitchingtime = 20@u_ms\nfinaltime = 80@u_ms\n\n# Switch model & control pulse sources (preserved from manual topology)\ncircuit.model('switch', 'SW', Ron=1@u_mOhm, Roff=1@u_GOhm)\ncircuit.PulseVoltageSource(3, 'posa', circuit.gnd, initial_value=1, pulsed_value=-1,\n                           pulse_width=finaltime, period=finaltime, delay_time=switchingtime)\ncircuit.R('testa', 'posa', circuit.gnd, 1@u_kOhm)\ncircuit.PulseVoltageSource(4, 'posb', circuit.gnd, initial_value=-1, pulsed_value=1,\n                           pulse_width=finaltime, period=finaltime, delay_time=switchingtime)\ncircuit.R('testb', 'posb', circuit.gnd, 1@u_kOhm)\n\n# Pre-Switching & Post-Switching Step Network\ncircuit.V(1, 1, circuit.gnd, 40@u_V)\ncircuit.R(1, 1, 'a', 20@u_kOhm)\ncircuit.R(2, 'a', circuit.gnd, 60@u_kOhm)\ncircuit.VoltageControlledSwitch(1, 'a', 'output', 'posa', circuit.gnd, model='switch')\ncircuit.C(1, 'output', circuit.gnd, 0.25@u_uF)\ncircuit.VoltageControlledSwitch(2, 'output', 'b', 'posb', circuit.gnd, model='switch')\ncircuit.R(3, 'b', 2, 8@u_kOhm)\ncircuit.R(4, 2, circuit.gnd, 160@u_kOhm)\ncircuit.R(5, 2, 3, 40@u_kOhm)\ncircuit.V(2, circuit.gnd, 3, 75@u_V)\n\n# 1. Run the transient simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nic = 0@u_V\nsimulator.initial_condition(output=ic)\nanalysis = simulator.transient(step_time=steptime, end_time=finaltime)\n\n# Post-switching equivalent time constant tau\ntau = (circuit.C1.capacitance) * (circuit.R3.resistance +\n      (circuit.R4.resistance * circuit.R5.resistance) /\n      (circuit.R4.resistance + circuit.R5.resistance))\nprint('tau={0}'.format(EngNumber(tau.value)))\n\n# 2. Extract the requested signals (Capacitor Voltage V_C(t), Node Voltages, and Currents)\ntime_axis = np.array(analysis.time)\nv_capacitor = np.array(analysis['output'])  # Extracted Capacitor Voltage V_C(t) at node 'output'\nv_node2 = np.array(analysis['2'])\ni_capacitor = float(circuit.C1.capacitance) * np.gradient(v_capacitor, time_axis)  # i_C(t) = C * dV_C/dt\ni_r1 = (np.array(analysis['1']) - np.array(analysis['a'])) / float(circuit.R1.resistance)\ni_r3 = (np.array(analysis['b']) - np.array(analysis['2'])) / float(circuit.R3.resistance)\ni_r4 = np.array(analysis['2']) / float(circuit.R4.resistance)\n\n# 3. Create the plots and 4. Label axes appropriately\nfigure1 = plt.figure(1, (20, 10))\nplt.subplot(211)\nplot(analysis['posa'])\nplot(analysis['posb'])\nplt.title('Switch Activations (posa & posb)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(('Switch 1 Control V(posa)', 'Switch 2 Control V(posb)'), loc='upper right')\n\naxe = plt.subplot(212)\nplt.title('Voltage across Capacitor C1 (Step Response)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplot(analysis['output'], axis=axe, color='black')\nplot(analysis['2'])\nplt.legend(('Capacitor Voltage V_C(t) [output]', 'Node 2 Voltage V(2)'), loc=(.5, .5))\ncursor = Cursor(axe, useblit=True, color='red', linewidth=1)\n\nfigure2 = plt.figure(2, (20, 10))\nplot((analysis['1'] - analysis['a']) / circuit.R1.resistance)\nplot(analysis['2'] / circuit.R4.resistance)\nplot((analysis['b'] - analysis['2']) / circuit.R3.resistance)\nplt.plot(time_axis, i_capacitor, linestyle='--', color='blue', label='Capacitor Current i_C(t)')\nplt.title('Capacitor & Branch Currents')\nplt.xlabel('Time [s]')\nplt.ylabel('Current [A]')\nplt.grid(True)\nplt.legend(('I(R1)', 'I(R4)', 'I(R3)', 'Capacitor Current i_C(t)'), loc=(.5, .5))\n\n# 5. Save and display the result\nplt.tight_layout()\nfigure1.savefig('rc_step_response_capacitor_voltage.png', dpi=150)\nfigure2.savefig('rc_step_response_currents.png', dpi=150)\nplt.show()\n",
+  "code_sample": "import math\nimport matplotlib.pyplot as plt\nfrom matplotlib.widgets import Cursor\nimport numpy as np\nimport PySpice.Logging.Logging as Logging\nlogger = Logging.setup_logging()\nfrom PySpice.Probe.Plot import plot\nfrom PySpice.Spice.Netlist import Circuit\nfrom PySpice.Unit import *\nfrom engineering_notation import EngNumber\n\n# Topology Classification: EXACT MANUAL TOPOLOGY\n# Experiment 5: Step Response of RC Circuit (Complete Manual Multi-Switch Topology)\ncircuit = Circuit('Step Response of RC Circuit')\nsteptime = 1@u_us\nswitchingtime = 20@u_ms\nfinaltime = 80@u_ms\n\n# Switch model & control pulse sources (preserved from manual topology)\ncircuit.model('switch', 'SW', Ron=1@u_mOhm, Roff=1@u_GOhm)\ncircuit.PulseVoltageSource(3, 'posa', circuit.gnd, initial_value=1, pulsed_value=-1,\n                           pulse_width=finaltime, period=finaltime, delay_time=switchingtime)\ncircuit.R('testa', 'posa', circuit.gnd, 1@u_kOhm)\ncircuit.PulseVoltageSource(4, 'posb', circuit.gnd, initial_value=-1, pulsed_value=1,\n                           pulse_width=finaltime, period=finaltime, delay_time=switchingtime)\ncircuit.R('testb', 'posb', circuit.gnd, 1@u_kOhm)\n\n# Pre-Switching & Post-Switching Step Network\ncircuit.V(1, 1, circuit.gnd, 40@u_V)\ncircuit.R(1, 1, 'a', 20@u_kOhm)\ncircuit.R(2, 'a', circuit.gnd, 60@u_kOhm)\ncircuit.VoltageControlledSwitch(1, 'a', 'output', 'posa', circuit.gnd, model='switch')\ncircuit.C(1, 'output', circuit.gnd, 0.25@u_uF)\ncircuit.VoltageControlledSwitch(2, 'output', 'b', 'posb', circuit.gnd, model='switch')\ncircuit.R(3, 'b', 2, 8@u_kOhm)\ncircuit.R(4, 2, circuit.gnd, 160@u_kOhm)\ncircuit.R(5, 2, 3, 40@u_kOhm)\ncircuit.V(2, circuit.gnd, 3, 75@u_V)\n\n# 1. Run the transient simulation\nsimulator = circuit.simulator(temperature=25, nominal_temperature=25)\nic = 0@u_V\nsimulator.initial_condition(output=ic)\nanalysis = simulator.transient(step_time=steptime, end_time=finaltime)\n\n# Post-switching equivalent time constant tau\ntau = (circuit.C1.capacitance) * (circuit.R3.resistance +\n      (circuit.R4.resistance * circuit.R5.resistance) /\n      (circuit.R4.resistance + circuit.R5.resistance))\nprint('tau={0}'.format(EngNumber(tau.value)))\n\n# 2. Extract the requested signals (Capacitor Voltage V_C(t), Node Voltages, and Currents)\ntime_axis = np.array(analysis.time)\nv_capacitor = np.array(analysis['output'])  # Extracted Capacitor Voltage V_C(t) at node 'output'\nv_node2 = np.array(analysis['2'])\ni_capacitor = float(circuit.C1.capacitance) * np.gradient(v_capacitor, time_axis)  # i_C(t) = C * dV_C/dt\ni_r1 = (np.array(analysis['1']) - np.array(analysis['a'])) / float(circuit.R1.resistance)\ni_r3 = (np.array(analysis['b']) - np.array(analysis['2'])) / float(circuit.R3.resistance)\ni_r4 = np.array(analysis['2']) / float(circuit.R4.resistance)\n\n# 3. Create the plots and 4. Label axes appropriately\nfigure1 = plt.figure(1, (20, 10))\nplt.subplot(211)\nplot(analysis['posa'])\nplot(analysis['posb'])\nplt.title('Switch Activations (posa & posb)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplt.legend(('Switch 1 Control V(posa)', 'Switch 2 Control V(posb)'), loc='upper right')\n\naxe = plt.subplot(212)\nplt.title('Voltage across Capacitor C1 (Step Response)')\nplt.xlabel('Time [s]')\nplt.ylabel('Voltage [V]')\nplt.grid(True)\nplot(analysis['output'], axis=axe, color='black')\nplot(analysis['2'])\nplt.legend(('Capacitor Voltage V_C(t) [output]', 'Node 2 Voltage V(2)'), loc=(.5, .5))\ncursor = Cursor(axe, useblit=True, color='red', linewidth=1)\n\nfigure2 = plt.figure(2, (20, 10))\nplot((analysis['1'] - analysis['a']) / circuit.R1.resistance)\nplot(analysis['2'] / circuit.R4.resistance)\nplot((analysis['b'] - analysis['2']) / circuit.R3.resistance)\nplt.plot(time_axis, i_capacitor, linestyle='--', color='blue', label='Capacitor Current i_C(t)')\nplt.title('Capacitor & Branch Currents')\nplt.xlabel('Time [s]')\nplt.ylabel('Current [A]')\nplt.grid(True)\nplt.legend(('I(R1)', 'I(R4)', 'I(R3)', 'Capacitor Current i_C(t)'), loc=(.5, .5))\n\n# 5. Save and display the result\nplt.tight_layout()\nfigure1.savefig('rc_step_response_capacitor_voltage.png', dpi=150)\nfigure2.savefig('rc_step_response_currents.png', dpi=150)\nplt.show()\n",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Step Response of RC Circuit (Experiment 5)",
+      "circuit_type": "RC_STEP_RESPONSE",
+      "experiment": 5,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "capacitor_voltage",
+        "capacitor_current",
+        "waveform",
+        "switch_activations",
+        "branch_current",
+        "time_constant"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "a",
+          "output",
+          "b",
+          "N2",
+          "N3",
+          "posa",
+          "posb",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "Vpulse3",
+            "type": "pulse_voltage_source",
+            "raw_from": "posa",
+            "raw_to": "GND",
+            "from_node": "posa",
+            "to_node": "GND",
+            "display_value": "pulse_voltage_source",
+            "control_info": null,
+            "edge_line": "Vpulse3: posa → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "Rtesta",
+            "type": "resistor",
+            "raw_from": "posa",
+            "raw_to": "GND",
+            "from_node": "posa",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "Rtesta: posa → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "Vpulse4",
+            "type": "pulse_voltage_source",
+            "raw_from": "posb",
+            "raw_to": "GND",
+            "from_node": "posb",
+            "to_node": "GND",
+            "display_value": "pulse_voltage_source",
+            "control_info": null,
+            "edge_line": "Vpulse4: posb → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "Rtestb",
+            "type": "resistor",
+            "raw_from": "posb",
+            "raw_to": "GND",
+            "from_node": "posb",
+            "to_node": "GND",
+            "display_value": "1 kΩ",
+            "control_info": null,
+            "edge_line": "Rtestb: posb → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "40 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "a",
+            "from_node": "N1",
+            "to_node": "a",
+            "display_value": "20 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → a",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R2",
+            "type": "resistor",
+            "raw_from": "a",
+            "raw_to": "GND",
+            "from_node": "a",
+            "to_node": "GND",
+            "display_value": "60 kΩ",
+            "control_info": null,
+            "edge_line": "R2: a → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "S1",
+            "type": "vc_switch",
+            "raw_from": "a",
+            "raw_to": "output",
+            "from_node": "a",
+            "to_node": "output",
+            "display_value": "switch",
+            "control_info": "ctrl: posa → GND",
+            "edge_line": "S1: a → output",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "C1",
+            "type": "capacitor",
+            "raw_from": "output",
+            "raw_to": "GND",
+            "from_node": "output",
+            "to_node": "GND",
+            "display_value": "0.25 µF",
+            "control_info": null,
+            "edge_line": "C1: output → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "S2",
+            "type": "vc_switch",
+            "raw_from": "output",
+            "raw_to": "b",
+            "from_node": "output",
+            "to_node": "b",
+            "display_value": "switch",
+            "control_info": "ctrl: posb → GND",
+            "edge_line": "S2: output → b",
+            "is_source": false,
+            "is_passive": false
+          },
+          {
+            "id": "R3",
+            "type": "resistor",
+            "raw_from": "b",
+            "raw_to": "2",
+            "from_node": "b",
+            "to_node": "N2",
+            "display_value": "8 kΩ",
+            "control_info": null,
+            "edge_line": "R3: b → N2",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R4",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "GND",
+            "from_node": "N2",
+            "to_node": "GND",
+            "display_value": "160 kΩ",
+            "control_info": null,
+            "edge_line": "R4: N2 → GND",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "R5",
+            "type": "resistor",
+            "raw_from": "2",
+            "raw_to": "3",
+            "from_node": "N2",
+            "to_node": "N3",
+            "display_value": "40 kΩ",
+            "control_info": null,
+            "edge_line": "R5: N2 → N3",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "V2",
+            "type": "dc_voltage_source",
+            "raw_from": "GND",
+            "raw_to": "3",
+            "from_node": "GND",
+            "to_node": "N3",
+            "display_value": "75 V",
+            "control_info": null,
+            "edge_line": "V2: GND → N3",
+            "is_source": true,
+            "is_passive": false
+          }
+        ],
+        "edge_list_lines": [
+          "Vpulse3: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse4: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "R2: a → GND",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R3: b → N2",
+          "R4: N2 → GND",
+          "R5: N2 → N3",
+          "V2: GND → N3"
+        ],
+        "resolved_graph_lines": [
+          "Vpulse3: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse4: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "R2: a → GND",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R3: b → N2",
+          "R4: N2 → GND",
+          "R5: N2 → N3",
+          "V2: GND → N3"
+        ]
+      },
+      "resolved_graph": [
+        "Vpulse3: posa → GND",
+        "Rtesta: posa → GND",
+        "Vpulse4: posb → GND",
+        "Rtestb: posb → GND",
+        "V1: N1 → GND",
+        "R1: N1 → a",
+        "R2: a → GND",
+        "S1: a → output",
+        "C1: output → GND",
+        "S2: output → b",
+        "R3: b → N2",
+        "R4: N2 → GND",
+        "R5: N2 → N3",
+        "V2: GND → N3"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "a",
+            "output",
+            "b",
+            "N2",
+            "N3",
+            "posa",
+            "posb",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "Vpulse3",
+              "type": "pulse_voltage_source",
+              "raw_from": "posa",
+              "raw_to": "GND",
+              "from_node": "posa",
+              "to_node": "GND",
+              "display_value": "pulse_voltage_source",
+              "control_info": null,
+              "edge_line": "Vpulse3: posa → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "Rtesta",
+              "type": "resistor",
+              "raw_from": "posa",
+              "raw_to": "GND",
+              "from_node": "posa",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "Rtesta: posa → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "Vpulse4",
+              "type": "pulse_voltage_source",
+              "raw_from": "posb",
+              "raw_to": "GND",
+              "from_node": "posb",
+              "to_node": "GND",
+              "display_value": "pulse_voltage_source",
+              "control_info": null,
+              "edge_line": "Vpulse4: posb → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "Rtestb",
+              "type": "resistor",
+              "raw_from": "posb",
+              "raw_to": "GND",
+              "from_node": "posb",
+              "to_node": "GND",
+              "display_value": "1 kΩ",
+              "control_info": null,
+              "edge_line": "Rtestb: posb → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "40 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "a",
+              "from_node": "N1",
+              "to_node": "a",
+              "display_value": "20 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → a",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R2",
+              "type": "resistor",
+              "raw_from": "a",
+              "raw_to": "GND",
+              "from_node": "a",
+              "to_node": "GND",
+              "display_value": "60 kΩ",
+              "control_info": null,
+              "edge_line": "R2: a → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "S1",
+              "type": "vc_switch",
+              "raw_from": "a",
+              "raw_to": "output",
+              "from_node": "a",
+              "to_node": "output",
+              "display_value": "switch",
+              "control_info": "ctrl: posa → GND",
+              "edge_line": "S1: a → output",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "C1",
+              "type": "capacitor",
+              "raw_from": "output",
+              "raw_to": "GND",
+              "from_node": "output",
+              "to_node": "GND",
+              "display_value": "0.25 µF",
+              "control_info": null,
+              "edge_line": "C1: output → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "S2",
+              "type": "vc_switch",
+              "raw_from": "output",
+              "raw_to": "b",
+              "from_node": "output",
+              "to_node": "b",
+              "display_value": "switch",
+              "control_info": "ctrl: posb → GND",
+              "edge_line": "S2: output → b",
+              "is_source": false,
+              "is_passive": false
+            },
+            {
+              "id": "R3",
+              "type": "resistor",
+              "raw_from": "b",
+              "raw_to": "2",
+              "from_node": "b",
+              "to_node": "N2",
+              "display_value": "8 kΩ",
+              "control_info": null,
+              "edge_line": "R3: b → N2",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R4",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "GND",
+              "from_node": "N2",
+              "to_node": "GND",
+              "display_value": "160 kΩ",
+              "control_info": null,
+              "edge_line": "R4: N2 → GND",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "R5",
+              "type": "resistor",
+              "raw_from": "2",
+              "raw_to": "3",
+              "from_node": "N2",
+              "to_node": "N3",
+              "display_value": "40 kΩ",
+              "control_info": null,
+              "edge_line": "R5: N2 → N3",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "V2",
+              "type": "dc_voltage_source",
+              "raw_from": "GND",
+              "raw_to": "3",
+              "from_node": "GND",
+              "to_node": "N3",
+              "display_value": "75 V",
+              "control_info": null,
+              "edge_line": "V2: GND → N3",
+              "is_source": true,
+              "is_passive": false
+            }
+          ],
+          "edge_list_lines": [
+            "Vpulse3: posa → GND",
+            "Rtesta: posa → GND",
+            "Vpulse4: posb → GND",
+            "Rtestb: posb → GND",
+            "V1: N1 → GND",
+            "R1: N1 → a",
+            "R2: a → GND",
+            "S1: a → output",
+            "C1: output → GND",
+            "S2: output → b",
+            "R3: b → N2",
+            "R4: N2 → GND",
+            "R5: N2 → N3",
+            "V2: GND → N3"
+          ],
+          "resolved_graph_lines": [
+            "Vpulse3: posa → GND",
+            "Rtesta: posa → GND",
+            "Vpulse4: posb → GND",
+            "Rtestb: posb → GND",
+            "V1: N1 → GND",
+            "R1: N1 → a",
+            "R2: a → GND",
+            "S1: a → output",
+            "C1: output → GND",
+            "S2: output → b",
+            "R3: b → N2",
+            "R4: N2 → GND",
+            "R5: N2 → N3",
+            "V2: GND → N3"
+          ]
+        },
+        "ascii_diagram": "[Vpulse3 = pulse_voltage_source] (posa → GND)\n[Vpulse4 = pulse_voltage_source] (posb → GND)\n[V1 = 40 V] (N1 → GND)\n[V2 = 75 V] (GND → N3)\n ├── Rtesta (1 kΩ): posa → GND\n ├── Rtestb (1 kΩ): posb → GND\n ├── R1 (20 kΩ): N1 → a\n ├── R2 (60 kΩ): a → GND\n ├── S1 (switch, ctrl: posa → GND): a → output\n ├── C1 (0.25 µF): output → GND\n ├── S2 (switch, ctrl: posb → GND): output → b\n ├── R3 (8 kΩ): b → N2\n ├── R4 (160 kΩ): N2 → GND\n └── R5 (40 kΩ): N2 → N3",
+        "edge_list_lines": [
+          "Vpulse3: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse4: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "R2: a → GND",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R3: b → N2",
+          "R4: N2 → GND",
+          "R5: N2 → N3",
+          "V2: GND → N3"
+        ],
+        "resolved_graph_lines": [
+          "Vpulse3: posa → GND",
+          "Rtesta: posa → GND",
+          "Vpulse4: posb → GND",
+          "Rtestb: posb → GND",
+          "V1: N1 → GND",
+          "R1: N1 → a",
+          "R2: a → GND",
+          "S1: a → output",
+          "C1: output → GND",
+          "S2: output → b",
+          "R3: b → N2",
+          "R4: N2 → GND",
+          "R5: N2 → N3",
+          "V2: GND → N3"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[Vpulse3 = pulse_voltage_source] (posa → GND)\n[Vpulse4 = pulse_voltage_source] (posb → GND)\n[V1 = 40 V] (N1 → GND)\n[V2 = 75 V] (GND → N3)\n ├── Rtesta (1 kΩ): posa → GND\n ├── Rtestb (1 kΩ): posb → GND\n ├── R1 (20 kΩ): N1 → a\n ├── R2 (60 kΩ): a → GND\n ├── S1 (switch, ctrl: posa → GND): a → output\n ├── C1 (0.25 µF): output → GND\n ├── S2 (switch, ctrl: posb → GND): output → b\n ├── R3 (8 kΩ): b → N2\n ├── R4 (160 kΩ): N2 → GND\n └── R5 (40 kΩ): N2 → N3\n\nVpulse3: posa → GND\nRtesta: posa → GND\nVpulse4: posb → GND\nRtestb: posb → GND\nV1: N1 → GND\nR1: N1 → a\nR2: a → GND\nS1: a → output\nC1: output → GND\nS2: output → b\nR3: b → N2\nR4: N2 → GND\nR5: N2 → N3\nV2: GND → N3"
+      }
+    },
+    "components": [
+      {
+        "id": "Vpulse3",
+        "type": "pulse_voltage_source",
+        "initial_value": 1.0,
+        "pulsed_value": -1.0,
+        "delay_time": 0.02,
+        "pulse_width": 0.08,
+        "period": 0.08,
+        "unit": "V",
+        "nodes": [
+          "posa",
+          "GND"
+        ]
+      },
+      {
+        "id": "Rtesta",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "posa",
+          "GND"
+        ]
+      },
+      {
+        "id": "Vpulse4",
+        "type": "pulse_voltage_source",
+        "initial_value": -1.0,
+        "pulsed_value": 1.0,
+        "delay_time": 0.02,
+        "pulse_width": 0.08,
+        "period": 0.08,
+        "unit": "V",
+        "nodes": [
+          "posb",
+          "GND"
+        ]
+      },
+      {
+        "id": "Rtestb",
+        "type": "resistor",
+        "value": 1000.0,
+        "unit": "ohm",
+        "nodes": [
+          "posb",
+          "GND"
+        ]
+      },
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 40.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 20000.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "a"
+        ]
+      },
+      {
+        "id": "R2",
+        "type": "resistor",
+        "value": 60000.0,
+        "unit": "ohm",
+        "nodes": [
+          "a",
+          "GND"
+        ]
+      },
+      {
+        "id": "S1",
+        "type": "vc_switch",
+        "model": "switch",
+        "ron": 0.001,
+        "roff": 1000000000.0,
+        "nodes": [
+          "a",
+          "output"
+        ],
+        "control_nodes": [
+          "posa",
+          "GND"
+        ]
+      },
+      {
+        "id": "C1",
+        "type": "capacitor",
+        "value": 2.5e-07,
+        "unit": "F",
+        "nodes": [
+          "output",
+          "GND"
+        ]
+      },
+      {
+        "id": "S2",
+        "type": "vc_switch",
+        "model": "switch",
+        "ron": 0.001,
+        "roff": 1000000000.0,
+        "nodes": [
+          "output",
+          "b"
+        ],
+        "control_nodes": [
+          "posb",
+          "GND"
+        ]
+      },
+      {
+        "id": "R3",
+        "type": "resistor",
+        "value": 8000.0,
+        "unit": "ohm",
+        "nodes": [
+          "b",
+          "2"
+        ]
+      },
+      {
+        "id": "R4",
+        "type": "resistor",
+        "value": 160000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "GND"
+        ]
+      },
+      {
+        "id": "R5",
+        "type": "resistor",
+        "value": 40000.0,
+        "unit": "ohm",
+        "nodes": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "id": "V2",
+        "type": "dc_voltage_source",
+        "value": 75.0,
+        "unit": "V",
+        "nodes": [
+          "GND",
+          "3"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "a",
+      "output",
+      "b",
+      "2",
+      "3",
+      "posa",
+      "posb",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step": 1e-06,
+      "switchingtime": 0.02,
+      "stop": 0.08,
+      "initial_condition": {
+        "output": 0.0
+      },
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 1e-06,
+        "raw_stop_s": 0.08,
+        "raw_step_expr": "1@u_us",
+        "raw_stop_expr": "80@u_ms",
+        "raw_step_text": "1 microseconds",
+        "raw_stop_text": "80 milliseconds",
+        "compat_step_for_raw_stop_s": 1e-06,
+        "compat_raw_step_expr": "1@u_us",
+        "compat_raw_step_text": "1 microseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  },
+  "circuit_template_id": "exp5_rc_step_response",
+  "viva": [
+    {
+      "q": "What is the complete step response of an RC circuit?",
+      "a": "It is the sum of the natural response and forced response when an RC circuit with initial capacitor voltage V_0 is subjected to a sudden DC source change: V_C(t) = V_inf + (V_0 - V_inf) * e^(-t/tau).",
+      "category": "definition",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "Why does the capacitor voltage settle at 20 V instead of 40 V before switching in Experiment 5?",
+      "a": "Because R1 (10 kΩ) and R2 (10 kΩ) form an equal voltage divider across V1 (40 V), so the Thevenin voltage seen by C1 is 40 V * (10k / 20k) = 20 V.",
+      "category": "why",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "How is the final steady-state voltage V_inf = -60 V obtained in Experiment 5?",
+      "a": "V2 (75 V) has its positive terminal at GND and negative at Node 3, so V(3) = -75 V. With C1 open-circuited in steady state, R4 (200 kΩ) and R5 (50 kΩ) divide -75 V to give V(4) = -75 * (200k / 250k) = -60 V.",
+      "category": "how",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "What is the post-switching equivalent resistance R_eq in Experiment 5?",
+      "a": "Looking from C1 into S2 after switching, R_eq = R3 + (R4 || R5) = 160 kΩ + (200k * 50k)/(200k + 50k) = 160 kΩ + 40 kΩ = 200 kΩ.",
+      "category": "component",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "At what time does the switch transition occur in Experiment 5?",
+      "a": "At `switchingtime = 20@u_ms` (20 milliseconds).",
+      "category": "procedure",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "How is V2's inverted polarity written in PySpice for Experiment 5?",
+      "a": "`circuit.V(2, circuit.gnd, 3, 75@u_V)` — placing `circuit.gnd` as the positive node and `3` as the negative node.",
+      "category": "code",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "What is the pre-switching Thevenin resistance and time constant in Experiment 5?",
+      "a": "R_th_pre = R1 || R2 = 10 kΩ || 10 kΩ = 5 kΩ, so tau_pre = 5 kΩ * 0.25 µF = 1.25 ms.",
+      "category": "topology",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "What is the capacitor voltage at t = 20 ms + 50 ms = 70 ms in Experiment 5?",
+      "a": "V_C(70 ms) = -60 + (20 - (-60)) * e^(-1) = -60 + 80 * 0.3679 = -30.57 V.",
+      "category": "calculation",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "Why must we always include `plt.plot(analysis.time, analysis['output'])` when the user asks to show capacitor voltage?",
+      "a": "Because requested outputs are explicit requirements; running `.transient()` without extracting and plotting `analysis['output']` leaves the task incomplete.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    },
+    {
+      "q": "How long after switching (t = 20 ms) does the capacitor take to reach within 1% of -60 V?",
+      "a": "About 5 time constants: 5 * 50 ms = 250 ms after switching.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Step Response",
+        "Initial Voltage V(0+)",
+        "Final Steady-State Voltage V(inf)",
+        "Thevenin Equivalent Resistance"
+      ]
+    }
+  ]
+}

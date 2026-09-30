@@ -1,0 +1,304 @@
+{
+  "exp_number": 9,
+  "title": "Implementation of Boolean Function in SOP and POS Form Using Multisim",
+  "category": "Boolean Algebra",
+  "family": "DIGITAL_LOGIC",
+  "pages": [
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "aim": "To implement a 3-variable Boolean function in both Sum of Products (SOP) and Product of Sums (POS) forms and verify their equivalence via truth table.",
+  "apparatus_components": [
+    "NOT Gates (IC 7404) for complemented literals A', B', C'",
+    "3-Input AND Gates (IC 7411) and OR Gates (IC 7432) for SOP implementation",
+    "3-Input OR Gates and AND Gates for POS implementation",
+    "3 Binary Inputs (A, B, C) and Output Indicator Y"
+  ],
+  "theory": "Any Boolean function can be expressed canonically as a Sum of Products (SOP, ORing minterms where output = 1) or a Product of Sums (POS, ANDing maxterms where output = 0). In Experiment 9, the manual implements XSOP = Sigma_m(1, 3, 6) = A'B'C + A'BC + ABC' (which simplifies to A'C + ABC') and the complementary POS form XPOS = Pi_M(0, 2, 4, 5, 7).",
+  "equations": [
+    "Canonical SOP: XSOP = Sigma_m(1, 3, 6) = A'B'C + A'BC + ABC'",
+    "Simplified SOP: XSOP = A'C + ABC'",
+    "Canonical POS: XPOS = Pi_M(0, 2, 4, 5, 7) = (A+B+C)(A+B'+C)(A'+B+C)(A'+B+C')(A'+B'+C')"
+  ],
+  "circuit_topology": "Two-level AND-OR network (for SOP) and two-level OR-AND network (for POS) driven by input rails A, B, C and their complements A', B', C'.",
+  "component_relationships": [
+    "Inverters generate A', B', C' from inputs A, B, C",
+    "AND1(A', B', C) -> m1",
+    "AND2(A', B, C) -> m3",
+    "AND3(A, B, C') -> m6",
+    "OR(m1, m3, m6) -> Output Y"
+  ],
+  "simulation_type": "Digital 3-Variable Truth-Table Verification (8 states m0..m7)",
+  "procedure": "1. Derive the minterm list Sigma_m(1, 3, 6) from the Boolean expression.\n2. Construct the AND-OR circuit for SOP (or OR-AND circuit for POS).\n3. Step inputs (A, B, C) from 000 (m0) to 111 (m7) and verify Y = 1 only at m1 (001), m3 (011), and m6 (110).",
+  "expected_observations": "Output Y = 1 for rows m1 (0,0,1), m3 (0,1,1), and m6 (1,1,0); Output Y = 0 for rows m0, m2, m4, m5, m7.",
+  "result": "The Boolean function was implemented in both SOP and POS forms and their identical 8-row truth tables were verified.",
+  "common_mistakes": [
+    "Using uncomplemented variables where maxterms require complemented variables in POS form",
+    "Confusing minterm numbering (e.g., mistaking 110 for m3 instead of m6)"
+  ],
+  "important_terminology": [
+    "Sum of Products (SOP)",
+    "Product of Sums (POS)",
+    "Minterm (m_i)",
+    "Maxterm (M_i)",
+    "Canonical Form"
+  ],
+  "related_experiments": [
+    7,
+    8,
+    10
+  ],
+  "viva_concepts": [
+    {
+      "category": "definition",
+      "q": "What is the difference between a minterm and a maxterm?",
+      "a": "A minterm is an AND product term of all variables that equals 1 for a single input combination, whereas a maxterm is an OR sum term of all variables that equals 0 for a single input combination."
+    },
+    {
+      "category": "why",
+      "q": "Why are variables with value 1 complemented in a maxterm (POS) but uncomplemented in a minterm (SOP)?",
+      "a": "Because a minterm (AND) needs all inputs to be 1 to output 1, while a maxterm (OR) needs all inputs to be 0 to output 0."
+    },
+    {
+      "category": "how",
+      "q": "How can `A'B'C + A'BC + ABC'` in Experiment 9 be simplified algebraically?",
+      "a": "Factor `A'C` from the first two terms: `A'C(B' + B) + ABC' = A'C(1) + ABC' = A'C + ABC'`."
+    },
+    {
+      "category": "component",
+      "q": "What two-level gate structure implements an SOP expression?",
+      "a": "A first level of AND gates (producing the product terms) feeding a second-level OR gate (summing the products)."
+    },
+    {
+      "category": "procedure",
+      "q": "If a 3-variable function has minterms Sigma_m(1, 3, 6), what are its maxterms?",
+      "a": "All remaining indices from 0..7: Pi_M(0, 2, 4, 5, 7)."
+    },
+    {
+      "category": "code",
+      "q": "How do you evaluate `XSOP = A'B'C + A'BC + ABC'` for all 8 states in Python?",
+      "a": "Loop `for i in range(8): A, B, C = (i>>2)&1, (i>>1)&1, i&1; Y = int(((not A) and (not B) and C) or ((not A) and B and C) or (A and B and (not C)))`."
+    },
+    {
+      "category": "topology",
+      "q": "What two-level gate structure implements a POS expression?",
+      "a": "A first level of OR gates (forming the sum terms) feeding a second-level AND gate."
+    },
+    {
+      "category": "calculation",
+      "q": "Evaluate Y for (A=1, B=1, C=0) and (A=1, B=1, C=1) in Experiment 9.",
+      "a": "For (1,1,0) [m6], ABC' = 1·1·1 = 1 so Y = 1. For (1,1,1) [m7], all minterms are 0 so Y = 0."
+    },
+    {
+      "category": "troubleshooting",
+      "q": "If the SOP circuit outputs 1 for (0,1,0) instead of (1,1,0), what wiring error occurred?",
+      "a": "Input A on the third AND gate was accidentally connected to A' instead of A."
+    },
+    {
+      "category": "expected_output",
+      "q": "How many 1s and how many 0s appear in the output column of Experiment 9?",
+      "a": "Three 1s (at m1, m3, m6) and five 0s (at m0, m2, m4, m5, m7)."
+    }
+  ],
+  "raw_text": "EXPERIMENT-9\n\nDate:\n\nIMPLEMENTATION OF BOOLEAN FUNCTION IN SOP AND POS FORM USING\nMULTISIM\nAim:\nTo implement the Boolean function XSOP=∑(1,3,6)=A′.B′.C+A′.B.C+A.B.C′ and its\nequivalent in the Product of Sums (POS) form XPOS=∏(1,3,6) using Multisim.\nApparatus Required\n1. Multisim Software: For circuit simulation.\n2. Logic Gates:\no\n\nAND Gates (3 inputs)\n\no\n\nOR Gates (3 inputs)\n\no\n\nNOT Gates\n\n3. Digital Logic Probes: To monitor the output.\n4. Power Supply: To power the logic gates.\nCircuit Diagram\n1. Sum of Products (SOP) Form:\no\n\nUse NOT gates to generate the complements A′, B′, and C′.\n\no\n\nUse AND gates to implement each product term:\n\no\n\n▪\n\nA′.B′.C\n\n▪\n\nA′.B.C\n\n▪\n\nA.B.C′\n\nUse an OR gate to sum the outputs of the AND gates.\n\n2. Product of Sums (POS) Form:\no\n\no\n\n29 | P a g e\n\nImplement each sum term using OR gates:\n▪\n\n(A+B+C′)\n\n▪\n\n(A+B′+C)\n\n▪\n\n(A′+B+C)\n\nUse an AND gate to multiply the outputs of the OR gates.\n\nProcedure\n1. Set Up the Circuit in Multisim:\no\n\nOpen Multisim and create a new project.\n\no\n\nPlace the required logic gates (AND, OR, NOT) on the workspace.\n\no\n\nConnect the inputs A, B, and C to the gates according to the Boolean\nexpression.\n\no\n\nFor SOP:\n\no\n\no\n\n▪\n\nConnect A′, B′, and C′ to the corresponding AND gates as per the\nproduct terms.\n\n▪\n\nConnect the outputs of the AND gates to the OR gate.\n\nFor POS:\n▪\n\nConnect the inputs to the OR gates as per the sum terms.\n\n▪\n\nConnect the outputs of the OR gates to the AND gate.\n\nPlace digital probes at the output of the final OR gate (SOP) and the AND gate\n(POS) to monitor the output.\n\n2. Run the Simulation:\no\n\nAssign logical values (0 or 1) to the inputs A, B, and C.\n\no\n\nRun the simulation and observe the output on the digital probes.\n\no\n\nVerify that the outputs match the expected results for both SOP and POS\nforms.\n\n3. Verification:\no\n\n30 | P a g e\n\nCheck the truth table for both implementations by changing the input\ncombinations and ensuring that the outputs match the Boolean expression.\n\nTruth Table\n\nB C A' B' C'\n\n0\n\n0 0 1 1\n\n1\n\n0\n\n0\n\n0\n\n0\n\n1\n\n1\n\n1\n\n1\n\n0\n\n0 1 1 1\n\n0\n\n1\n\n0\n\n0\n\n1\n\n0\n\n1\n\n1\n\n1\n\n0\n\n1 0 1 0\n\n1\n\n0\n\n1\n\n0\n\n1\n\n1\n\n0\n\n1\n\n1\n\n0\n\n1 1 1 0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n1\n\n0\n\n1\n\n0 0 0 1\n\n1\n\n0\n\n0\n\n1\n\n1\n\n1\n\n1\n\n1\n\n1\n\n1\n\n0 1 0 1\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n1\n\n1\n\n0\n\n1\n\n1 0 0 0\n\n1\n\n0\n\n0\n\n1\n\n1\n\n1\n\n0\n\n1\n\n1\n\n1\n\n1 1 0 0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\n0\n\nResult:\n\n31 | P a g e\n\nA'.B'.C A'.B.C A.B.C'\n\nSOP\nPOS\nA + B + C' A + B' + C A' + B + C\nOutput\nOutput\n\nA\n\nEXPERIMENT-10\n\nDate:\n\nIMPLEMENTATION OF COMBINATIONAL CIRCUIT USING MINIMUM\nNUMBER OF NAND GATES USING MULTISIM\n\nAim\nTo implement the Boolean function F=AB+BC+ACF = AB + BC + ACF=AB+BC+AC using\nthe minimum number of NAND gates in Multisim and verify the output for all possible input\ncombinations.\nApparatus Required\n1. Multisim Software: For circuit design and simulation.\n2. NAND Gates:\no\n\n3 NAND gates for generating the AND terms ABABAB, BCBCBC, and\nACACAC.\n\no\n\n1 NAND gate for combining the outputs to achieve the OR operation.\n\n3. Logic Inputs (Switches):\no\n\n3 logic switches to provide binary inputs AAA, BBB, and CCC.\n\n4. Output Indicators (LEDs):\no\n\n1 LED to display the final output FFF.\n\n5. Connecting Wires: To connect the components within the Multisim workspace.\nTheory\n1. Express the Function in NAND-NAND Logic\nTo convert the expression to use only NAND gates, we need to apply De Morgan's\nlaws and NAND equivalences:\n•\n\nStep 1: The original expression is F=AB+BC+AC\n\n•\n\nStep 2: Express OR operations using NAND gates:\nF=(AB)′⋅(BC)′⋅(AC)′\no\n\nThis step introduces a double negation, which is valid since x=(x′′)\n\n2. Implement Using NAND Gates\n1. AND Operations Using NAND Gates:\no\n\n32 | P a g e\n\nAB can be implemented as (A⋅B)′ using a NAND gate and then NOT the\nresult using another NAND gate.\n\no\n\nBC can be implemented similarly using two NAND gates.\n\no\n\nAC can be implemented similarly using two NAND gates.\n\n2. OR Operation Using NAND Gates:\no\n\nThe OR operation (AB)′⋅(BC)′⋅(AC)′(AB)' is realized by taking the NAND of\nthe NAND outputs.\n\n3. Multisim Implementation\nHere is how you can construct the circuit:\nCreate the AND terms:\no\n\nUse two NAND gates to create each of the AND terms:\n▪\n\nAB=((A⋅B)′)′\n\n▪\n\nBC=((B⋅C)′)′\n\n▪\n\nAC=((A⋅C)′)′\n\nCombine the AND terms using NAND:\no\n\nTake the output of each AND gate, invert each using a NAND gate, then feed\nall three into a final NAND gate to get the OR result:\n▪\n\nF=((AB)′⋅(BC)′⋅(AC)′)′\n\nProcedure\n1. Design the Circuit:\no\n\nStep 1: Open Multisim software and start a new project.\n\no\n\nStep 2: From the component library, select NAND gates and place them on\nthe workspace.\n\no\n\nStep 3: Connect the first NAND gate to inputs A and B to form the term AB.\n\no\n\nStep 4: Connect the output of the first NAND gate to the inputs of a second\nNAND gate to obtain the AND operation for AB. Repeat this for the other\nterms BC and AC.\n\no\n\nStep 5: Connect the outputs of the three AND terms to the inputs of a fourth\nNAND gate to perform the OR operation.\n\no\n\nStep 6: Attach three logic switches to serve as inputs A, B, and C.\n\no\n\nStep 7: Connect the output of the final NAND gate to an LED to display the\noutput F.\n\no\n\nStep 8: Add a power source and ground connections if required by the circuit\nconfiguration in Multisim.\n\n2. Simulate the Circuit:\n33 | P a g e",
+  "page_start": 29,
+  "page_end": 33,
+  "software": "Multisim / SIMLAB Digital Logic Engine",
+  "tags": "Sum of Products (SOP), Product of Sums (POS), Minterm (m_i), Maxterm (M_i), Canonical Form",
+  "diagram_images": [
+    "Manual complete_page-0029-compressed.jpg",
+    "Manual complete_page-0030-compressed.jpg",
+    "Manual complete_page-0031-compressed.jpg",
+    "Manual complete_page-0032-compressed.jpg",
+    "Manual complete_page-0033-compressed.jpg"
+  ],
+  "code": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (Boolean Function in SOP and POS Form (Experiment 9))\n# 1. Run Digital Logic Truth Table Verification\nprint('=== DIGITAL TRUTH TABLE VERIFICATION ===')\nrows = []\nfor idx in range(8):\n    A, B, C = (idx >> 2) & 1, (idx >> 1) & 1, idx & 1\n    sum_bit = A ^ B ^ C\n    carry_bit = (A & B) | (B & C) | (A & C)\n    sop_y = 1 if idx in (1, 3, 6) else 0\n    rows.append((A, B, C, sum_bit, carry_bit, sop_y))\n    print(f'A={A} B={B} C={C} | Sum={sum_bit} Carry={carry_bit} | SOP_Y={sop_y}')\n\n# 2. Extract digital signals & 3. Plot digital timing waveforms\nt = np.arange(8)\narr = np.array(rows)\nfig, axes = plt.subplots(4, 1, figsize=(10, 7), sharex=True)\nlabels = ['Input A', 'Input B', 'Input C', 'Output Y']\ncols = [0, 1, 2, 3 if 'ADDER' in 'BOOLEAN_SOP_POS' else 5]\nfor ax, col_idx, lbl in zip(axes, cols, labels):\n    ax.step(t, arr[:, col_idx], where='post', linewidth=2)\n    ax.set_ylabel(lbl)\n    ax.set_ylim(-0.2, 1.2)\n    ax.grid(True)\naxes[0].set_title('Digital Logic Truth-Table Timing Waveforms')\naxes[-1].set_xlabel('Input State Index (0..7)')\nplt.tight_layout()\nplt.savefig('digital_truth_table_waveforms.png', dpi=150)\nplt.show()\n",
+  "code_sample": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Topology Classification: EXACT MANUAL TOPOLOGY (Boolean Function in SOP and POS Form (Experiment 9))\n# 1. Run Digital Logic Truth Table Verification\nprint('=== DIGITAL TRUTH TABLE VERIFICATION ===')\nrows = []\nfor idx in range(8):\n    A, B, C = (idx >> 2) & 1, (idx >> 1) & 1, idx & 1\n    sum_bit = A ^ B ^ C\n    carry_bit = (A & B) | (B & C) | (A & C)\n    sop_y = 1 if idx in (1, 3, 6) else 0\n    rows.append((A, B, C, sum_bit, carry_bit, sop_y))\n    print(f'A={A} B={B} C={C} | Sum={sum_bit} Carry={carry_bit} | SOP_Y={sop_y}')\n\n# 2. Extract digital signals & 3. Plot digital timing waveforms\nt = np.arange(8)\narr = np.array(rows)\nfig, axes = plt.subplots(4, 1, figsize=(10, 7), sharex=True)\nlabels = ['Input A', 'Input B', 'Input C', 'Output Y']\ncols = [0, 1, 2, 3 if 'ADDER' in 'BOOLEAN_SOP_POS' else 5]\nfor ax, col_idx, lbl in zip(axes, cols, labels):\n    ax.step(t, arr[:, col_idx], where='post', linewidth=2)\n    ax.set_ylabel(lbl)\n    ax.set_ylim(-0.2, 1.2)\n    ax.grid(True)\naxes[0].set_title('Digital Logic Truth-Table Timing Waveforms')\naxes[-1].set_xlabel('Input State Index (0..7)')\nplt.tight_layout()\nplt.savefig('digital_truth_table_waveforms.png', dpi=150)\nplt.show()\n",
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Boolean Function in SOP and POS Form (Experiment 9)",
+      "circuit_type": "BOOLEAN_SOP_POS",
+      "experiment": 9,
+      "topology_source": "manual_template",
+      "topology_classification": "EXACT MANUAL TOPOLOGY",
+      "user_confirmed": false,
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "truth_table"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "A",
+          "B",
+          "C",
+          "OUT",
+          "GND"
+        ],
+        "edges": [],
+        "edge_list_lines": [],
+        "resolved_graph_lines": []
+      },
+      "resolved_graph": [],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "A",
+            "B",
+            "C",
+            "OUT",
+            "GND"
+          ],
+          "edges": [],
+          "edge_list_lines": [],
+          "resolved_graph_lines": []
+        },
+        "ascii_diagram": "",
+        "edge_list_lines": [],
+        "resolved_graph_lines": [],
+        "user_connection_clauses": [],
+        "formatted_preview": "\n\n"
+      }
+    },
+    "components": [],
+    "nodes": [
+      "A",
+      "B",
+      "C",
+      "OUT",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "digital_truth_table"
+    }
+  },
+  "circuit_template_id": "exp9_boolean_sop_pos",
+  "viva": [
+    {
+      "q": "What is the difference between a minterm and a maxterm?",
+      "a": "A minterm is an AND product term of all variables that equals 1 for a single input combination, whereas a maxterm is an OR sum term of all variables that equals 0 for a single input combination.",
+      "category": "definition",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "Why are variables with value 1 complemented in a maxterm (POS) but uncomplemented in a minterm (SOP)?",
+      "a": "Because a minterm (AND) needs all inputs to be 1 to output 1, while a maxterm (OR) needs all inputs to be 0 to output 0.",
+      "category": "why",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "How can `A'B'C + A'BC + ABC'` in Experiment 9 be simplified algebraically?",
+      "a": "Factor `A'C` from the first two terms: `A'C(B' + B) + ABC' = A'C(1) + ABC' = A'C + ABC'`.",
+      "category": "how",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "What two-level gate structure implements an SOP expression?",
+      "a": "A first level of AND gates (producing the product terms) feeding a second-level OR gate (summing the products).",
+      "category": "component",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "If a 3-variable function has minterms Sigma_m(1, 3, 6), what are its maxterms?",
+      "a": "All remaining indices from 0..7: Pi_M(0, 2, 4, 5, 7).",
+      "category": "procedure",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "How do you evaluate `XSOP = A'B'C + A'BC + ABC'` for all 8 states in Python?",
+      "a": "Loop `for i in range(8): A, B, C = (i>>2)&1, (i>>1)&1, i&1; Y = int(((not A) and (not B) and C) or ((not A) and B and C) or (A and B and (not C)))`.",
+      "category": "code",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "What two-level gate structure implements a POS expression?",
+      "a": "A first level of OR gates (forming the sum terms) feeding a second-level AND gate.",
+      "category": "topology",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "Evaluate Y for (A=1, B=1, C=0) and (A=1, B=1, C=1) in Experiment 9.",
+      "a": "For (1,1,0) [m6], ABC' = 1·1·1 = 1 so Y = 1. For (1,1,1) [m7], all minterms are 0 so Y = 0.",
+      "category": "calculation",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "If the SOP circuit outputs 1 for (0,1,0) instead of (1,1,0), what wiring error occurred?",
+      "a": "Input A on the third AND gate was accidentally connected to A' instead of A.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    },
+    {
+      "q": "How many 1s and how many 0s appear in the output column of Experiment 9?",
+      "a": "Three 1s (at m1, m3, m6) and five 0s (at m0, m2, m4, m5, m7).",
+      "category": "expected_output",
+      "key_concepts": [
+        "Sum of Products (SOP)",
+        "Product of Sums (POS)",
+        "Minterm (m_i)",
+        "Maxterm (M_i)"
+      ]
+    }
+  ]
+}

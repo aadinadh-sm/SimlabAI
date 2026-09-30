@@ -1,0 +1,116 @@
+{
+  "exp_number": 10,
+  "title": "Implementation of Combinational Circuit Using Minimum Number of NAND Gates Using Multisim",
+  "questions": [
+    {
+      "q": "Why is NAND-NAND implementation preferred in digital hardware design?",
+      "a": "Because NAND gates have smaller transistor count, faster propagation delay in CMOS/TTL, and allow an entire board to use a single quad-NAND IC type (7400).",
+      "category": "definition",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "Why does a two-level AND-OR circuit convert directly into a two-level NAND-NAND circuit?",
+      "a": "Because the output bubble of the first-level NAND gates cancels with the input bubbles of the negative-OR (which is functionally a NAND gate) by De Morgan's Law: ((X)' · (Y)')' = X + Y.",
+      "category": "why",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How many 2-input NAND gates are needed to implement `F = A'C + ABC'`?",
+      "a": "Using `A'C = ((A'C)')'`, one NAND inverter for `A'`, one NAND for `(A'C)'`, one 3-input NAND for `(ABC')'` (with C' from a NAND inverter), and one final NAND to combine them.",
+      "category": "how",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "Which TTL IC provides triple 3-input NAND gates?",
+      "a": "The 7410 TTL IC provides three independent 3-input NAND gates.",
+      "category": "component",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "What is the first step before converting a Boolean expression to minimum NAND gates?",
+      "a": "Minimize the Boolean expression into minimal Sum-of-Products (SOP) form using Boolean algebra or a Karnaugh map.",
+      "category": "procedure",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How do you write a NAND function in Python?",
+      "a": "`def nand(*inputs): return int(not all(inputs))`.",
+      "category": "code",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How do you implement an OR gate `A + B` using only 2-input NAND gates?",
+      "a": "Use 3 NAND gates: NAND1(A,A) = A', NAND2(B,B) = B', and NAND3(A', B') = (A'·B')' = A + B.",
+      "category": "topology",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "In `F = ((AB)' · (BC)' · (AC)')'`, if A=1, B=1, C=0, what are the outputs of the three first-stage NAND gates and final output F?",
+      "a": "(AB)' = (1·1)' = 0; (BC)' = (1·0)' = 1; (AC)' = (1·0)' = 1. Final NAND(0, 1, 1) = (0·1·1)' = 1.",
+      "category": "calculation",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "If every output bit of your NAND circuit is inverted compared to the target truth table, what is wrong?",
+      "a": "There is either a missing second-level NAND inversion or an extra NAND inverter added at the output.",
+      "category": "troubleshooting",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    },
+    {
+      "q": "How many NAND gates are needed to build a single XOR gate `A ⊕ B`?",
+      "a": "Four 2-input NAND gates.",
+      "category": "expected_output",
+      "key_concepts": [
+        "Universal NAND Gate",
+        "De Morgan's Theorem",
+        "Double Negation",
+        "NAND-NAND Realization"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "template_id": "general_rc",
+  "experiment_number": null,
+  "topology_category": "GENERALIZED CIRCUIT",
+  "circuit_type": "GENERAL_RC",
+  "name": "Generalized Single-Loop RC Circuit (GENERAL_RC)",
+  "components": [
+    "V1",
+    "R1",
+    "C1"
+  ],
+  "component_values": {
+    "V1": {
+      "value": 12.0,
+      "unit": "V"
+    },
+    "R1": {
+      "value": 5000.0,
+      "unit": "ohm"
+    },
+    "C1": {
+      "value": 2e-06,
+      "unit": "F"
+    }
+  },
+  "component_types": {
+    "V1": "dc_voltage_source",
+    "R1": "resistor",
+    "C1": "capacitor"
+  },
+  "nodes": [
+    "1",
+    "output",
+    "GND"
+  ],
+  "connections": [
+    "V1 -> N1,GND",
+    "R1 -> N1,output",
+    "C1 -> output,GND"
+  ],
+  "ground": "GND",
+  "control_relationships": [],
+  "source_polarity": [
+    "V1: (+) N1 to (-) GND"
+  ],
+  "analysis_type": "transient",
+  "simulation_parameters": {
+    "type": "transient",
+    "step": 0.0001,
+    "stop": 0.05,
+    "initial_condition": {
+      "output": 12.0
+    },
+    "step_stop_consistency": {
+      "step_positive": true,
+      "stop_positive": true,
+      "step_le_stop": true,
+      "raw_pair_consistent": true,
+      "was_adjusted": false,
+      "adjustment_reason": "",
+      "window_sufficient": true,
+      "raw_step_s": 0.0001,
+      "raw_stop_s": 0.05,
+      "raw_step_expr": "100@u_us",
+      "raw_stop_expr": "50@u_ms",
+      "raw_step_text": "100 microseconds",
+      "raw_stop_text": "50 milliseconds",
+      "compat_step_for_raw_stop_s": 0.0001,
+      "compat_raw_step_expr": "100@u_us",
+      "compat_raw_step_text": "100 microseconds",
+      "required_cycles": 5,
+      "required_duration_s": 1.0,
+      "compat_step_for_req_s": 0.001,
+      "req_step_expr": "1@u_ms",
+      "req_step_text": "1 milliseconds",
+      "req_stop_expr": "1@u_time_s",
+      "req_stop_text": "1 seconds",
+      "req_needs_u_second": true,
+      "changes_reported": []
+    }
+  },
+  "default_simulation_results": {
+    "converged": true,
+    "node_voltages": {
+      "1 (V1)": 12.0,
+      "output @ t=tau (Natural Decay)": 4.4146,
+      "output @ t=tau (Step Charge)": 7.5854
+    },
+    "branch_currents": {
+      "I_C(0+) [Initial Capacitor Current]": 0.0024,
+      "I_C(tau)": 0.000883
+    },
+    "transient_metrics": {
+      "Time Constant (tau = R1*C1)": "10 ms",
+      "5*tau Settling Time": "50 ms",
+      "Capacitor Voltage Step Equation": "V_C(t) = 12 * (1 - exp(-t / 0.01)) V",
+      "Capacitor Current Step Equation": "i_C(t) = 0.002400 * exp(-t / 0.01) A"
+    }
+  },
+  "canonical_circuit_ir": {
+    "version": "1.0",
+    "metadata": {
+      "name": "Generalized Single-Loop RC Circuit (GENERAL_RC)",
+      "circuit_type": "GENERAL_RC",
+      "experiment": null,
+      "topology_source": "ai_inferred",
+      "topology_classification": "GENERALIZED CIRCUIT",
+      "user_confirmed": true,
+      "parameters": {
+        "tau_seconds": 0.01
+      },
+      "lifecycle": {
+        "TOPOLOGY_RECONSTRUCTED": true,
+        "TOPOLOGY_VALIDATED": true,
+        "SIMULATION_EXECUTED": true,
+        "SIMULATION_NUMERICALLY_SUCCESSFUL": true,
+        "SIMULATION_SUCCESSFUL": true,
+        "WINDOW_SUFFICIENT": true,
+        "REQUESTED_BEHAVIOR_OBSERVED": true,
+        "REQUESTED_OUTPUTS_FULFILLED": true,
+        "TASK_COMPLETION_STATUS": "COMPLETED",
+        "TASK_COMPLETED": true
+      },
+      "requested_outputs": [
+        "capacitor_voltage",
+        "capacitor_current",
+        "waveform",
+        "time_constant"
+      ],
+      "user_connection_clauses": [],
+      "topology_graph": {
+        "nodes": [
+          "N1",
+          "output",
+          "GND"
+        ],
+        "edges": [
+          {
+            "id": "V1",
+            "type": "dc_voltage_source",
+            "raw_from": "1",
+            "raw_to": "GND",
+            "from_node": "N1",
+            "to_node": "GND",
+            "display_value": "12 V",
+            "control_info": null,
+            "edge_line": "V1: N1 → GND",
+            "is_source": true,
+            "is_passive": false
+          },
+          {
+            "id": "R1",
+            "type": "resistor",
+            "raw_from": "1",
+            "raw_to": "output",
+            "from_node": "N1",
+            "to_node": "output",
+            "display_value": "5 kΩ",
+            "control_info": null,
+            "edge_line": "R1: N1 → output",
+            "is_source": false,
+            "is_passive": true
+          },
+          {
+            "id": "C1",
+            "type": "capacitor",
+            "raw_from": "output",
+            "raw_to": "GND",
+            "from_node": "output",
+            "to_node": "GND",
+            "display_value": "2 µF",
+            "control_info": null,
+            "edge_line": "C1: output → GND",
+            "is_source": false,
+            "is_passive": true
+          }
+        ],
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → output",
+          "C1: output → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → output",
+          "C1: output → GND"
+        ]
+      },
+      "resolved_graph": [
+        "V1: N1 → GND",
+        "R1: N1 → output",
+        "C1: output → GND"
+      ],
+      "topology_preview": {
+        "topology_graph": {
+          "nodes": [
+            "N1",
+            "output",
+            "GND"
+          ],
+          "edges": [
+            {
+              "id": "V1",
+              "type": "dc_voltage_source",
+              "raw_from": "1",
+              "raw_to": "GND",
+              "from_node": "N1",
+              "to_node": "GND",
+              "display_value": "12 V",
+              "control_info": null,
+              "edge_line": "V1: N1 → GND",
+              "is_source": true,
+              "is_passive": false
+            },
+            {
+              "id": "R1",
+              "type": "resistor",
+              "raw_from": "1",
+              "raw_to": "output",
+              "from_node": "N1",
+              "to_node": "output",
+              "display_value": "5 kΩ",
+              "control_info": null,
+              "edge_line": "R1: N1 → output",
+              "is_source": false,
+              "is_passive": true
+            },
+            {
+              "id": "C1",
+              "type": "capacitor",
+              "raw_from": "output",
+              "raw_to": "GND",
+              "from_node": "output",
+              "to_node": "GND",
+              "display_value": "2 µF",
+              "control_info": null,
+              "edge_line": "C1: output → GND",
+              "is_source": false,
+              "is_passive": true
+            }
+          ],
+          "edge_list_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → output",
+            "C1: output → GND"
+          ],
+          "resolved_graph_lines": [
+            "V1: N1 → GND",
+            "R1: N1 → output",
+            "C1: output → GND"
+          ]
+        },
+        "ascii_diagram": "[V1 = 12 V] (N1 → GND)\n │\nR1 (5 kΩ): N1 → output\n │\n ● output\n └── C1 (2 µF): output → GND",
+        "edge_list_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → output",
+          "C1: output → GND"
+        ],
+        "resolved_graph_lines": [
+          "V1: N1 → GND",
+          "R1: N1 → output",
+          "C1: output → GND"
+        ],
+        "user_connection_clauses": [],
+        "formatted_preview": "[V1 = 12 V] (N1 → GND)\n │\nR1 (5 kΩ): N1 → output\n │\n ● output\n └── C1 (2 µF): output → GND\n\nV1: N1 → GND\nR1: N1 → output\nC1: output → GND"
+      }
+    },
+    "components": [
+      {
+        "id": "V1",
+        "type": "dc_voltage_source",
+        "value": 12.0,
+        "unit": "V",
+        "nodes": [
+          "1",
+          "GND"
+        ]
+      },
+      {
+        "id": "R1",
+        "type": "resistor",
+        "value": 5000.0,
+        "unit": "ohm",
+        "nodes": [
+          "1",
+          "output"
+        ]
+      },
+      {
+        "id": "C1",
+        "type": "capacitor",
+        "value": 2e-06,
+        "unit": "F",
+        "nodes": [
+          "output",
+          "GND"
+        ]
+      }
+    ],
+    "nodes": [
+      "1",
+      "output",
+      "GND"
+    ],
+    "ground_node": "GND",
+    "analysis": {
+      "type": "transient",
+      "step": 0.0001,
+      "stop": 0.05,
+      "initial_condition": {
+        "output": 12.0
+      },
+      "step_stop_consistency": {
+        "step_positive": true,
+        "stop_positive": true,
+        "step_le_stop": true,
+        "raw_pair_consistent": true,
+        "was_adjusted": false,
+        "adjustment_reason": "",
+        "window_sufficient": true,
+        "raw_step_s": 0.0001,
+        "raw_stop_s": 0.05,
+        "raw_step_expr": "100@u_us",
+        "raw_stop_expr": "50@u_ms",
+        "raw_step_text": "100 microseconds",
+        "raw_stop_text": "50 milliseconds",
+        "compat_step_for_raw_stop_s": 0.0001,
+        "compat_raw_step_expr": "100@u_us",
+        "compat_raw_step_text": "100 microseconds",
+        "required_cycles": 5,
+        "required_duration_s": 1.0,
+        "compat_step_for_req_s": 0.001,
+        "req_step_expr": "1@u_ms",
+        "req_step_text": "1 milliseconds",
+        "req_stop_expr": "1@u_time_s",
+        "req_stop_text": "1 seconds",
+        "req_needs_u_second": true,
+        "changes_reported": []
+      }
+    }
+  }
+}
